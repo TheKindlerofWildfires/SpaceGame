@@ -1,6 +1,5 @@
 package entity.player;
 
-import java.awt.event.KeyEvent;
 
 public class player {
 	public String playerTag; // Player identifier
@@ -15,12 +14,6 @@ public class player {
 	public String playerArmorTag;
 	public String playerAbility; // Special sauce
 	public int playerSpeed; //blocks per turn
-
-	public void keyPressed(KeyEvent event){
-		if (event.getKeyCode()== KeyEvent.VK_UP){
-			System.out.println("sup dog");
-		}
-	}
 
 	public void Neo() {
 		playerTag = "Neo";
