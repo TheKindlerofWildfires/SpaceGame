@@ -253,6 +253,24 @@ public class Canvas extends JPanel {
 		// if len(land)>= 500{ regen}
 
 	}
+	
+	public void generateContinent(LargeHexTile seed) {
+		generateContinent(seed, maps[rng.nextInt(maps.length)]);
+	}
+	
+	public void generateContinent(LargeHexTile seed, String mapType) {
+		//TODO: extract the logic to generate a single continent from initializeMap
+		/* instead of
+		 * if(seedCount >= 2) { ... }
+		 * if(seedCount >= 3) { ... }
+		 * 
+		 * we can do
+		 * for(int j = 0; j <= seedCount;j++) {
+		 * 	   generateContinent(seeds[j]);
+		 * }
+		 */
+		//Seriously, have you not heard of DRY?
+	}
 
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
