@@ -4,10 +4,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Polygon;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
@@ -19,7 +22,7 @@ import javax.swing.KeyStroke;
 /**
  * OUTER LAYER NO NEIGHBOR
  * 
- * @author Simon paintComponent calls on screen refresh
+ * @author Simon
  */
 
 @SuppressWarnings("serial")
@@ -35,6 +38,10 @@ public class Canvas extends JPanel {
 	private LargeHexTile seed;
 	private LargeHexTile seed2;
 	private LargeHexTile seed3;
+
+	private double zoomFactor = 1;
+
+	private boolean zoomed = false;
 
 	public Canvas() {
 		// start keyboardinput stuff
@@ -104,7 +111,7 @@ public class Canvas extends JPanel {
 		for (int i = 0; i < HEXESACROSS; i++) {
 			hexes.add(new ArrayList<LargeHexTile>());
 		}
-		int apothem = LargeHexTile.apothem;
+		int apothem = Hexagon.apothem;
 		for (int i = 0; i < HEXESACROSS; i++) {
 			for (int j = 0; j < HEXESDOWN; j++) {
 				if (j % 2 == 0) {
@@ -151,18 +158,50 @@ public class Canvas extends JPanel {
 			}
 		}
 		initializeMap();
+		displayMapThenZoom();
+	}
+
+	private void displayMapThenZoom() {
+		repaint();
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() {
+			public void run() {
+				zoomed = true;
+				zoomFactor = 5;
+				repaint();
+			}
+		}, 2000);
 	}
 
 	public Dimension getPreferredSize() {
 		return new Dimension(1920, 1080);
 	}
 
-	public void drawHex(Graphics2D g2d, LargeHexTile hex) {
-		g2d.drawLine(hex.xpoints[0], hex.ypoints[0], hex.xpoints[1], hex.ypoints[1]);
-		g2d.drawLine(hex.xpoints[3], hex.ypoints[3], hex.xpoints[4], hex.ypoints[4]);
-		g2d.drawLine(hex.xpoints[4], hex.ypoints[4], hex.xpoints[5], hex.ypoints[5]);
-		g2d.drawLine(hex.xpoints[5], hex.ypoints[5], hex.xpoints[0], hex.ypoints[0]);
+	private void drawHex(Graphics2D g2d, LargeHexTile hex) {
+		g2d.drawLine((int) (hex.xpoints[0] * zoomFactor), (int) (hex.ypoints[0] * zoomFactor),
+				(int) (hex.xpoints[1] * zoomFactor), (int) (hex.ypoints[1] * zoomFactor));
+		g2d.drawLine((int) (hex.xpoints[3] * zoomFactor), (int) (hex.ypoints[3] * zoomFactor),
+				(int) (hex.xpoints[4] * zoomFactor), (int) (hex.ypoints[4] * zoomFactor));
+		g2d.drawLine((int) (hex.xpoints[4] * zoomFactor), (int) (hex.ypoints[4] * zoomFactor),
+				(int) (hex.xpoints[5] * zoomFactor), (int) (hex.ypoints[5] * zoomFactor));
+		g2d.drawLine((int) (hex.xpoints[5] * zoomFactor), (int) (hex.ypoints[5] * zoomFactor),
+				(int) (hex.xpoints[0] * zoomFactor), (int) (hex.ypoints[0] * zoomFactor));
+	}
 
+	private void drawSmTile(Graphics2D g2d, SmallTile hex) {
+		Polygon poly = new Polygon();
+		for (int i = 0; i < hex.npoints; i++) {
+			poly.addPoint((int) (hex.xpoints[i] * zoomFactor), (int) (hex.ypoints[i] * zoomFactor));
+		}
+		g2d.drawPolygon(poly);
+	}
+
+	private void fillHex(Graphics2D g2d, LargeHexTile hex) {
+		Polygon poly = new Polygon();
+		for (int i = 0; i < hex.npoints; i++) {
+			poly.addPoint((int) (hex.xpoints[i] * zoomFactor), (int) (hex.ypoints[i] * zoomFactor));
+		}
+		g2d.fillPolygon(poly);
 	}
 
 	/*
@@ -263,28 +302,50 @@ public class Canvas extends JPanel {
 		Graphics2D g2d = (Graphics2D) g;
 		System.out.println("it");
 
-		g2d.setColor(Color.GREEN);
-		hexes.stream().forEach(l -> l.stream().filter(h -> h.isLand()).forEach(h -> g2d.fillPolygon(h)));
+		if (!zoomed) {
+			g2d.setColor(Color.GREEN);
+			hexes.stream().forEach(l -> l.stream().filter(h -> h.isLand()).forEach(h -> g2d.fillPolygon(h)));
 
-		g2d.setColor(Color.BLUE);
-		hexes.stream().forEach(l -> l.stream().filter(h -> !h.isLand()).forEach(h -> g2d.fillPolygon(h)));
+			g2d.setColor(Color.BLUE);
+			hexes.stream().forEach(l -> l.stream().filter(h -> !h.isLand()).forEach(h -> g2d.fillPolygon(h)));
 
-		g2d.setColor(Color.BLACK);
-		hexes.stream().forEach(l -> l.stream().forEach(h -> drawHex(g2d, h)));
+			g2d.setColor(Color.BLACK);
+			hexes.stream().forEach(l -> l.stream().forEach(h -> drawHex(g2d, h)));
 
-		g2d.setColor(Color.MAGENTA);
-		g2d.fill(seed);
-		g2d.setColor(Color.ORANGE);
-		if (seedCount >= 2) {
-			g2d.fill(seed2);
+			g2d.setColor(Color.MAGENTA);
+			g2d.fill(seed);
+			g2d.setColor(Color.ORANGE);
+			if (seedCount >= 2) {
+				g2d.fill(seed2);
+			}
+			if (seedCount >= 3) {
+				g2d.fill(seed3);
+			}
+			System.out.println(seedCount);
+			System.out.println(mapType);
+		} else {
+			g2d.setColor(Color.GREEN);
+			hexes.stream().forEach(l -> l.stream().filter(h -> h.isLand()).forEach(h -> fillHex(g2d, h)));
+
+			g2d.setColor(Color.BLUE);
+			hexes.stream().forEach(l -> l.stream().filter(h -> !h.isLand()).forEach(h -> fillHex(g2d, h)));
+
+			g2d.setColor(Color.BLACK);
+			hexes.stream().forEach(l -> l.stream().forEach(h -> drawHex(g2d, h)));
+
+			g2d.setColor(Color.MAGENTA);
+			g2d.fill(seed);
+			g2d.setColor(Color.ORANGE);
+			if (seedCount >= 2) {
+				g2d.fill(seed2);
+			}
+			if (seedCount >= 3) {
+				g2d.fill(seed3);
+			}
+
+			g2d.setColor(Color.YELLOW);
+			hexes.stream().forEach(l -> l.stream().forEach(h -> h.innerTiles.stream().forEach(t -> drawSmTile(g2d, t))));
 		}
-		if (seedCount >= 3) {
-			g2d.fill(seed3);
-		}
-
-		seed.setLand(true);
-		System.out.println(seedCount);
-		System.out.println(mapType);
-
 	}
+
 }
