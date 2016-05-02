@@ -20,6 +20,7 @@ public class Window {
 
 	private static void createAndShowGUI() {
 		JFrame f = new JFrame("Perlin");
+		f.addKeyListener(new UserInput());
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setLocation(100, 100);
 		f.getContentPane().add(new Canvas(), BorderLayout.CENTER);
