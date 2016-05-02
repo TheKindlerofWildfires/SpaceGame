@@ -6,7 +6,7 @@ public class LargeHexTile extends Hexagon {
 
 	ArrayList<SmallTile> innerTiles = new ArrayList<SmallTile>(7);
 
-	LargeHexTile[] neighbors;
+	public LargeHexTile[] neighbors;
 
 	public LargeHexTile(int cX, int cY) {
 		super(cX, cY);
