@@ -29,7 +29,7 @@ public class Canvas extends JPanel {
 	public String mapType;
 	public int seedCount;
 	public String[] maps;
-	private ArrayList<ArrayList<Hexagon>> hexes = new ArrayList<ArrayList<Hexagon>>();
+	private ArrayList<ArrayList<LargeHexTile>> hexes = new ArrayList<ArrayList<LargeHexTile>>();
 	private Random rng = new Random();
 
 	public Canvas() {
@@ -98,18 +98,18 @@ public class Canvas extends JPanel {
 		setBorder(BorderFactory.createLineBorder(Color.black));
 		setBackground(Color.BLACK);
 		for (int i = 0; i < HEXESACROSS; i++) {
-			hexes.add(new ArrayList<Hexagon>());
+			hexes.add(new ArrayList<LargeHexTile>());
 		}
-		int apothem = Hexagon.apothem;
+		int apothem = LargeHexTile.apothem;
 		for (int i = 0; i < HEXESACROSS; i++) {
 			for (int j = 0; j < HEXESDOWN; j++) {
 				if (j % 2 == 0) {
 					hexes.get(j).add(
-							new Hexagon(i * 2 * apothem,
+							new LargeHexTile(i * 2 * apothem,
 									(int) (j * 3 * apothem / Math.sqrt(3))));
 				} else {
 					hexes.get(j).add(
-							new Hexagon(i * 2 * apothem + apothem, (int) (j * 3
+							new LargeHexTile(i * 2 * apothem + apothem, (int) (j * 3
 									* apothem / Math.sqrt(3))));
 				}
 			}
@@ -118,7 +118,7 @@ public class Canvas extends JPanel {
 			for (int j = 0; j < HEXESDOWN; j++) {
 				if (j != 0 && i != 0 && j < (199) && i < (199)) {
 					if (j % 2 == 0) {
-						hexes.get(j).get(i).neighbors = new Hexagon[6];
+						hexes.get(j).get(i).neighbors = new LargeHexTile[6];
 						hexes.get(j).get(i)
 								.setLeftNeighbor(hexes.get(j).get(i - 1));
 						hexes.get(j).get(i)
@@ -137,7 +137,7 @@ public class Canvas extends JPanel {
 										hexes.get(j + 1).get(i - 1));
 
 					} else {
-						hexes.get(j).get(i).neighbors = new Hexagon[6];
+						hexes.get(j).get(i).neighbors = new LargeHexTile[6];
 						hexes.get(j).get(i)
 								.setLeftNeighbor(hexes.get(j).get(i - 1));
 						hexes.get(j).get(i)
@@ -156,7 +156,7 @@ public class Canvas extends JPanel {
 										hexes.get(j + 1).get(i + 1));
 					}
 				} else if (i == 0 && j == 0) {
-					hexes.get(j).get(i).neighbors = new Hexagon[3];
+					hexes.get(j).get(i).neighbors = new LargeHexTile[3];
 					hexes.get(j).get(i)
 							.setLowerLeftNeighbor(hexes.get(j + 1).get(i));
 					hexes.get(j).get(i)
@@ -164,7 +164,7 @@ public class Canvas extends JPanel {
 					hexes.get(j).get(i)
 							.setRightNeighbor(hexes.get(j).get(i + 1));
 				} else if (j == 0 && i == 199) {
-					hexes.get(j).get(i).neighbors = new Hexagon[2];
+					hexes.get(j).get(i).neighbors = new LargeHexTile[2];
 					hexes.get(j).get(i)
 							.setLowerRightNeighbor(hexes.get(j).get(i - 1));
 					hexes.get(j).get(i)
@@ -178,7 +178,7 @@ public class Canvas extends JPanel {
 		return new Dimension(1920, 1080);
 	}
 
-	public void drawHex(Graphics2D g2d, Hexagon hex) {
+	public void drawHex(Graphics2D g2d, LargeHexTile hex) {
 		g2d.drawLine(hex.xpoints[0], hex.ypoints[0], hex.xpoints[1],
 				hex.ypoints[1]);
 		g2d.drawLine(hex.xpoints[3], hex.ypoints[3], hex.xpoints[4],
@@ -201,13 +201,13 @@ public class Canvas extends JPanel {
 		Graphics2D g2d = (Graphics2D) g;
 		System.out.println("it");
 
-		Hexagon seed = hexes
+		LargeHexTile seed = hexes
 				.get(HEXESACROSS / 4 + rng.nextInt(HEXESACROSS / 2)).get(
 						HEXESDOWN / 4 + rng.nextInt(HEXESDOWN / 2));
-		Hexagon seed2 = hexes.get(
+		LargeHexTile seed2 = hexes.get(
 				HEXESACROSS / 4 + rng.nextInt(HEXESACROSS / 2)).get(
 				HEXESDOWN / 4 + rng.nextInt(HEXESDOWN / 2));
-		Hexagon seed3 = hexes.get(
+		LargeHexTile seed3 = hexes.get(
 				HEXESACROSS / 4 + rng.nextInt(HEXESACROSS / 2)).get(
 				HEXESDOWN / 4 + rng.nextInt(HEXESDOWN / 2));
 		seed.setLand(true);
@@ -218,19 +218,19 @@ public class Canvas extends JPanel {
 			seed3.setLand(true);
 		}
 
-		ArrayList<Hexagon> outerLand = new ArrayList<Hexagon>();
-		for (Hexagon i : seed.getNeighbors()) {
+		ArrayList<LargeHexTile> outerLand = new ArrayList<LargeHexTile>();
+		for (LargeHexTile i : seed.getNeighbors()) {
 			i.setLand(true);
 			outerLand.add(i);
 		}
-		for (Hexagon i : seed2.getNeighbors()) {
+		for (LargeHexTile i : seed2.getNeighbors()) {
 			if (seedCount >= 2) {
 				i.setLand(true);
 				outerLand.add(i);
 			}
 
 		}
-		for (Hexagon i : seed3.getNeighbors()) {
+		for (LargeHexTile i : seed3.getNeighbors()) {
 			if (seedCount >= 3) {
 				i.setLand(true);
 				outerLand.add(i);
@@ -239,10 +239,10 @@ public class Canvas extends JPanel {
 		double i = 1; // changed
 		// int to double and i from 0
 		while (outerLand.size() != 0) {
-			ArrayList<Hexagon> newLand = new ArrayList<Hexagon>();
+			ArrayList<LargeHexTile> newLand = new ArrayList<LargeHexTile>();
 			for (int j = 0; j < outerLand.size(); j++) {
 
-				for (Hexagon k : outerLand.get(j).getNeighbors()) {
+				for (LargeHexTile k : outerLand.get(j).getNeighbors()) {
 
 					if (!k.isLand()) {
 						if (rng.nextDouble() <= i) {
@@ -278,7 +278,7 @@ public class Canvas extends JPanel {
 			}
 		}
 
-		ArrayList<Hexagon> outerOcean = new ArrayList<Hexagon>();
+		ArrayList<LargeHexTile> outerOcean = new ArrayList<LargeHexTile>();
 		outerOcean.add(hexes.get(0).get(0));
 		outerOcean.add(hexes.get(0).get(HEXESACROSS - 1));
 		outerOcean.add(hexes.get(HEXESDOWN - 1).get(HEXESACROSS - 1));
