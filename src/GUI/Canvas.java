@@ -4,17 +4,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Random;
 
-import javax.swing.AbstractAction;
-import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
-import javax.swing.InputMap;
 import javax.swing.JPanel;
-import javax.swing.KeyStroke;
 
 /**
  * OUTER LAYER NO NEIGHBOR
@@ -33,53 +27,6 @@ public class Canvas extends JPanel {
 	private Random rng = new Random();
 
 	public Canvas() {
-		//start keyboardinput stuff
-		InputMap inKeys = getInputMap(WHEN_FOCUSED);
-		ActionMap acKeys = getActionMap();
-
-		inKeys.put(KeyStroke.getKeyStroke(KeyEvent.VK_W, 0), "w");
-		inKeys.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, 0), "a");
-		inKeys.put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, 0), "z");
-		inKeys.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, 0), "x");
-		inKeys.put(KeyStroke.getKeyStroke(KeyEvent.VK_D, 0), "d");
-		inKeys.put(KeyStroke.getKeyStroke(KeyEvent.VK_E, 0), "e");
-		acKeys.put("w", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("w");
-			}
-		});
-		acKeys.put("a", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("a");
-			}
-		});
-		acKeys.put("z", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("z");
-			}
-		});
-		acKeys.put("x", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("x");
-			}
-		});
-		acKeys.put("d", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("d");
-			}
-		});
-		acKeys.put("e", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("e");
-			}
-		});
-		//end keyboard stuff
 		setLayout(null);
 		maps = new String[5];
 		maps[0] = "sfractal";
