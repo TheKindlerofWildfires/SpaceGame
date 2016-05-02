@@ -4,8 +4,11 @@ import java.awt.Polygon;
 @SuppressWarnings("serial")
 public abstract class Tile extends Polygon {
 
+	protected double moisture = 1;
 	protected boolean land = false;
 	protected boolean ocean = false;
+	protected double elevation = 0;
+	protected String biome = "WATER";
 	
 	public Tile() {
 		super();

@@ -5,19 +5,15 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.swing.AbstractAction;
-import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
-import javax.swing.InputMap;
 import javax.swing.JPanel;
-import javax.swing.KeyStroke;
+
+import noiseLibrary.module.source.Perlin;
 
 /**
  * OUTER LAYER NO NEIGHBOR
@@ -27,8 +23,12 @@ import javax.swing.KeyStroke;
 
 @SuppressWarnings("serial")
 public class Canvas extends JPanel {
-	public static int HEXESACROSS = 200;
-	public static int HEXESDOWN = 200;
+	public static final int HEXESACROSS = 360;
+	public static final int HEXESDOWN = 240;
+
+	public static final int MOISTURESCALER = 12;
+	public static final int ELEVATIONSCALER = 17;
+
 	public String mapType;
 	public int seedCount;
 	public String[] maps;
@@ -64,7 +64,7 @@ public class Canvas extends JPanel {
 		for (int i = 0; i < HEXESACROSS; i++) {
 			hexes.add(new ArrayList<LargeHexTile>());
 		}
-		int apothem = Hexagon.apothem;
+		int apothem = new Hexagon(0,0).apothem;
 		for (int i = 0; i < HEXESACROSS; i++) {
 			for (int j = 0; j < HEXESDOWN; j++) {
 				if (j % 2 == 0) {
@@ -77,7 +77,7 @@ public class Canvas extends JPanel {
 		}
 		for (int i = 0; i < HEXESACROSS; i++) {
 			for (int j = 0; j < HEXESDOWN; j++) {
-				if (j != 0 && i != 0 && j < (199) && i < (199)) {
+				if (j != 0 && i != 0 && j < HEXESDOWN - 1 && i < HEXESACROSS - 1) {
 					if (j % 2 == 0) {
 						hexes.get(j).get(i).neighbors = new LargeHexTile[6];
 						hexes.get(j).get(i).setLeftNeighbor(hexes.get(j).get(i - 1));
@@ -101,7 +101,7 @@ public class Canvas extends JPanel {
 					hexes.get(j).get(i).setLowerLeftNeighbor(hexes.get(j + 1).get(i));
 					hexes.get(j).get(i).setLowerRightNeighbor(hexes.get(j + 1).get(i + 1));
 					hexes.get(j).get(i).setRightNeighbor(hexes.get(j).get(i + 1));
-				} else if (j == 0 && i == 199) {
+				} else if (j == 0 && i == HEXESACROSS - 1) {
 					hexes.get(j).get(i).neighbors = new LargeHexTile[2];
 					hexes.get(j).get(i).setLowerRightNeighbor(hexes.get(j).get(i - 1));
 					hexes.get(j).get(i).setLowerLeftNeighbor(hexes.get(j + 1).get(i));
@@ -111,7 +111,12 @@ public class Canvas extends JPanel {
 			}
 		}
 		initializeMap();
-		displayMapThenZoom();
+		// displayMapThenZoom();
+		
+		hexes.stream().forEach(l -> l.stream().forEach(t -> t.changeScaleFactor(10)));
+		validate();
+		repaint();
+		
 	}
 
 	private void displayMapThenZoom() {
@@ -150,6 +155,31 @@ public class Canvas extends JPanel {
 	}
 
 	private void fillHex(Graphics2D g2d, LargeHexTile hex) {
+	
+		//TODO: FIX BIOMES IN A SATISFACTORY MANNER
+		switch(hex.biome){
+		case "SNOW":
+			g2d.setColor(Color.WHITE);
+			break;
+		case "TUNDRA":
+			g2d.setColor(Color.LIGHT_GRAY);
+			break;
+		case "BARE":
+			g2d.setColor(Color.GRAY);
+			break;
+		case "SCORCHED":
+			g2d.setColor(Color.DARK_GRAY);
+			break;
+		case "WATER":
+			g2d.setColor(Color.BLUE);
+			break;
+		case "TAIGA":
+			g2d.setColor(Color.RED);
+			break;
+		default:
+			g2d.setColor(Color.GREEN);
+			break;
+		}
 		Polygon poly = new Polygon();
 		for (int i = 0; i < hex.npoints; i++) {
 			poly.addPoint((int) (hex.xpoints[i] * zoomFactor), (int) (hex.ypoints[i] * zoomFactor));
@@ -157,11 +187,75 @@ public class Canvas extends JPanel {
 		g2d.fillPolygon(poly);
 	}
 
-	/*
-	 * public void addKeyListener(KeyListener keyboard){
-	 * 
-	 * }
-	 */
+	private void initializeMoistureAndElevation(LargeHexTile hex) {
+		Perlin perlin = new Perlin();
+		perlin.setSeed(rng.nextInt(200000));
+		hex.moisture = Math.abs(perlin.getValue(hex.cX / MOISTURESCALER, hex.cY / MOISTURESCALER, .1));
+		hex.elevation = Math.abs(perlin.getValue(hex.cX / ELEVATIONSCALER, hex.cY / ELEVATIONSCALER, .5));
+
+		//TODO: FIX BIOMES IN A SATISFACTORY MANNER
+		if (hex.moisture * 6 > 5) {
+			if (hex.elevation * 4 > 3) {
+				hex.biome = "SNOW";
+			} else if (hex.elevation * 4 > 1.5) {
+				hex.biome = "TAIGA";
+			} else if (hex.elevation * 4 > 1) {
+				hex.biome = "TEMPERATE RAIN FOREST";
+			} else {
+				hex.biome = "TROPICAL RAIN FOREST";
+			}
+		} else if (hex.moisture * 6 > 4) {
+			if (hex.elevation * 4 > 3) {
+				hex.biome = "SNOW";
+			} else if (hex.elevation * 4 > 1.5) {
+				hex.biome = "TAIGA";
+			} else if (hex.elevation * 4 > 1) {
+				hex.biome = "TEMPERATE DECIDUOUS FOREST";
+			} else {
+				hex.biome = "TROPICAL RAIN FOREST";
+			}
+		} else if (hex.moisture * 6 > 3) {
+			if (hex.elevation * 4 > 3) {
+				hex.biome = "SNOW";
+			} else if (hex.elevation * 4 > 2) {
+				hex.biome = "SHRUBLAND";
+			} else if (hex.elevation * 4 > 1) {
+				hex.biome = "TEMPERATE DECIDUOUS FOREST";
+			} else {
+				hex.biome = "TROPICAL SEASONAL FOREST";
+			}
+		} else if (hex.moisture * 6 > 2) {
+			if (hex.elevation * 4 > 3) {
+				hex.biome = "TUNDRA";
+			} else if (hex.elevation * 4 > 2) {
+				hex.biome = "SHRUBLAND";
+			} else if (hex.elevation * 4 > 1) {
+				hex.biome = "GRASSLAND";
+			} else {
+				hex.biome = "TROPICAL SEASONAL FOREST";
+			}
+		} else if (hex.moisture * 6 > 1) {
+			if (hex.elevation * 4 > 3) {
+				hex.biome = "BARE";
+			} else if (hex.elevation * 4 > 2) {
+				hex.biome = "TEMPERATE DESERT";
+			} else if (hex.elevation * 4 > 1) {
+				hex.biome = "GRASSLAND";
+			} else {
+				hex.biome = "GRASSLAND";
+			}
+		} else{
+			if (hex.elevation * 4 > 3) {
+				hex.biome = "SCORCHED";
+			} else if (hex.elevation * 4 > 2) {
+				hex.biome = "TEMPERATE DESERT";
+			} else if (hex.elevation * 4 > 1) {
+				hex.biome = "TEMPERATE DESERT";
+			} else {
+				hex.biome = "SUBTROPICAL DESERT";
+			} 
+		}
+	}
 
 	private void initializeMap() {
 		seed = hexes.get(HEXESACROSS / 4 + rng.nextInt(HEXESACROSS / 2))
@@ -248,6 +342,7 @@ public class Canvas extends JPanel {
 		// }
 		// if len(land)>= 500{ regen}
 
+		hexes.stream().forEach(l -> l.stream().filter(h -> h.isLand()).forEach(t -> initializeMoistureAndElevation(t)));
 	}
 
 	public void paintComponent(Graphics g) {
@@ -255,49 +350,30 @@ public class Canvas extends JPanel {
 		Graphics2D g2d = (Graphics2D) g;
 		System.out.println("it");
 
-		if (!zoomed) {
-			g2d.setColor(Color.GREEN);
-			hexes.stream().forEach(l -> l.stream().filter(h -> h.isLand()).forEach(h -> g2d.fillPolygon(h)));
+		// g2d.setColor(Color.GREEN);
+		hexes.stream().forEach(l -> l.stream().forEach(h -> fillHex(g2d, h)));
 
-			g2d.setColor(Color.BLUE);
-			hexes.stream().forEach(l -> l.stream().filter(h -> !h.isLand()).forEach(h -> g2d.fillPolygon(h)));
+		// g2d.setColor(Color.BLUE);
 
-			g2d.setColor(Color.BLACK);
-			hexes.stream().forEach(l -> l.stream().forEach(h -> drawHex(g2d, h)));
+		g2d.setColor(Color.BLACK);
+		hexes.stream().forEach(l -> l.stream().forEach(h -> drawHex(g2d, h)));
 
-			g2d.setColor(Color.MAGENTA);
-			g2d.fill(seed);
-			g2d.setColor(Color.ORANGE);
-			if (seedCount >= 2) {
-				g2d.fill(seed2);
-			}
-			if (seedCount >= 3) {
-				g2d.fill(seed3);
-			}
-			System.out.println(seedCount);
-			System.out.println(mapType);
-		} else {
-			g2d.setColor(Color.GREEN);
-			hexes.stream().forEach(l -> l.stream().filter(h -> h.isLand()).forEach(h -> fillHex(g2d, h)));
+		g2d.setColor(Color.MAGENTA);
+		g2d.fill(seed);
+		g2d.setColor(Color.ORANGE);
+		if (seedCount >= 2) {
+			g2d.fill(seed2);
+		}
+		if (seedCount >= 3) {
+			g2d.fill(seed3);
+		}
+		System.out.println(seedCount);
+		System.out.println(mapType);
 
-			g2d.setColor(Color.BLUE);
-			hexes.stream().forEach(l -> l.stream().filter(h -> !h.isLand()).forEach(h -> fillHex(g2d, h)));
-
-			g2d.setColor(Color.BLACK);
-			hexes.stream().forEach(l -> l.stream().forEach(h -> drawHex(g2d, h)));
-
-			g2d.setColor(Color.MAGENTA);
-			g2d.fill(seed);
-			g2d.setColor(Color.ORANGE);
-			if (seedCount >= 2) {
-				g2d.fill(seed2);
-			}
-			if (seedCount >= 3) {
-				g2d.fill(seed3);
-			}
-
+		if (zoomed) {
 			g2d.setColor(Color.YELLOW);
-			hexes.stream().forEach(l -> l.stream().forEach(h -> h.innerTiles.stream().forEach(t -> drawSmTile(g2d, t))));
+			hexes.stream()
+					.forEach(l -> l.stream().forEach(h -> h.innerTiles.stream().forEach(t -> drawSmTile(g2d, t))));
 		}
 	}
 

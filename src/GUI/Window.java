@@ -19,13 +19,13 @@ public class Window {
 	}
 
 	private static void createAndShowGUI() {
-		JFrame f = new JFrame("Perlin");
+		JFrame f = new JFrame("I can code i promise");
 		f.addKeyListener(new UserInput());
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.setLocation(100, 100);
 		f.getContentPane().add(new Canvas(), BorderLayout.CENTER);
 		f.pack();
 		f.setVisible(true);
+		f.setLocation(0, 0);
 	}
 }
 
