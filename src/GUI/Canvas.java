@@ -94,8 +94,8 @@ public class Canvas extends JPanel {
 		/*
 		 * maps[5] = "disk";
 		 */
-		mapType = maps[rng.nextInt(maps.length)];
-		// mapType = "trig";
+		//mapType = maps[rng.nextInt(maps.length)];
+		mapType = "stand";
 		seedCount = rng.nextInt(2) + 1;
 		// seedCount = 3;
 
@@ -226,20 +226,16 @@ public class Canvas extends JPanel {
 			outerLand.addAll(newLand);
 			newLand.clear();
 			if (mapType == "sfractal") {
-				i = 0.29 / (Math.log(i + 2) * (0.01 * (seedCount - 1) + 1));
+				i = 0.299 / (Math.log(i + 2) * (0.01 * (seedCount - 1) + 1));
 			} else if (mapType == "ssoft") {
-				i = 0.18 / (i * (0.01 * (seedCount - 1) + 1));
+				i = 0.17 / (i * (0.01 * (seedCount - 1) + 1));
 			} else if (mapType == "sdisk") {
-				i = Math.pow(2.618, -2.47 * i) / (0.01 * (seedCount - 1) + 1.01);
+				i = Math.pow(2.618, -2.7 * i) / (0.01 * (seedCount - 1) + 1.01);
 			} else if (mapType == "stand") {
-				;
-				i = 0.98 * i / (0.01 * (seedCount - 1) + 1);
+				//look a bug
+				i = (0.72*i + 0.1) / (0.01 * (seedCount - 1) + 1);
 			} else if (mapType == "trig") {
-				i = Math.cos(1.43 * i);
-				/*
-				 * }else if (mapType == "disk"){ i = Math.pow(2.6,
-				 * -2.46*i)/(0.01*(seedCount-1)+1);
-				 */
+				i = Math.cos(1.444 * i)/(1.4*(seedCount - 1) + 1);
 			} else {
 				i = 0;
 			}
@@ -261,7 +257,7 @@ public class Canvas extends JPanel {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
-		System.out.println("it");
+		//System.out.println("it");
 
 		g2d.setColor(Color.GREEN);
 		hexes.stream().forEach(l -> l.stream().filter(h -> h.isLand()).forEach(h -> g2d.fillPolygon(h)));
