@@ -4,13 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-<<<<<<< HEAD
-import java.util.ArrayList;
-import java.util.Random;
-=======
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
->>>>>>> refs/remotes/origin/genFixes
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -26,29 +19,8 @@ import gen.WorldGenerator;
 
 @SuppressWarnings("serial")
 public class Canvas extends JPanel {
-<<<<<<< HEAD
-	public static int HEXESACROSS = 200;
-	public static int HEXESDOWN = 200;
-	public String mapType;
-	public int seedCount;
-	public String[] maps;
-	private ArrayList<ArrayList<Hexagon>> hexes = new ArrayList<ArrayList<Hexagon>>();
-	private Random rng = new Random();
+	
 
-	public Canvas() {
-=======
-//	public static int HEXESACROSS = 200;
-//	public static int HEXESDOWN = 200;
-//	public String mapType;
-//	public int seedCount;
-//	public String[] maps;
-//	private ArrayList<ArrayList<LargeHexTile>> hexes = new ArrayList<ArrayList<LargeHexTile>>();
-//	private Random rng = new Random();
-
-//	private LargeHexTile seed;
-//	private LargeHexTile seed2;
-//	private LargeHexTile seed3;
-//	private ArrayList<LargeHexTile> seeds = new ArrayList<LargeHexTile>();
 	
 	public World world;
 	public WorldGenerator gen;
@@ -57,53 +29,6 @@ public class Canvas extends JPanel {
 		// start keyboardinput stuff
 		this.world = world;
 		this.gen = gen;
-		InputMap inKeys = getInputMap(WHEN_FOCUSED);
-		ActionMap acKeys = getActionMap();
-
-		inKeys.put(KeyStroke.getKeyStroke(KeyEvent.VK_W, 0), "w");
-		inKeys.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, 0), "a");
-		inKeys.put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, 0), "z");
-		inKeys.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, 0), "x");
-		inKeys.put(KeyStroke.getKeyStroke(KeyEvent.VK_D, 0), "d");
-		inKeys.put(KeyStroke.getKeyStroke(KeyEvent.VK_E, 0), "e");
-		acKeys.put("w", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("w");
-			}
-		});
-		acKeys.put("a", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("a");
-			}
-		});
-		acKeys.put("z", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("z");
-			}
-		});
-		acKeys.put("x", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("x");
-			}
-		});
-		acKeys.put("d", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("d");
-			}
-		});
-		acKeys.put("e", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("e");
-			}
-		});
-		// end keyboard stuff
->>>>>>> refs/remotes/origin/genFixes
 		setLayout(null);
 		/*
 		 * maps[5] = "disk";

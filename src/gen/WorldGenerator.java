@@ -10,7 +10,7 @@ public class WorldGenerator {
 	public LargeHexTile seed;
 	public LargeHexTile seed2;
 	public LargeHexTile seed3;
-	private ArrayList<LargeHexTile> seeds = new ArrayList<LargeHexTile>();
+	public ArrayList<LargeHexTile> seeds = new ArrayList<LargeHexTile>();
 
 	private Random rng = new Random();
 
