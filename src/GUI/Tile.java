@@ -1,4 +1,4 @@
-package Simon;
+package GUI;
 import java.awt.Polygon;
 
 @SuppressWarnings("serial")

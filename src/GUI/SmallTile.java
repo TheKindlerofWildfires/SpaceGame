@@ -1,4 +1,4 @@
-package Simon;
+package GUI;
 @SuppressWarnings("serial")
 public class SmallTile extends Tile{
 

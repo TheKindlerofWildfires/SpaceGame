@@ -1,4 +1,4 @@
-package Simon;
+package GUI;
 import java.util.ArrayList;
 
 @SuppressWarnings("serial")
