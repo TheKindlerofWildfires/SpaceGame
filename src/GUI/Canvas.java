@@ -35,6 +35,7 @@ public class Canvas extends JPanel {
 	private LargeHexTile seed;
 	private LargeHexTile seed2;
 	private LargeHexTile seed3;
+	private ArrayList<LargeHexTile> seeds = new ArrayList<LargeHexTile>();
 
 	public Canvas() {
 		// start keyboardinput stuff
@@ -172,6 +173,19 @@ public class Canvas extends JPanel {
 	 */
 
 	private void initializeMap() {
+		/* This code is much better, but I don't really understand
+		 * how to get i in generateContinent to behave the same
+		 * we can use it once someone helps with that
+		for(int seednum = 0; seednum < seedCount; seednum++) {
+			seeds.add(
+				hexes.get(HEXESACROSS / 4 + rng.nextInt(HEXESACROSS / 2))
+					 .get(HEXESDOWN / 4 + rng.nextInt(HEXESDOWN / 2))
+			);
+		}
+		for(LargeHexTile seed : seeds) {
+			generateContinent(seed, mapType);
+		}
+		*/
 		seed = hexes.get(HEXESACROSS / 4 + rng.nextInt(HEXESACROSS / 2))
 				.get(HEXESDOWN / 4 + rng.nextInt(HEXESDOWN / 2));
 		seed2 = hexes.get(HEXESACROSS / 4 + rng.nextInt(HEXESACROSS / 2))
@@ -259,17 +273,50 @@ public class Canvas extends JPanel {
 	}
 	
 	public void generateContinent(LargeHexTile seed, String mapType) {
-		//TODO: extract the logic to generate a single continent from initializeMap
-		/* instead of
-		 * if(seedCount >= 2) { ... }
-		 * if(seedCount >= 3) { ... }
-		 * 
-		 * we can do
-		 * for(int j = 0; j <= seedCount;j++) {
-		 * 	   generateContinent(seeds[j]);
-		 * }
-		 */
-		//Seriously, have you not heard of DRY?
+		seed.setLand(true);
+		ArrayList<LargeHexTile> land = new ArrayList<LargeHexTile>();
+		land.add(seed);
+		double i = 1;
+		while(land.size() > 0) {
+			LargeHexTile tile = land.get(rng.nextInt(land.size()));
+			LargeHexTile[] neighbors = new LargeHexTile[6];
+			System.arraycopy(tile.neighbors, 0, neighbors, 0, tile.neighbors.length);
+			//Shuffle the array of neighbors
+			for(int ix = 0;ix < neighbors.length;ix++) {
+				int randix = rng.nextInt(neighbors.length);
+				LargeHexTile temp = neighbors[ix];
+				neighbors[ix] = neighbors[randix];
+				neighbors[randix] = temp;
+			}
+			boolean flag = true;
+			for(LargeHexTile neighbor : neighbors) {
+				//TODO someone get these calculations for i to behave well...
+				if (mapType == "sfractal") {
+					i = 0.299 / (Math.log(i + 2) * (0.01 * (seedCount - 1) + 1));
+				} else if (mapType == "ssoft") {
+					i = 0.17 / (i * (0.01 * (seedCount - 1) + 1));
+				} else if (mapType == "sdisk") {
+					i = Math.pow(2.618, -2.7 * i) / (0.01 * (seedCount - 1) + 1.01);
+				} else if (mapType == "stand") {
+					//look a bug
+					i = (0.72*i + 0.1) / (0.01 * (seedCount - 1) + 1);
+				} else if (mapType == "trig") {
+					i = Math.cos(1.444 * i)/(1.4*(seedCount - 1) + 1);
+				} else {
+					i = 0;
+				}
+				if(neighbor != null && rng.nextDouble() < i && !neighbor.isLand()) {
+					neighbor.setLand(true);
+					land.add(neighbor);
+					flag = false;
+					break;
+				}
+			}
+			if(flag) {
+				land.remove(tile);
+			}
+		}
+		
 	}
 
 	public void paintComponent(Graphics g) {
