@@ -32,8 +32,12 @@ public class Canvas extends JPanel {
 	private ArrayList<ArrayList<LargeHexTile>> hexes = new ArrayList<ArrayList<LargeHexTile>>();
 	private Random rng = new Random();
 
+	private LargeHexTile seed;
+	private LargeHexTile seed2;
+	private LargeHexTile seed3;
+
 	public Canvas() {
-		//start keyboardinput stuff
+		// start keyboardinput stuff
 		InputMap inKeys = getInputMap(WHEN_FOCUSED);
 		ActionMap acKeys = getActionMap();
 
@@ -79,7 +83,7 @@ public class Canvas extends JPanel {
 				System.out.println("e");
 			}
 		});
-		//end keyboard stuff
+		// end keyboard stuff
 		setLayout(null);
 		maps = new String[5];
 		maps[0] = "sfractal";
@@ -104,13 +108,10 @@ public class Canvas extends JPanel {
 		for (int i = 0; i < HEXESACROSS; i++) {
 			for (int j = 0; j < HEXESDOWN; j++) {
 				if (j % 2 == 0) {
-					hexes.get(j).add(
-							new LargeHexTile(i * 2 * apothem,
-									(int) (j * 3 * apothem / Math.sqrt(3))));
+					hexes.get(j).add(new LargeHexTile(i * 2 * apothem, (int) (j * 3 * apothem / Math.sqrt(3))));
 				} else {
-					hexes.get(j).add(
-							new LargeHexTile(i * 2 * apothem + apothem, (int) (j * 3
-									* apothem / Math.sqrt(3))));
+					hexes.get(j)
+							.add(new LargeHexTile(i * 2 * apothem + apothem, (int) (j * 3 * apothem / Math.sqrt(3))));
 				}
 			}
 		}
@@ -119,59 +120,37 @@ public class Canvas extends JPanel {
 				if (j != 0 && i != 0 && j < (199) && i < (199)) {
 					if (j % 2 == 0) {
 						hexes.get(j).get(i).neighbors = new LargeHexTile[6];
-						hexes.get(j).get(i)
-								.setLeftNeighbor(hexes.get(j).get(i - 1));
-						hexes.get(j).get(i)
-								.setRightNeighbor(hexes.get(j).get(i + 1));
-						hexes.get(j)
-								.get(i)
-								.setUpperRightNeighbor(
-										hexes.get(j - 1).get(i - 1));
-						hexes.get(j).get(i)
-								.setUpperLeftNeighbor(hexes.get(j - 1).get(i));
-						hexes.get(j).get(i)
-								.setLowerLeftNeighbor(hexes.get(j + 1).get(i));
-						hexes.get(j)
-								.get(i)
-								.setLowerRightNeighbor(
-										hexes.get(j + 1).get(i - 1));
+						hexes.get(j).get(i).setLeftNeighbor(hexes.get(j).get(i - 1));
+						hexes.get(j).get(i).setRightNeighbor(hexes.get(j).get(i + 1));
+						hexes.get(j).get(i).setUpperRightNeighbor(hexes.get(j - 1).get(i - 1));
+						hexes.get(j).get(i).setUpperLeftNeighbor(hexes.get(j - 1).get(i));
+						hexes.get(j).get(i).setLowerLeftNeighbor(hexes.get(j + 1).get(i));
+						hexes.get(j).get(i).setLowerRightNeighbor(hexes.get(j + 1).get(i - 1));
 
 					} else {
 						hexes.get(j).get(i).neighbors = new LargeHexTile[6];
-						hexes.get(j).get(i)
-								.setLeftNeighbor(hexes.get(j).get(i - 1));
-						hexes.get(j).get(i)
-								.setRightNeighbor(hexes.get(j).get(i + 1));
-						hexes.get(j)
-								.get(i)
-								.setUpperRightNeighbor(
-										hexes.get(j - 1).get(i + 1));
-						hexes.get(j).get(i)
-								.setUpperLeftNeighbor(hexes.get(j - 1).get(i));
-						hexes.get(j).get(i)
-								.setLowerLeftNeighbor(hexes.get(j + 1).get(i));
-						hexes.get(j)
-								.get(i)
-								.setLowerRightNeighbor(
-										hexes.get(j + 1).get(i + 1));
+						hexes.get(j).get(i).setLeftNeighbor(hexes.get(j).get(i - 1));
+						hexes.get(j).get(i).setRightNeighbor(hexes.get(j).get(i + 1));
+						hexes.get(j).get(i).setUpperRightNeighbor(hexes.get(j - 1).get(i + 1));
+						hexes.get(j).get(i).setUpperLeftNeighbor(hexes.get(j - 1).get(i));
+						hexes.get(j).get(i).setLowerLeftNeighbor(hexes.get(j + 1).get(i));
+						hexes.get(j).get(i).setLowerRightNeighbor(hexes.get(j + 1).get(i + 1));
 					}
 				} else if (i == 0 && j == 0) {
 					hexes.get(j).get(i).neighbors = new LargeHexTile[3];
-					hexes.get(j).get(i)
-							.setLowerLeftNeighbor(hexes.get(j + 1).get(i));
-					hexes.get(j).get(i)
-							.setLowerRightNeighbor(hexes.get(j + 1).get(i + 1));
-					hexes.get(j).get(i)
-							.setRightNeighbor(hexes.get(j).get(i + 1));
+					hexes.get(j).get(i).setLowerLeftNeighbor(hexes.get(j + 1).get(i));
+					hexes.get(j).get(i).setLowerRightNeighbor(hexes.get(j + 1).get(i + 1));
+					hexes.get(j).get(i).setRightNeighbor(hexes.get(j).get(i + 1));
 				} else if (j == 0 && i == 199) {
 					hexes.get(j).get(i).neighbors = new LargeHexTile[2];
-					hexes.get(j).get(i)
-							.setLowerRightNeighbor(hexes.get(j).get(i - 1));
-					hexes.get(j).get(i)
-							.setLowerLeftNeighbor(hexes.get(j + 1).get(i));
+					hexes.get(j).get(i).setLowerRightNeighbor(hexes.get(j).get(i - 1));
+					hexes.get(j).get(i).setLowerLeftNeighbor(hexes.get(j + 1).get(i));
+				} else {
+					hexes.get(j).get(i).neighbors = new LargeHexTile[0];
 				}
 			}
 		}
+		initializeMap();
 	}
 
 	public Dimension getPreferredSize() {
@@ -179,14 +158,10 @@ public class Canvas extends JPanel {
 	}
 
 	public void drawHex(Graphics2D g2d, LargeHexTile hex) {
-		g2d.drawLine(hex.xpoints[0], hex.ypoints[0], hex.xpoints[1],
-				hex.ypoints[1]);
-		g2d.drawLine(hex.xpoints[3], hex.ypoints[3], hex.xpoints[4],
-				hex.ypoints[4]);
-		g2d.drawLine(hex.xpoints[4], hex.ypoints[4], hex.xpoints[5],
-				hex.ypoints[5]);
-		g2d.drawLine(hex.xpoints[5], hex.ypoints[5], hex.xpoints[0],
-				hex.ypoints[0]);
+		g2d.drawLine(hex.xpoints[0], hex.ypoints[0], hex.xpoints[1], hex.ypoints[1]);
+		g2d.drawLine(hex.xpoints[3], hex.ypoints[3], hex.xpoints[4], hex.ypoints[4]);
+		g2d.drawLine(hex.xpoints[4], hex.ypoints[4], hex.xpoints[5], hex.ypoints[5]);
+		g2d.drawLine(hex.xpoints[5], hex.ypoints[5], hex.xpoints[0], hex.ypoints[0]);
 
 	}
 
@@ -196,20 +171,13 @@ public class Canvas extends JPanel {
 	 * }
 	 */
 
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		Graphics2D g2d = (Graphics2D) g;
-		System.out.println("it");
-
-		LargeHexTile seed = hexes
-				.get(HEXESACROSS / 4 + rng.nextInt(HEXESACROSS / 2)).get(
-						HEXESDOWN / 4 + rng.nextInt(HEXESDOWN / 2));
-		LargeHexTile seed2 = hexes.get(
-				HEXESACROSS / 4 + rng.nextInt(HEXESACROSS / 2)).get(
-				HEXESDOWN / 4 + rng.nextInt(HEXESDOWN / 2));
-		LargeHexTile seed3 = hexes.get(
-				HEXESACROSS / 4 + rng.nextInt(HEXESACROSS / 2)).get(
-				HEXESDOWN / 4 + rng.nextInt(HEXESDOWN / 2));
+	private void initializeMap() {
+		seed = hexes.get(HEXESACROSS / 4 + rng.nextInt(HEXESACROSS / 2))
+				.get(HEXESDOWN / 4 + rng.nextInt(HEXESDOWN / 2));
+		seed2 = hexes.get(HEXESACROSS / 4 + rng.nextInt(HEXESACROSS / 2))
+				.get(HEXESDOWN / 4 + rng.nextInt(HEXESDOWN / 2));
+		seed3 = hexes.get(HEXESACROSS / 4 + rng.nextInt(HEXESACROSS / 2))
+				.get(HEXESDOWN / 4 + rng.nextInt(HEXESDOWN / 2));
 		seed.setLand(true);
 		if (seedCount >= 2) {
 			seed2.setLand(true);
@@ -262,8 +230,7 @@ public class Canvas extends JPanel {
 			} else if (mapType == "ssoft") {
 				i = 0.18 / (i * (0.01 * (seedCount - 1) + 1));
 			} else if (mapType == "sdisk") {
-				i = Math.pow(2.618, -2.47 * i)
-						/ (0.01 * (seedCount - 1) + 1.01);
+				i = Math.pow(2.618, -2.47 * i) / (0.01 * (seedCount - 1) + 1.01);
 			} else if (mapType == "stand") {
 				;
 				i = 0.98 * i / (0.01 * (seedCount - 1) + 1);
@@ -289,15 +256,18 @@ public class Canvas extends JPanel {
 		// }
 		// if len(land)>= 500{ regen}
 
+	}
+
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		Graphics2D g2d = (Graphics2D) g;
+		System.out.println("it");
+
 		g2d.setColor(Color.GREEN);
-		hexes.stream().forEach(
-				l -> l.stream().filter(h -> h.isLand())
-						.forEach(h -> g2d.fillPolygon(h)));
+		hexes.stream().forEach(l -> l.stream().filter(h -> h.isLand()).forEach(h -> g2d.fillPolygon(h)));
 
 		g2d.setColor(Color.BLUE);
-		hexes.stream().forEach(
-				l -> l.stream().filter(h -> !h.isLand())
-						.forEach(h -> g2d.fillPolygon(h)));
+		hexes.stream().forEach(l -> l.stream().filter(h -> !h.isLand()).forEach(h -> g2d.fillPolygon(h)));
 
 		g2d.setColor(Color.BLACK);
 		hexes.stream().forEach(l -> l.stream().forEach(h -> drawHex(g2d, h)));
@@ -317,5 +287,4 @@ public class Canvas extends JPanel {
 		System.out.println(mapType);
 
 	}
-
 }
