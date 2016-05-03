@@ -54,7 +54,7 @@ public class enemy {
 			enemyWeaponDamage = 20;
 			enemyWeaponPriority = 5;
 			enemyArmorTag = "null";
-			enemyAbility = "null"; //Surge (regain health when low)
+			enemyAbility = "Surge"; //Surge (regain health when low)
 			enemySpeed = 2;
 		}else if (enemyTag =="Sniper"){//they sit back, take aim
 			//Neo +30
@@ -68,7 +68,7 @@ public class enemy {
 			enemyWeaponDamage = 20;
 			enemyWeaponPriority = 3;
 			enemyArmorTag = "null";
-			enemyAbility = "null"; //dead eye
+			enemyAbility = "Dead Eye"; //dead eye
 			enemySpeed = 1;	
 		}else if (enemyTag =="Skirmisher"){//they dash in and out of fights
 			//Neo +20
@@ -82,7 +82,7 @@ public class enemy {
 			enemyWeaponDamage = 10;
 			enemyWeaponPriority = 2;
 			enemyArmorTag = "null";
-			enemyAbility = "null"; //stealth, tele at later levels
+			enemyAbility = "Stealth"; //stealth, tele at later levels
 			enemySpeed = 3;
 		}else if (enemyTag =="Grunt"){//meaningless minion waves
 			//Neo +85
@@ -110,7 +110,7 @@ public class enemy {
 			enemyWeaponDamage = 15;
 			enemyWeaponPriority = 2;
 			enemyArmorTag = "null"; //larger size
-			enemyAbility = "null"; //stickiness 
+			enemyAbility = "Surprise"; //surprise
 			enemySpeed = 1;
 		}else if (enemyTag =="Tank"){//almost impossible to kill
 			//Neo +16
@@ -124,7 +124,7 @@ public class enemy {
 			enemyWeaponDamage = 2;
 			enemyWeaponPriority = 5;
 			enemyArmorTag = "null"; //Reflect 1/10th of damage taken
-			enemyAbility = "null";
+			enemyAbility = "Reflect";
 			enemySpeed = 2;
 		}else if (enemyTag =="Leader"){//Like a mini mini boss
 			//Neo -50
@@ -136,10 +136,10 @@ public class enemy {
 			enemyArmor = 8;
 			enemyWeaponTag = "null";
 			enemyWeaponDamage = 15;
-			enemyWeaponPriority = 3;
+			enemyWeaponPriority = 4;
 			enemyArmorTag = "null";
-			enemyAbility = "null"; //Rally
-			enemySpeed = 4;
+			enemyAbility = "Rally"; //Rally
+			enemySpeed = 3;
 		}else if (enemyTag =="Scout"){ //a grunt with speed
 			//Neo + 90
 			//Agent +115
@@ -152,7 +152,7 @@ public class enemy {
 			enemyWeaponDamage = 3;
 			enemyWeaponPriority = 5;
 			enemyArmorTag = "null";
-			enemyAbility = "null"; //weak slow
+			enemyAbility = "Net"; //weak slow
 			enemySpeed = 5;
 		}else if (enemyTag =="Mage"){
 			//Neo +85
@@ -166,7 +166,7 @@ public class enemy {
 			enemyWeaponDamage = 5;
 			enemyWeaponPriority = 5;
 			enemyArmorTag = "null";
-			enemyAbility = "null"; //host of spells
+			enemyAbility = "Mage"; //host of spells
 			enemySpeed = 2;
 		}else if (enemyTag =="Hunter"){ //like a scout, but chases indefinitly and is dangerous
 			//Neo -16
@@ -180,7 +180,7 @@ public class enemy {
 			enemyWeaponDamage = 15;
 			enemyWeaponPriority = 2;
 			enemyArmorTag = "null";
-			enemyAbility = "null"; //knockdown, sprint
+			enemyAbility = "Knockdown"; //knockdown, sprint
 			enemySpeed = 5;
 			}
 		}

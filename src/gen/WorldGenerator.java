@@ -6,6 +6,7 @@ import java.util.Random;
 import GUI.LargeHexTile;
 
 public class WorldGenerator {
+	
 
 	public LargeHexTile seed;
 	public LargeHexTile seed2;
@@ -30,7 +31,7 @@ public class WorldGenerator {
 		maps[3] = "stand";
 		maps[4] = "trig";
 		
-		mapType = "stand";
+		//mapType = "stand";
 		seedCount = rng.nextInt(2) + 1;
 		// seedCount = 3;
 	}

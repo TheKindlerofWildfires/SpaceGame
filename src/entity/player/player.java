@@ -47,7 +47,7 @@ public class player {
 		return this.playerSpeed;
 	}
 	public player() {
-		playerTag = "Occultist";
+		playerTag = "Agent";
 		if (playerTag == "Neo") { //Basic char, balanced and easier
 			playerHealth = 100;
 			playerSanity = 100;
@@ -55,7 +55,7 @@ public class player {
 			playerSanityResist = 10;
 			playerWeaponTag = "Salvage";
 			playerWeaponDamage = 12;
-			playerWeaponPriority = 4;
+			playerWeaponPriority = 3;
 			playerArmorTag = "Leather Jacket";
 			playerAbility = "Pattern recognition"; // Helps to solve cyphers &&
 													// ruins
