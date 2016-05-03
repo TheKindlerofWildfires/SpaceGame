@@ -51,7 +51,13 @@ public class Canvas extends JPanel {
 		seedCount = rng.nextInt(2) + 1;
 
 		initializeMap();
-
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask(){
+			public void run(){
+				apothem=10;
+				repaint();
+			}
+		}, 2000);
 	}
 
 	public Dimension getPreferredSize() {
@@ -178,6 +184,7 @@ public class Canvas extends JPanel {
 		g2d.fill(poly);
 	}
 
+	//ONLY FOR TESTING ETC
 	private void fillTile(Graphics2D g2d, Tile tile, Color color) {
 		g2d.setColor(color);
 		double cX;
@@ -223,6 +230,7 @@ public class Canvas extends JPanel {
 		poly.closePath();
 		g2d.draw(poly);
 	}
+	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
