@@ -40,7 +40,7 @@ public class Canvas extends JPanel {
 
 	private Random rng = new Random();
 
-	private double apothem = 2;
+	private double apothem = 3;
 
 	public Canvas() {
 		setLayout(null);
@@ -61,20 +61,16 @@ public class Canvas extends JPanel {
 	private Tile[] getAllNeighbors(Tile tile) {
 		if (tile.xIndex > 0 && tile.yIndex > 0 && tile.xIndex < HEXESACROSS - 1 && tile.yIndex < HEXESDOWN - 1) {
 			Tile[] neighbors = new Tile[6];
-			if (tile.yIndex % 2 == 0) {
-				neighbors[0] = tiles.get(tile.yIndex).get(tile.xIndex - 1);
-				neighbors[1] = tiles.get(tile.yIndex).get(tile.xIndex + 1);
-				neighbors[2] = tiles.get(tile.yIndex - 1).get(tile.xIndex - 1);
-				neighbors[3] = tiles.get(tile.yIndex - 1).get(tile.xIndex);
-				neighbors[4] = tiles.get(tile.yIndex + 1).get(tile.xIndex);
+			neighbors[0] = tiles.get(tile.yIndex + 1).get(tile.xIndex);
+			neighbors[1] = tiles.get(tile.yIndex - 1).get(tile.xIndex);
+			neighbors[2] = tiles.get(tile.yIndex).get(tile.xIndex + 1);
+			neighbors[3] = tiles.get(tile.yIndex).get(tile.xIndex - 1);
+			if(tile.xIndex%2==0){
+				neighbors[4] = tiles.get(tile.yIndex - 1).get(tile.xIndex + 1);
+				neighbors[5] = tiles.get(tile.yIndex - 1).get(tile.xIndex - 1);
+			} else{
+				neighbors[4] = tiles.get(tile.yIndex + 1).get(tile.xIndex + 1);
 				neighbors[5] = tiles.get(tile.yIndex + 1).get(tile.xIndex - 1);
-			} else {
-				neighbors[0] = tiles.get(tile.yIndex).get(tile.xIndex - 1);
-				neighbors[1] = tiles.get(tile.yIndex).get(tile.xIndex + 1);
-				neighbors[2] = tiles.get(tile.yIndex - 1).get(tile.xIndex + 1);
-				neighbors[3] = tiles.get(tile.yIndex - 1).get(tile.xIndex);
-				neighbors[4] = tiles.get(tile.yIndex + 1).get(tile.xIndex);
-				neighbors[5] = tiles.get(tile.yIndex + 1).get(tile.xIndex + 1);
 			}
 			return neighbors;
 		} else {
@@ -168,50 +164,85 @@ public class Canvas extends JPanel {
 		if (tile.xIndex % 2 == 0) {
 			cY = tile.yIndex * apothem * 2;
 			cX = tile.xIndex * 3 * apothem / Math.sqrt(3);
-			poly.moveTo(cX + side, cY);
-			poly.lineTo(cX + side / 2, cY - apothem);
-			poly.lineTo(cX - side / 2, cY - apothem);
-			poly.lineTo(cX - side, cY);
-			poly.lineTo(cX - side / 2, cY + apothem);
-			poly.lineTo(cX + side / 2, cY + apothem);
-			poly.closePath();
-			g2d.draw(poly);
 		} else {
 			cY = tile.yIndex * apothem * 2 + apothem;
 			cX = tile.xIndex * 3 * apothem / Math.sqrt(3);
-			poly.moveTo(cX + side, cY);
-			poly.lineTo(cX + side / 2, cY - apothem);
-			poly.lineTo(cX - side / 2, cY - apothem);
-			poly.lineTo(cX - side, cY);
-			poly.lineTo(cX - side / 2, cY + apothem);
-			poly.lineTo(cX + side / 2, cY + apothem);
-			poly.closePath();
-			g2d.draw(poly);
 		}
+		poly.moveTo(cX + side, cY);
+		poly.lineTo(cX + side / 2, cY - apothem);
+		poly.lineTo(cX - side / 2, cY - apothem);
+		poly.lineTo(cX - side, cY);
+		poly.lineTo(cX - side / 2, cY + apothem);
+		poly.lineTo(cX + side / 2, cY + apothem);
+		poly.closePath();
+		g2d.fill(poly);
 	}
 
+	private void fillTile(Graphics2D g2d, Tile tile, Color color) {
+		g2d.setColor(color);
+		double cX;
+		double cY;
+		double side = apothem * 2 / Math.sqrt(3);
+		Path2D.Double poly = new Path2D.Double();
+		if (tile.xIndex % 2 == 0) {
+			cY = tile.yIndex * apothem * 2;
+			cX = tile.xIndex * 3 * apothem / Math.sqrt(3);
+		} else {
+			cY = tile.yIndex * apothem * 2 + apothem;
+			cX = tile.xIndex * 3 * apothem / Math.sqrt(3);
+		}
+		poly.moveTo(cX + side, cY);
+		poly.lineTo(cX + side / 2, cY - apothem);
+		poly.lineTo(cX - side / 2, cY - apothem);
+		poly.lineTo(cX - side, cY);
+		poly.lineTo(cX - side / 2, cY + apothem);
+		poly.lineTo(cX + side / 2, cY + apothem);
+		poly.closePath();
+		g2d.fill(poly);
+	}
+	
+	private void drawTile(Graphics2D g2d, Tile tile) {
+		g2d.setColor(Color.BLACK);
+		double cX;
+		double cY;
+		double side = apothem * 2 / Math.sqrt(3);
+		Path2D.Double poly = new Path2D.Double();
+		if (tile.xIndex % 2 == 0) {
+			cY = tile.yIndex * apothem * 2;
+			cX = tile.xIndex * 3 * apothem / Math.sqrt(3);
+		} else {
+			cY = tile.yIndex * apothem * 2 + apothem;
+			cX = tile.xIndex * 3 * apothem / Math.sqrt(3);
+		}
+		poly.moveTo(cX + side, cY);
+		poly.lineTo(cX + side / 2, cY - apothem);
+		poly.lineTo(cX - side / 2, cY - apothem);
+		poly.lineTo(cX - side, cY);
+		poly.lineTo(cX - side / 2, cY + apothem);
+		poly.lineTo(cX + side / 2, cY + apothem);
+		poly.closePath();
+		g2d.draw(poly);
+	}
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
 
-		// g2d.setColor(Color.GREEN);
-		tiles.stream().forEach(l -> l.stream().forEach(h -> fillTile(g2d, h)));
-
 		/*
-		 * // g2d.setColor(Color.BLUE);
-		 * 
-		 * g2d.setColor(Color.BLACK); hexes.stream().forEach(l ->
-		 * l.stream().forEach(h -> drawHex(g2d, h)));
-		 * 
-		 * g2d.setColor(Color.MAGENTA); g2d.fill(seed);
-		 * g2d.setColor(Color.ORANGE); if (seedCount >= 2) { g2d.fill(seed2); }
-		 * if (seedCount >= 3) { g2d.fill(seed3); }
-		 * System.out.println(seedCount); System.out.println(mapType);
-		 * 
-		 * if (zoomed) { g2d.setColor(Color.YELLOW); hexes.stream() .forEach(l
-		 * -> l.stream().forEach(h -> h.innerTiles.stream().forEach(t ->
-		 * drawSmTile(g2d, t)))); }
+		 * fillTile(g2d, tiles.get(3).get(4), Color.RED); fillTile(g2d,
+		 * tiles.get(2).get(4), Color.BLUE); fillTile(g2d, tiles.get(4).get(4),
+		 * Color.BLUE); fillTile(g2d, tiles.get(3).get(5), Color.BLUE);
+		 * fillTile(g2d, tiles.get(3).get(3), Color.BLUE); fillTile(g2d,
+		 * tiles.get(2).get(3), Color.BLUE); fillTile(g2d, tiles.get(2).get(5),
+		 * Color.BLUE);
 		 */
+
+	//	fillTile(g2d, tiles.get(26).get(25), Color.RED);
+	//	for (Tile t : getAllNeighbors(tiles.get(26).get(25))) {
+	//		fillTile(g2d, t, Color.CYAN);
+	//	}
+		tiles.stream().forEach(l -> l.stream().forEach(h -> fillTile(g2d, h)));
+		tiles.stream().forEach(l -> l.stream().forEach(h -> drawTile(g2d, h)));
+
 	}
 
 }
