@@ -32,23 +32,23 @@ public class player {
 		return this.playerWeaponTag;
 	}
 	public double getPlayerWeaponDamage() {
-		return this.playerSanityResist;
+		return this.playerWeaponDamage;
 	}
 	public double getPlayerWeaponPriority() {
-		return this.playerSanityResist;
+		return this.playerWeaponPriority;
 	}
 	public String getPlayerArmorTag() {
-		return this.playerWeaponTag;
+		return this.playerArmorTag;
 	}
 	public String getPlayerAbility() {
-		return this.playerWeaponTag;
+		return this.playerAbility;
 	}
 	public double getPlayerSpeed() {
-		return this.playerSanityResist;
+		return this.playerSpeed;
 	}
 	public player() {
-		playerTag = "Neo";
-		if (playerTag == "Neo") {
+		playerTag = "Occultist";
+		if (playerTag == "Neo") { //Basic char, balanced and easier
 			playerHealth = 100;
 			playerSanity = 100;
 			playerArmor = 9;
@@ -60,7 +60,7 @@ public class player {
 			playerAbility = "Pattern recognition"; // Helps to solve cyphers &&
 													// ruins
 			playerSpeed = 3;
-		} else if (playerTag == "Agent") {
+		} else if (playerTag == "Agent") { //Combat intensive, low utility
 			playerHealth = 120;
 			playerSanity = 80;
 			playerArmor = 10;
@@ -71,17 +71,19 @@ public class player {
 			playerArmorTag = "Bullet Proof Vest";
 			playerAbility = "Combat Expertise"; // Helps to see enemies
 			playerSpeed = 4;
-		} else if (playerTag == "Occultist") {
+		} else if (playerTag == "Occultist") {//Utility based, more risky to play
 			playerHealth = 80;
 			playerSanity = 50;
 			playerArmor = 8;
 			playerSanityResist = 8;
-			playerWeaponTag = "Knife";
+			playerWeaponTag = "Cultist's Blade";
 			playerWeaponDamage = 5;
 			playerWeaponPriority = 3;
 			playerArmorTag = "Robes";
 			playerAbility = "Alcoltye"; // Slows anger of old gods, helps with
 										// figuring out magic weapons
+			//lifestrike on basic weapon
+			//watch the overheal
 			playerSpeed = 3;
 
 		}

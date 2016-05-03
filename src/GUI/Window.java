@@ -8,6 +8,8 @@ import javax.swing.SwingUtilities;
 import gen.World;
 import gen.WorldGenerator;
 
+import combat.combatBasic;
+
 /**
  * Lacunarity: 1.5
  */
@@ -31,7 +33,10 @@ public class Window {
 		Canvas c = new Canvas(w, gen);
 		f.getContentPane().add(c, BorderLayout.CENTER);
 		f.pack();
-		f.setVisible(true);
+		f.setVisible(false); //true
+		
+		combatBasic x = new combatBasic();
+		x.init();
 	}
 	
 }
