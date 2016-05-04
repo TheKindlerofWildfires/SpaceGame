@@ -1,11 +1,10 @@
 package combat;
 
-import entity.Player;
-import entity.Monster;
-import entity.Entity;
+
+import entity.monster.*;
+import entity.player.*;
 import entity.*;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public class combatBasic {
@@ -20,16 +19,15 @@ public class combatBasic {
 
 	public combatBasic() {
 		String playerTag = "Neo";
-		String monsterTag = "Tank";
+		String monsterTag = "Scout";
 		//rng spits out random player
-		//Weapon damage is bugged
-		//
+		//looks like player pulls other Tag always... why is beyond me
 		p = Entity.getEntity(playerTag);
+		System.out.println(p.getEntityWeaponDamage());
+		//and this line right here overwrites p with m (The one below)
 		m = Entity.getEntity(monsterTag);
-		System.out.println(m.getEntityAbility());
+		System.out.println(p.getEntityWeaponDamage());
 		deadEyeStacks = 0;
-
-
 	}
 
 	public void Attack(Entity attacker, Entity defender) {
@@ -90,7 +88,7 @@ public class combatBasic {
 			m.setEntityHealth(m.getEntityHealth() + damage);
 		} else if (m.getEntityAbility() == "Dead Eye") {
 			if (rng.nextDouble() <= 0.8 / ((deadEyeStacks + 1))) {
-				p.setEntityHealth(p.getEntityHealth()-1);
+				p.setEntityArmor(p.getEntityArmor()-1);
 				p.setEntitySpeed(p.getEntitySpeed()-1);
 				deadEyeStacks++;
 			} else if (deadEyeStacks >= 1) {
@@ -115,7 +113,7 @@ public class combatBasic {
 	public void iliterativeCombat(Entity attacker, Entity defender) { // its a
 																		// pun
 		if (!(p.getEntityHealth() <= 0) && !(p.getEntityHealth() <= 0)) {
-			System.out.println(m.getEntityHealth());
+			//System.out.println(m.getEntityHealth());
 			Attack(defender, attacker);
 		} else if (p.getEntityHealth() > 0) {
 			System.out.println("Winner is " + p.getEntityTag());
@@ -127,6 +125,8 @@ public class combatBasic {
 			System.out.println(m.getEntityTag() + " has " + m.getEntityHealth());
 		} else
 			System.out.println("Checkout iliterateCombat cuz it has a bug");
+			System.out.println(p.getEntityTag() + p.getEntityHealth());
+			System.out.println(m.getEntityTag()  + m.getEntityHealth());
 	}
 
 	public void init() {

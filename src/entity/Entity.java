@@ -1,5 +1,8 @@
 package entity;
 
+import entity.monster.*;
+import entity.player.*;
+
 public abstract class Entity {
 	protected String entityTag; // Entity identifier
 	protected static String entityCondition;
@@ -63,6 +66,9 @@ public abstract class Entity {
 	public void setEntityHealth(double entityHealth){
 		this.entityHealth = entityHealth;
 	}
+	public void setEntityArmor(double entityArmor){
+		this.entityArmor = entityArmor;
+	}
 	public void setEntitySanityResist(double entitySanityResist){
 		this.entitySanityResist = entitySanityResist;
 	}
@@ -83,10 +89,32 @@ public abstract class Entity {
 	}
 	public static Entity getEntity(String entityTag){
 		switch(entityTag){
-		case "Neo":
-			return new Neo();
+		case "Grunt":
+			return new Grunt();
+		case "Hunter":
+			return new Hunter();
+		case "Juggernaut":
+			return new Juggernaut();
+		case "Leader":
+			return new Leader();
+		case "Lurker":
+			return new Lurker();
+		case "Mage":
+			return new Mage();
+		case "Scout":
+			return new Scout();
+		case "Skirmisher":
+			return new Skirmisher();
+		case "Sniper":
+			return new Sniper();
 		case "Tank":
 			return new Tank();
+		case "Neo":
+			return new Neo();
+		case "Agent":
+			return new Agent();
+		case "Oc":
+			return new Oc();
 		default:
 			System.err.println("Invalid entity Tag");
 			return new Neo();

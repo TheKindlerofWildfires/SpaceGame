@@ -1,4 +1,5 @@
-package entity;
+package entity.player;
+
 
 public class Neo extends Player{
 	public Neo(){

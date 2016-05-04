@@ -1,4 +1,5 @@
-package entity;
+package entity.monster;
+
 
 public class Tank extends Monster{
 	public Tank(){
