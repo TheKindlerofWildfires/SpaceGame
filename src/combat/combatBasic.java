@@ -1,90 +1,48 @@
 package combat;
 
-import entity.player.*;
-import entity.enemy.*;
+import entity.Player;
+import entity.Monster;
+import entity.Entity;
+import entity.*;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 public class combatBasic {
-	private Random rng = new Random();
-	private String playerTag;
-	private double playerHealth;
-	private double playerArmor;
-	private String playerWeaponTag;
-	private double playerWeaponDamage;
-	private double playerWeaponPriority;
-	private double playerSpeed;
-	private String enemyTag;
-	private double enemyHealth;
-	private double enemyArmor;
-	private String enemyWeaponTag;
-	private double enemyWeaponDamage;
-	private double enemyWeaponPriority;
-	private double enemySpeed;
-	private String enemyAbility;
+
 	private double damage;
 	private double deadEyeStacks;
-	private String playerCondition;
 	private String spell[];
 	private String spellChoice;
+	private Entity p; 
+	private Entity m;
+	private Random rng  = new Random();
 
 	public combatBasic() {
-
-		// Me being bad
-		player player = new player();
-		String playerTag = player.getPlayerTag();
-		double playerHealth = player.getPlayerHealth();
-		double playerArmor = player.getPlayerArmor();
-		String playerWeaponTag = player.getPlayerWeaponTag();
-		double playerWeaponDamage = player.getPlayerWeaponDamage();
-		double playerWeaponPriority = player.getPlayerWeaponPriority();
-		double playerSpeed = player.getPlayerSpeed();
-		enemy enemy = new enemy();
-		String enemyTag = enemy.getEnemyTag();
-		double enemyHealth = enemy.getEnemyHealth();
-		double enemyArmor = enemy.getEnemyArmor();
-		String enemyWeaponTag = enemy.getEnemyWeaponTag();
-		double enemyWeaponDamage = enemy.getEnemyWeaponDamage();
-		double enemyWeaponPriority = enemy.getEnemyWeaponPriority();
-		double enemySpeed = enemy.getEnemySpeed();
-		String enemyAbility = enemy.getEnemyAbility();
+		String playerTag = "Neo";
+		String monsterTag = "Tank";
+		//rng spits out random player
+		//Weapon damage is bugged
+		//
+		p = Entity.getEntity(playerTag);
+		m = Entity.getEntity(monsterTag);
+		System.out.println(m.getEntityAbility());
 		deadEyeStacks = 0;
-		this.playerTag = playerTag;
-		this.playerHealth = playerHealth;
-		this.playerArmor = playerArmor;
-		this.playerWeaponTag = playerWeaponTag;
-		this.playerWeaponDamage = playerWeaponDamage;
-		this.playerWeaponPriority = playerWeaponPriority;
-		this.playerSpeed = playerSpeed;
-		this.enemyTag = enemyTag;
-		this.enemyHealth = enemyHealth;
-		this.enemyArmor = enemyArmor;
-		this.enemyWeaponTag = enemyWeaponTag;
-		this.enemyWeaponDamage = enemyWeaponDamage;
-		this.enemyAbility = enemyAbility;
-		this.enemyWeaponPriority = enemyWeaponPriority;
-		this.enemySpeed = enemySpeed;
+
 
 	}
 
-	public void Attack(String attacker, String defender) {
-		if (attacker == "Mage") {
+	public void Attack(Entity attacker, Entity defender) {
+		if (attacker.getEntityTag() == "Mage") {
 			spellCasting();
 		} else {
 			for (int AR = 1; AR < 6;) {
 				double hitChance = (1 / 17.5 * Math.pow(Math.E, .1 * AR
-						* enemySpeed));
-				double attackerWeaponPriority;
-				if (attacker == playerTag) {
-					attackerWeaponPriority = playerWeaponPriority;
-				} else
-					attackerWeaponPriority = enemyWeaponPriority;
-
+						* defender.getEntitySpeed()));
 				if (rng.nextDouble() <= hitChance) {
 					Dodge(attacker, defender);
 					break;
-				} else if (AR == attackerWeaponPriority) {
+				} else if (AR == attacker.getEntityWeaponPriority()) {
 					Hit(attacker, defender);
 					break;
 				} else {
@@ -94,8 +52,8 @@ public class combatBasic {
 		}
 	}
 
-	public void Dodge(String attacker, String defender) {
-		System.out.println(defender + " Dodge");
+	public void Dodge(Entity attacker, Entity defender) {
+		System.out.println(defender.getEntityTag() + " Dodge");
 		iliterativeCombat(attacker, defender);
 	}
 
@@ -105,14 +63,14 @@ public class combatBasic {
 	// Mage: random spell every round instead of attack, including nuke, heal,
 	// debuff
 	// Nockdown: Skip a player turn on % */
-	public void Hit(String attacker, String defender) {
-		System.out.println(attacker + " Hit");
-		if (attacker == playerTag) {
-			damage = playerWeaponDamage * (10 / (10 + enemyArmor));
-			enemyHealth = enemyHealth - damage;
-			if ((playerWeaponTag == "Cultist's Blade")
-					&& (rng.nextDouble() <= 0.8) && (!(playerHealth >= 200))) {
-				playerHealth = playerHealth + playerWeaponDamage;
+	public void Hit(Entity attacker, Entity defender) {
+		System.out.println(attacker.getEntityTag() + " Hit");
+		if (attacker.getEntityTag() == p.getEntityTag()) {
+			damage = p.getEntityWeaponDamage() * (10 / (10 + m.getEntityArmor()));
+			m.setEntityHealth(m.getEntityHealth() - damage);
+			if ((p.getEntityWeaponTag() == "Cultist's Blade")
+					&& (rng.nextDouble() <= 0.8) && (!(p.getEntityHealth() >= 200))) {
+				p.setEntityHealth(p.getEntityHealth() + p.getEntityWeaponDamage());
 			}
 			iliterativeCombat(attacker, defender);
 		} else {
@@ -121,59 +79,58 @@ public class combatBasic {
 		}
 	}
 
-	public void onHitAbilityCall(String attacker, String defender) {
-		if (enemyAbility == "Surge") {
-			if (enemyHealth >= 50) {
-				enemyAbility = "Surged";
-				enemySpeed = enemySpeed + 1;
-				enemyWeaponPriority = enemyWeaponPriority - 2;
+	public void onHitAbilityCall(Entity attacker, Entity defender) {
+		if (m.getEntityAbility() == "Surge") {
+			if (m.getEntityHealth() >= 50) {
+				m.setEntityAbility("Surged");
+				m.setEntitySpeed(m.getEntitySpeed()+1);
+				m.setEntityWeaponPriority(m.getEntityWeaponPriority() - 2);
 			}
-		} else if (enemyAbility == "Surged") {
-			enemyHealth = enemyHealth + damage;
-		} else if (enemyAbility == "Dead Eye") {
+		} else if (m.getEntityAbility() == "Surged") {
+			m.setEntityHealth(m.getEntityHealth() + damage);
+		} else if (m.getEntityAbility() == "Dead Eye") {
 			if (rng.nextDouble() <= 0.8 / ((deadEyeStacks + 1))) {
-
-				playerSpeed = playerSpeed - 1;
-				playerArmor = playerArmor - 1;
+				p.setEntityHealth(p.getEntityHealth()-1);
+				p.setEntitySpeed(p.getEntitySpeed()-1);
 				deadEyeStacks++;
 			} else if (deadEyeStacks >= 1) {
 				deadEyeStacks = deadEyeStacks - 1;
-				playerSpeed = playerSpeed + 1;
-				playerArmor = playerArmor + 1;
+				p.setEntityHealth(p.getEntityHealth()+1);
+				p.setEntitySpeed(p.getEntitySpeed()+1);
 			}
-		} else if (enemyAbility == "Knockdown") {
+		} else if (m.getEntityAbility() == "Knockdown") {
 			if (rng.nextDouble() <= 0.3) {
-				playerCondition = "Knockdown";
+				p.setEntityCondition("Knockdown");
 			}
-		} else if (enemyAbility == "Rally") {
-			enemyAbility = "Rallied";
-			// allies too
-			enemySpeed = enemySpeed + 1;
-			enemyWeaponPriority = enemyWeaponPriority - 1;
+		} else if (m.getEntityAbility() == "Rally") {
+			m.setEntityAbility("Rallied");
+			m.setEntitySpeed(m.getEntitySpeed()+1);
+			m.setEntityWeaponPriority(m.getEntityWeaponPriority()-1);
 		} else
-			damage = enemyWeaponDamage * (10 / (10 + playerArmor));
-		playerHealth = playerHealth - damage;
-		iliterativeCombat(attacker, defender);
+			damage = m.getEntityWeaponDamage() * (10 / (10 + p.getEntityArmor()));
+			p.setEntityHealth(p.getEntityHealth()-damage);
+			iliterativeCombat(attacker, defender);
 	}
 
-	public void iliterativeCombat(String attacker, String defender) { // its a
+	public void iliterativeCombat(Entity attacker, Entity defender) { // its a
 																		// pun
-		if (!(playerHealth <= 0) && !(enemyHealth <= 0)) {
+		if (!(p.getEntityHealth() <= 0) && !(p.getEntityHealth() <= 0)) {
+			System.out.println(m.getEntityHealth());
 			Attack(defender, attacker);
-		} else if (playerHealth > 0) {
-			System.out.println("Winner is " + playerTag);
-			System.out.println(playerTag + " has " + playerHealth);
-			System.out.println(enemyTag + " died at " + enemyHealth);
-		} else if (enemyHealth > 0) {
-			System.out.println("Winner is " + enemyTag);
-			System.out.println(playerTag + " died at " + playerHealth);
-			System.out.println(enemyTag + " has " + enemyHealth);
+		} else if (p.getEntityHealth() > 0) {
+			System.out.println("Winner is " + p.getEntityTag());
+			System.out.println(p.getEntityTag() + " has " + p.getEntityHealth());
+			System.out.println(m.getEntityTag() + " died at " + m.getEntityHealth());
+		} else if (m.getEntityHealth() > 0) {
+			System.out.println("Winner is " + m.getEntityTag());
+			System.out.println(p.getEntityTag() + " died at " + p.getEntityHealth());
+			System.out.println(m.getEntityTag() + " has " + m.getEntityHealth());
 		} else
 			System.out.println("Checkout iliterateCombat cuz it has a bug");
 	}
 
 	public void init() {
-		Attack(playerTag, enemyTag); // player attacks first
+		Attack(p, m); // player attacks first
 	}
 
 	public void spellCasting() {
@@ -182,22 +139,22 @@ public class combatBasic {
 		spell[1] = "Life Siphon";
 		spell[2] = "Heal";
 		//spellChoice = spell[rng.nextInt(spell.length)];
-		if (enemyHealth >= 70){
+		if (m.getEntityHealth() >= 70){
 			spellChoice = "Firebolt";
-		}else if (enemyHealth <= 20){
+		}else if (m.getEntityHealth() <= 20){
 			spellChoice = "Heal";
 		}else{
 			spellChoice = "Life Siphon";
 		}
 		System.out.println("Mage cast "+ spellChoice);
 		if (spellChoice == "Firebolt"){
-			playerHealth = playerHealth-5;
+			p.setEntityHealth(p.getEntityHealth()-5);
 		}else if (spellChoice == "Life Siphon"){
-			playerHealth = playerHealth-3;
-			enemyHealth = enemyHealth +3;
+			p.setEntityHealth(p.getEntityHealth()-3);
+			m.setEntityHealth(m.getEntityHealth()-3);
 		}else if (spellChoice == "Heal"){
-			enemyHealth = enemyHealth +5;
+			m.setEntityHealth(m.getEntityHealth()-5);
 		}
-		iliterativeCombat(enemyTag, playerTag);
+		iliterativeCombat(m,p);
 	}
 }
