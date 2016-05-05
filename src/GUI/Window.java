@@ -40,7 +40,7 @@ public class Window {
 		//Render r = new Render("Null");
 		//r.drawEntity();
 		Mechanics m = new Mechanics();
-		m.init();
+		m.attackHandler("Neo", "Tank");
 	}
 	
 }

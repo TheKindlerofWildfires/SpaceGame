@@ -1,23 +1,14 @@
 package combat;
 
 import java.util.Random;
-import java.math.*;
-import combat.*;
-
 import entity.*;
 
 public class Mechanics {
-	private Entity p; 
-	private Entity m;
 	private AbilityHandler ab;
 	private Random rng = new Random();
 	static double hitChance;
 	public Mechanics() {
-		String playerTag = "Neo"; //rework for final
-		String monsterTag = "Hunter"; //rff
-		AbilityHandler ab = new AbilityHandler();
-		m = Entity.getEntity(monsterTag);
-		p = Entity.getEntity(playerTag);
+		ab = new AbilityHandler();
 	}
 
 	public boolean tryAttack(Entity attacker, Entity target) {
@@ -40,24 +31,23 @@ public class Mechanics {
 		return false;
 	}
 	public void attackHit(Entity attacker, Entity target){
-		ab.checkAbility(attacker.getEntityAbility(), "onhit", attacker, target);
+		ab.checkAbility("onHit", attacker, target);
 		double damage = attacker.getEntityWeaponDamage() * (10/(10*target.getEntityArmor())); 
 		target.setEntityHealth(target.getEntityHealth()-damage);
 	}
 	public void attackMiss(Entity attacker, Entity target){
-		//check for miss conditions
-		ab.checkAbility(target.getEntityAbility(), "onmiss");
+		ab.checkAbility("onMiss", attacker, target);
 	}
-	public void attackHandler(Entity attacker, Entity target, attacker, target){
+	public void attackHandler(String attackerTag, String targetTag){
+		System.out.println("delay");
 		//consume animation time or action counter - just a delay in code
-		if (tryAttack(attacker, target)){ //rff vars
+		Entity attacker = Entity.getEntity(attackerTag);
+		Entity target = Entity.getEntity(targetTag);
+		if (tryAttack(attacker, target)){
 			attackHit(attacker,target);
 		}else{
 			attackMiss(attacker,target);
 		}
-	}
-	//This function is used to test the code in dev
-	public void init() {
-		 attackHandler(p, m);// player attacks first
+		System.out.println("Stop crossing the streams");
 	}
 }
