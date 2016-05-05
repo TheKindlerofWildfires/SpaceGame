@@ -1,12 +1,10 @@
 package combat;
 
 
-import entity.monster.*;
-import entity.player.*;
 import entity.*;
 
 import java.util.Random;
-
+//this is just a class to test things
 public class combatBasic {
 
 	private double damage;
@@ -19,14 +17,14 @@ public class combatBasic {
 
 	public combatBasic() {
 		String playerTag = "Neo";
-		String monsterTag = "Scout";
-		//rng spits out random player
+		String monsterTag = "Hunter";
+		//rng spits out random match up
 		//looks like player pulls other Tag always... why is beyond me
 		p = Entity.getEntity(playerTag);
-		System.out.println(p.getEntityWeaponDamage());
+		//System.out.println(p.getEntityWeaponDamage());
 		//and this line right here overwrites p with m (The one below)
 		m = Entity.getEntity(monsterTag);
-		System.out.println(p.getEntityWeaponDamage());
+		//System.out.println(p.getEntityWeaponDamage());
 		deadEyeStacks = 0;
 	}
 
@@ -72,6 +70,8 @@ public class combatBasic {
 			}
 			iliterativeCombat(attacker, defender);
 		} else {
+			damage = m.getEntityWeaponDamage() * (10 / (10 + p.getEntityArmor()));
+			p.setEntityHealth(p.getEntityHealth()-damage);
 			onHitAbilityCall(attacker, defender);
 
 		}
@@ -105,15 +105,14 @@ public class combatBasic {
 			m.setEntitySpeed(m.getEntitySpeed()+1);
 			m.setEntityWeaponPriority(m.getEntityWeaponPriority()-1);
 		} else
-			damage = m.getEntityWeaponDamage() * (10 / (10 + p.getEntityArmor()));
-			p.setEntityHealth(p.getEntityHealth()-damage);
 			iliterativeCombat(attacker, defender);
 	}
 
-	public void iliterativeCombat(Entity attacker, Entity defender) { // its a
-																		// pun
-		if (!(p.getEntityHealth() <= 0) && !(p.getEntityHealth() <= 0)) {
-			//System.out.println(m.getEntityHealth());
+	public void iliterativeCombat(Entity attacker, Entity defender) {
+		//System.out.println(attacker.getEntityHealth());
+		//System.out.println(defender.getEntityHealth());
+		if (!(p.getEntityHealth() < 0) && !(p.getEntityHealth() < 0)) {
+			//System.out.println(attacker.getEntityTag());
 			Attack(defender, attacker);
 		} else if (p.getEntityHealth() > 0) {
 			System.out.println("Winner is " + p.getEntityTag());

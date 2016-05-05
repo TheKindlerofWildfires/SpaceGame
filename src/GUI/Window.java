@@ -7,8 +7,8 @@ import javax.swing.SwingUtilities;
 
 import gen.World;
 import gen.WorldGenerator;
-
-import combat.combatBasic;
+import entity.Render;
+import combat.*;
 
 /**
  * Lacunarity: 1.5
@@ -36,7 +36,11 @@ public class Window {
 		f.setVisible(false); //true
 		
 		combatBasic x = new combatBasic();
-		x.init();
+		//x.init();
+		//Render r = new Render("Null");
+		//r.drawEntity();
+		Mechanics m = new Mechanics();
+		m.init();
 	}
 	
 }
