@@ -34,7 +34,7 @@ public class Canvas extends JPanel {
 	public String mapType;
 	public int seedCount;
 
-	public String[] maps = { "sfractal", "ssoft", "sdisk", "stand", "trig" };
+	public String[] maps = { "fractal", "soft", "disk", "stand", "trig" };
 	private ArrayList<ArrayList<Tile>> tiles = new ArrayList<ArrayList<Tile>>();
 	private Tile[] seeds;
 
@@ -47,7 +47,8 @@ public class Canvas extends JPanel {
 		setBorder(BorderFactory.createLineBorder(Color.black));
 		setBackground(Color.BLACK);
 
-		mapType = maps[rng.nextInt(maps.length)];
+		//mapType = maps[rng.nextInt(maps.length)];
+		mapType = "fractal";
 		seedCount = rng.nextInt(2) + 1;
 
 		initializeMap();
@@ -102,8 +103,8 @@ public class Canvas extends JPanel {
 		// INIT SEEDS
 		seeds = new Tile[seedCount];
 		for (int i = 0; i < seedCount; i++) {
-			seeds[i] = tiles.get(HEXESDOWN / 4 + rng.nextInt(HEXESDOWN / 2))
-					.get(HEXESACROSS / 4 + rng.nextInt(HEXESACROSS / 2));
+			seeds[i] = tiles.get(HEXESDOWN /(8/3)  + rng.nextInt(HEXESDOWN / 3))
+					.get(HEXESACROSS / (8/3) + rng.nextInt(HEXESACROSS / 3));
 			seeds[i].setLand(true);
 		}
 
@@ -135,20 +136,20 @@ public class Canvas extends JPanel {
 			newLand.clear();
 
 			switch (mapType) {
-			case "sfractal":
-				i = 0.29 / (Math.log(i + 2) * (0.01 * (seedCount - 1) + 1));
+			case "fractal":
+				i = 0.29 / (Math.log(i + 2));
 				break;
-			case "ssoft":
-				i = 0.18 / (i * (0.01 * (seedCount - 1) + 1));
+			case "soft":
+				i = 0.18 /i;
 				break;
-			case "sdisk":
-				i = Math.pow(2.618, -2.47 * i) / (0.01 * (seedCount - 1) + 1.01);
+			case "disk":
+				i = Math.pow(2.618, -2.47 * i);
 				break;
 			case "stand":
-				i = 0.98 * i / (0.01 * (seedCount - 1) + 1);
+				i = 0.988 * i;
 				break;
 			case "trig":
-				i = Math.cos(1.43 * i);
+				i = Math.cos(1.443 * i);
 				break;
 			default:
 				System.err.println("invalid map type");
@@ -250,7 +251,8 @@ public class Canvas extends JPanel {
 	//	}
 		tiles.stream().forEach(l -> l.stream().forEach(h -> fillTile(g2d, h)));
 		tiles.stream().forEach(l -> l.stream().forEach(h -> drawTile(g2d, h)));
-
+		System.out.println(seedCount);
+		System.out.println(mapType);
 	}
 
 }
