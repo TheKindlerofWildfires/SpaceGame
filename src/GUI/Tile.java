@@ -1,33 +1,26 @@
 package GUI;
-import java.awt.Polygon;
 
-@SuppressWarnings("serial")
-public abstract class Tile extends Polygon {
+public class Tile {
 
-	protected boolean land = false;
-	protected boolean ocean = false;
+	private boolean land;
+	private double moisture;
+	private double elevation;
 	
-	public Tile() {
-		super();
+	public int xIndex;
+	public int yIndex;
+	
+	public Tile(int xIndex, int yIndex, double moisture, double elevation) {
+		this.moisture=moisture;
+		this.elevation=elevation;
+		this.xIndex=xIndex;
+		this.yIndex=yIndex;
 	}
-
-	public Tile(int[] xpoints, int[] ypoints, int npoints) {
-		super(xpoints, ypoints, npoints);
-	}
-
-	public void setLand(boolean land) {
+	
+	public void setLand(boolean land){
 		this.land = land;
-	}
-
-	public boolean isLand() {
+	}	
+	
+	public boolean isLand(){
 		return land;
-	}
-
-	public void setOcean(boolean ocean) {
-		this.ocean = ocean;
-	}
-
-	public boolean isOcean() {
-		return ocean;
 	}
 }
