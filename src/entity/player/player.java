@@ -1,6 +1,6 @@
 package entity.player;
 
-
+ 
 public class player {
 	public String playerTag; // Player identifier
 	public double playerHealth;
