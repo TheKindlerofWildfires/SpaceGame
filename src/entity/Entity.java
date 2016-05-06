@@ -7,23 +7,19 @@ import java.util.*;
 
 public abstract class Entity {
 	protected String entityTag; // Entity identifier
-	protected static String entityCondition;
-	protected static double entityHealth;
-	protected static double entitySanity;
-	protected static double entityArmor;
-	protected static double entitySanityResist; // like armor for sanity
-	protected static String entityWeaponTag; // weapon identifier
-	protected static double entityWeaponDamage;
-	protected static double entityWeaponPriority; // higherprio fires later
-	protected static String entityArmorTag;
+	protected String entityCondition;
+	protected double entityHealth;
+	protected double entitySanity;
+	protected double entityArmor;
+	protected double entitySanityResist; // like armor for sanity
+	protected String entityWeaponTag; // weapon identifier
+	protected double entityWeaponDamage;
+	protected double entityWeaponPriority; // higherprio fires later
+	protected String entityArmorTag;
 	protected List<String> entityAbility = new ArrayList<String>(); // Special sauce
-	protected static int entitySpeed; // blocks per turn
-	protected static String entityNatAbility;
+	protected int entitySpeed; // blocks per turn
+	protected String entityNatAbility;
 	public Entity(){
-		//looks to me like the way we did instantiaing entities was not happy
-		//passed entities seem to loose all feilds
-		//and all entites are one, which migh be doing something
-		addEntityAbility(this.entityNatAbility);
 	}
 	public String getEntityTag() { 
 		return entityTag;

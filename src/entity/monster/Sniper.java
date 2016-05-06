@@ -12,5 +12,6 @@ public class Sniper extends Monster{
 		entityArmorTag = "null"; 
 		entityNatAbility = "Dead Eye";
 		entitySpeed = 1;
+		addEntityAbility(entityNatAbility);
  }
 }

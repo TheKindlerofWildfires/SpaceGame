@@ -12,5 +12,6 @@ public class Hunter extends Monster{
 		entityArmorTag = "null"; //Reflect 1/10th of damage taken
 		entityNatAbility ="Knockdown";
 		entitySpeed = 2;
+		addEntityAbility(entityNatAbility);
  }
 }

@@ -12,5 +12,6 @@ public class Lurker extends Monster{
 		entityArmorTag = "null"; //Reflect 1/10th of damage taken
 		entityNatAbility = "Surprise";
 		entitySpeed = 1;
+		addEntityAbility(entityNatAbility);
  }
 }

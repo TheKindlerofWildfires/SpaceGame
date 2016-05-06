@@ -12,5 +12,6 @@ public class Tank extends Monster{
 		entityArmorTag = "null"; //Reflect 1/10th of damage taken
 		entityNatAbility = "Reflect";
 		entitySpeed = 2;
+		addEntityAbility(entityNatAbility);
  }
 }

@@ -12,5 +12,6 @@ public class Leader extends Monster{
 		entityArmorTag = "null"; //Reflect 1/10th of damage taken
 		entityNatAbility = "Rally";
 		entitySpeed = 3;
+		addEntityAbility(entityNatAbility);
  }
 }

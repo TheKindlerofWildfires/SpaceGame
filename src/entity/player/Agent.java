@@ -14,6 +14,7 @@ public class Agent extends Player{
 		entityArmorTag = "Bullet Proof Vest";
 		entityNatAbility = "Combat Expertise"; 
 		entitySpeed = 4;
+		addEntityAbility(entityNatAbility);
 	}
 
 }

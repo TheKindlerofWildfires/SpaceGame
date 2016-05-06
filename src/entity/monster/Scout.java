@@ -12,5 +12,6 @@ public class Scout extends Monster{
 		entityArmorTag = "null"; //Reflect 1/10th of damage taken
 		entityNatAbility = "Net";
 		entitySpeed = 5;
+		addEntityAbility(entityNatAbility);
  }
 }

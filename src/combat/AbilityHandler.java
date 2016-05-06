@@ -9,7 +9,7 @@ public class AbilityHandler {
 	}
 
 	public void checkAbility(String callType, Entity attacker, Entity target) {
-		//System.out.println(attacker.getEntityAbility().size());
+
 		for (int x = 0; x < attacker.getEntityAbility().size(); x++) {
 			switch (callType) {
 			case "onHit":
@@ -47,7 +47,7 @@ public class AbilityHandler {
 				case "Alcolyte":
 					break;
 				default:
-					System.err.println("onHit error");
+					System.err.println("onHit error--Ability Unlisted");
 					break;
 				}
 				if (target.getEntityAbility().get(x) == "Reflect") {
@@ -63,7 +63,10 @@ public class AbilityHandler {
 					break;
 				}
 			default:
-				System.err.println("error on call type");
+				//System.err.println("error on call type");
+				
+				//Suspect this is a big issue
+				//System.out.println(attacker.getEntityAbility());
 				break;
 			}
 		}
