@@ -76,8 +76,8 @@ public class Canvas extends JPanel {
 		}
 
 		gen.seed.setLand(true);
-		System.out.println(gen.seedCount);
-		System.out.println(gen.mapType);
+		//System.out.println(gen.seedCount);
+		//System.out.println(gen.mapType);
 
 	}
 }

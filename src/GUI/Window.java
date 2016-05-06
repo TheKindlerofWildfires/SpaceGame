@@ -7,6 +7,8 @@ import javax.swing.SwingUtilities;
 
 import gen.World;
 import gen.WorldGenerator;
+import entity.Render;
+import combat.*;
 
 /**
  * Lacunarity: 1.5
@@ -32,7 +34,18 @@ public class Window {
 		Canvas c = new Canvas(w, gen);
 		f.getContentPane().add(c, BorderLayout.CENTER);
 		f.pack();
-		f.setVisible(true);
+		f.setVisible(false); //true
+		
+		//x.init();
+		//Render r = new Render("Null");
+		//r.drawEntity();
+		Mechanics m = new Mechanics();
+		m.attackHandler("Neo","Juggernaut");
+		/*for (int x = 0; x<100; x++){
+			m.attackHandler("Neo", "Tank");
+			m.attackHandler("Tank", "Neo");
+		}*/
+		
 	}
 	
 }
