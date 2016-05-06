@@ -1,6 +1,5 @@
 /GUI/
-<<<<<<< HEAD
-=======
 /entity/
 /gen/
->>>>>>> refs/remotes/origin/genFixes
+/perlinNoise/
+/noiseLibrary/
