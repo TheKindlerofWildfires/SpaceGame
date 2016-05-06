@@ -10,7 +10,7 @@ public class Scout extends Monster{
 		entityWeaponDamage = 3;
 		entityWeaponPriority = 5;
 		entityArmorTag = "null"; //Reflect 1/10th of damage taken
-		entityAbility = "Net";
+		entityNatAbility = "Net";
 		entitySpeed = 5;
  }
 }

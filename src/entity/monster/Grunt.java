@@ -1,6 +1,5 @@
 package entity.monster;
 
-
 public class Grunt extends Monster{
 	public Grunt(){
 		entityTag = "Grunt"; //Not that dangerous
@@ -10,7 +9,7 @@ public class Grunt extends Monster{
 		entityWeaponDamage = 5;
 		entityWeaponPriority = 5;
 		entityArmorTag = "null"; //Reflect 1/10th of damage taken
-		entityAbility = "null";
+		entityNatAbility = "null";
 		entitySpeed = 2;
  }
 }

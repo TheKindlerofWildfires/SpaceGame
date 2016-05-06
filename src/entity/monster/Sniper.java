@@ -10,7 +10,7 @@ public class Sniper extends Monster{
 		entityWeaponDamage = 20;
 		entityWeaponPriority = 2;
 		entityArmorTag = "null"; 
-		entityAbility = "Dead Eye";
+		entityNatAbility = "Dead Eye";
 		entitySpeed = 1;
  }
 }

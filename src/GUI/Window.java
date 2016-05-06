@@ -35,12 +35,16 @@ public class Window {
 		f.pack();
 		f.setVisible(false); //true
 		
-		combatBasic x = new combatBasic();
 		//x.init();
 		//Render r = new Render("Null");
 		//r.drawEntity();
 		Mechanics m = new Mechanics();
-		m.attackHandler("Neo", "Tank");
+		m.attackHandler("Neo","Juggernaut");
+		/*for (int x = 0; x<100; x++){
+			m.attackHandler("Neo", "Tank");
+			m.attackHandler("Tank", "Neo");
+		}*/
+		
 	}
 	
 }

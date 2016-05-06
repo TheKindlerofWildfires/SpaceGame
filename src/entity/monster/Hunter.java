@@ -10,7 +10,7 @@ public class Hunter extends Monster{
 		entityWeaponDamage = 15;
 		entityWeaponPriority = 2;
 		entityArmorTag = "null"; //Reflect 1/10th of damage taken
-		entityAbility = "Knockdown";
+		entityNatAbility ="Knockdown";
 		entitySpeed = 2;
  }
 }

@@ -10,7 +10,7 @@ public class Skirmisher extends Monster{
 		entityWeaponDamage = 10;
 		entityWeaponPriority = 2;
 		entityArmorTag = "null"; //Reflect 1/10th of damage taken
-		entityAbility = "Stealth";
+		entityNatAbility = "Stealth";
 		entitySpeed = 3;
  }
 }

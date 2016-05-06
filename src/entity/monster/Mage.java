@@ -10,7 +10,7 @@ public class Mage extends Monster{
 		entityWeaponDamage = 5;
 		entityWeaponPriority = 5;
 		entityArmorTag = "null"; //Reflect 1/10th of damage taken
-		entityAbility = "Reflect";
+		entityNatAbility = "Mage";
 		entitySpeed = 2;
  }
 }

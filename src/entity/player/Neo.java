@@ -12,7 +12,7 @@ public class Neo extends Player{
 		entityWeaponDamage = 12;
 		entityWeaponPriority = 3;
 		entityArmorTag = "Leather Jacket";
-		entityAbility = "Pattern recognition"; 
+		entityNatAbility = "Pattern recognition"; 
 		entitySpeed = 3;
 	}
 

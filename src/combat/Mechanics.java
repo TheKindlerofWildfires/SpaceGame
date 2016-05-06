@@ -15,7 +15,7 @@ public class Mechanics {
 		//this is called when someone tries to hit something
 		for (int AR = 1; AR < 6;AR++) {
 			double hitChance = Gaussian.cdf(AR*target.getEntitySpeed(), 12.5, 3);
-			System.out.println(hitChance);
+			//System.out.println(hitChance);
 			if (rng.nextDouble() <= hitChance) {
 				//dodge event
 				return false;
@@ -44,10 +44,12 @@ public class Mechanics {
 		Entity attacker = Entity.getEntity(attackerTag);
 		Entity target = Entity.getEntity(targetTag);
 		if (tryAttack(attacker, target)){
+			System.out.println("Hit");
 			attackHit(attacker,target);
 		}else{
+			System.out.println("Miss");
 			attackMiss(attacker,target);
 		}
-		System.out.println("Stop crossing the streams");
+		//System.out.println("Stop crossing the streams");
 	}
 }

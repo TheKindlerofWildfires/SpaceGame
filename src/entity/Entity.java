@@ -3,6 +3,8 @@ package entity;
 import entity.monster.*;
 import entity.player.*;
 
+import java.util.*;
+
 public abstract class Entity {
 	protected String entityTag; // Entity identifier
 	protected static String entityCondition;
@@ -14,12 +16,15 @@ public abstract class Entity {
 	protected static double entityWeaponDamage;
 	protected static double entityWeaponPriority; // higherprio fires later
 	protected static String entityArmorTag;
-	protected static String entityAbility; // Special sauce
+	protected List<String> entityAbility = new ArrayList<String>(); // Special sauce
 	protected static int entitySpeed; // blocks per turn
+	protected static String entityNatAbility;
 	public Entity(){
-		
+		//looks to me like the way we did instantiaing entities was not happy
+		//passed entities seem to loose all feilds
+		//and all entites are one, which migh be doing something
+		addEntityAbility(this.entityNatAbility);
 	}
-	//write a big switch statement I guess
 	public String getEntityTag() { 
 		return entityTag;
 	}
@@ -50,8 +55,11 @@ public abstract class Entity {
 	public String getEntityArmorTag() {
 		return entityArmorTag;
 	}
-	public String getEntityAbility() {
+	public List<String> getEntityAbility() {
 		return entityAbility;
+	}
+	public String getEntityNatAbility() {
+		return entityNatAbility;
 	}
 	public int getEntitySpeed() {
 		return entitySpeed;
@@ -85,7 +93,14 @@ public abstract class Entity {
 		this.entitySpeed = entitySpeed;
 	}
 	public void setEntityAbility(String entityAbility){
-		this.entityAbility = entityAbility;
+		this.entityAbility.clear();
+		this.entityAbility.add(entityAbility);
+	}
+	public void addEntityAbility(String entityAbility){
+		if (!(this.entityAbility.contains(entityAbility))){
+			this.entityAbility.add(entityAbility);
+		}
+
 	}
 	public static Entity getEntity(String entityTag){
 		switch(entityTag){

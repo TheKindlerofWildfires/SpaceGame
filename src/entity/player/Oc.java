@@ -12,7 +12,7 @@ public class Oc extends Player{
 		entityWeaponDamage = 5;
 		entityWeaponPriority = 3;
 		entityArmorTag = "Robes";
-		entityAbility = "Alcolyte"; 
+		entityNatAbility = "Alcolyte"; 
 		entitySpeed = 3;
 	}
 

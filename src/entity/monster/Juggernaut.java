@@ -10,7 +10,7 @@ public class Juggernaut extends Monster{
 		entityWeaponDamage = 20;
 		entityWeaponPriority = 5;
 		entityArmorTag = "null"; 
-		entityAbility = "Surge";
+		entityNatAbility = "Surge";
 		entitySpeed = 2;
  }
 }
