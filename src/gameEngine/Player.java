@@ -6,7 +6,8 @@ import graphicEngine.*;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class Player extends GameObject{
-	
+	public float WIDTH = 0.05f;
+	public float HEIGHT = 0.25f;
 	private VertexArrayObject vao;
 	public Vector3f position;
 	
@@ -18,12 +19,23 @@ public class Player extends GameObject{
 		vao = new VertexArrayObject(this.vertices, this.indices);
 		this.vaoID = vao.getVaoID();
 	}
+	public boolean checkBounds(){
+		return false;
+	}
 	public void update(){
+		if(!checkBounds()){
 		if(KeyboardInput.isKeyDown(GLFW_KEY_W)){
 			position.y += 0.01f;
 		}
 		if(KeyboardInput.isKeyDown(GLFW_KEY_S)){
 			position.y -= 0.01f;
 		}
+		if(KeyboardInput.isKeyDown(GLFW_KEY_A)){
+			position.x -= 0.01f;
+		}
+		if(KeyboardInput.isKeyDown(GLFW_KEY_D)){
+			position.x += 0.01f;
+		}
+	}
 	}
 }

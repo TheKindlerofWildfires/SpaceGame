@@ -15,4 +15,9 @@ public class Vector3f {
 		this.y = 0;
 		this.z = 0;
 	}
+	public void translate(Vector3f vec) {
+		this.x += vec.x;
+		this.y += vec.y;
+		this.z += vec.z;
+	}
 }

@@ -1,8 +1,5 @@
 package GUI;
 
-//99% of this is copied from tutorials by this guy
-//https://www.youtube.com/channel/UCwFl9Y49sWChrddQTD9QhRA
-//remember to take out comments when we are done
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.system.MemoryUtil.*;
@@ -75,7 +72,7 @@ public class Window implements Runnable {
 		level1.update();
 		
 		glfwPollEvents();
-		
+		/*
 		if (KeyboardInput.keys[GLFW_KEY_A]) {
 			System.out.println("A");
 		}else if(KeyboardInput.keys[GLFW_KEY_W]) {
@@ -85,6 +82,7 @@ public class Window implements Runnable {
 		}else if(KeyboardInput.keys[GLFW_KEY_D]) {
 			System.out.println("D");
 		}
+		*/
 	}
 
 	public void render() {
@@ -98,9 +96,29 @@ public class Window implements Runnable {
 	@Override
 	public void run() {
 		init();
+		long lastTime = System.nanoTime();
+		double delta = 0.0;
+		double ns = 1000000000.0 /60.0;
+		long timer = System.currentTimeMillis();
+		int updates = 0;
+		int frames = 0;
 		while (running) {
-			update();
+			long now = System.nanoTime();
+			delta += (now - lastTime)/ns;
+			lastTime = now;
+			if (delta>= 1.0){
+				update();
+				updates++;
+				delta--;
+			}
 			render();
+			frames++;
+			if(System.currentTimeMillis()-timer > 1000){
+				timer+=1000;
+				System.out.println(updates + " UPS, " + frames + " FPS");
+				frames = 0;
+				updates = 0;
+			}
 
 			if (glfwWindowShouldClose(window) == GL_TRUE) {
 				running = false;
