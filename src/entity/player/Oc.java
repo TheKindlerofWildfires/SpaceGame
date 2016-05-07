@@ -1,7 +1,9 @@
 package entity.player;
 
+import entity.Entity;
 
-public class Oc extends Player{
+
+public class Oc extends Entity{
 	public Oc(){
 		entityTag = "Neo";
 		entityHealth = 80;

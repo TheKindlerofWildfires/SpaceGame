@@ -1,7 +1,9 @@
 package entity.monster;
 
+import entity.Entity;
 
-public class Tank extends Monster{
+
+public class Tank extends Entity{
 	public Tank(){
 		entityTag = "Tank"; //Not that dangerous
 		entityHealth = 300;

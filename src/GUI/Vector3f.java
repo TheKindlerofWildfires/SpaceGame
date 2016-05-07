@@ -11,6 +11,8 @@ public class Vector3f {
 		this.z = z;
 	}
 	public Vector3f(){
-		//an empty constructor
+		this.x = 0;
+		this.y = 0;
+		this.z = 0;
 	}
 }

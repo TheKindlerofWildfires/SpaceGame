@@ -10,8 +10,12 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
+//import javax.swing.BorderFactory;
+//import javax.swing.JPanel;
+
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.system.MemoryUtil.*;
 
 import noiseLibrary.module.source.Perlin;
 
@@ -22,13 +26,8 @@ import noiseLibrary.module.source.Perlin;
  * @author Simon
  */
 
-@SuppressWarnings("serial")
-public class Canvas extends JPanel {
-	
-//	public World world;
-//	public WorldGenerator gen;
-
-	
+//udfg	
+public class Canvas extends Window {
 	public static final int HEXESACROSS = 360;
 	public static final int HEXESDOWN = 240;
 
@@ -47,27 +46,26 @@ public class Canvas extends JPanel {
 	private double apothem = 3;
 
 	public Canvas() {
-		setLayout(null);
-		setBorder(BorderFactory.createLineBorder(Color.black));
-		setBackground(Color.BLACK);
+		//udfg	
+		//setLayout(null);
+		//setBorder(BorderFactory.createLineBorder(Color.black));
+		//setBackground(Color.BLACK);
 
 		//mapType = maps[rng.nextInt(maps.length)];
 		mapType = "fractal";
 		seedCount = rng.nextInt(2) + 1;
 
 		initializeMap();
+		/*
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask(){
 			public void run(){
 				apothem=10;
 				repaint();
-			}
-		}, 2000);
+			}	
+		}, 2000); */
 	}
 
-	public Dimension getPreferredSize() {
-		return new Dimension(1920, 1080);
-	}
 
 	private Tile[] getAllNeighbors(Tile tile) {
 		if (tile.xIndex > 0 && tile.yIndex > 0 && tile.xIndex < HEXESACROSS - 1 && tile.yIndex < HEXESDOWN - 1) {
