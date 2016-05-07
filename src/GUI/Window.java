@@ -1,11 +1,9 @@
 package GUI;
-
 import java.awt.BorderLayout;
+import java.awt.DisplayMode;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
-
-import combat.Mechanics;
 
 /**
  * Lacunarity: 1.5
@@ -34,8 +32,8 @@ public class Window {
 		//x.init();
 		//Render r = new Render("Null");
 		//r.drawEntity();
-		Mechanics m = new Mechanics();
-		m.attackHandler("Neo","Juggernaut");
+		//Mechanics m = new Mechanics();
+		//m.attackHandler("Neo","Juggernaut");
 		/*for (int x = 0; x<100; x++){
 			m.attackHandler("Neo", "Tank");
 			m.attackHandler("Tank", "Neo");
