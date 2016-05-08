@@ -20,6 +20,26 @@ public class Player extends GameObject{
 		this.vaoID = vao.getVaoID();
 	}
 	public boolean checkBounds(){
+		if (position.y <= -1.0f){
+			//below
+			position.y = -0.99f;
+			return true;
+		}
+		if (position.y +HEIGHT >= 1.0f){
+			//above
+			position.y = 0.99f-HEIGHT;
+			return true;
+		}
+		if (position.x +WIDTH >= 1.0f){
+			//right
+			position.x = 0.99f-WIDTH;
+			return true;
+		}
+		if (position.x <= -1.0f){
+			//left
+			position.x = -0.99f;
+			return true;
+		}
 		return false;
 	}
 	public void update(){

@@ -65,6 +65,7 @@ public class Window implements Runnable {
 		
 		level1 = new Level(); //rwff
 		
+		
 		//System.out.println(glGetString(GL_VERSION));
 	}
 
