@@ -10,9 +10,20 @@ public class Player extends GameObject{
 	public float HEIGHT = 0.25f;
 	private VertexArrayObject vao;
 	public Vector3f position;
-	
-	float[] vertices = {-0.0f, 0.25f, 0f,0.0f, 0.0f, 0f, 0.05f, 0.0f, 0f,0.05f, 0.25f, 0f};
-	public byte[] indices = new byte[]{0,1,2,2,3,0};
+	public double apothem = 0.03;
+	public float w = (float) (0.4*apothem);
+	public float h = (float) (Math.sqrt(3)/2*apothem);
+	public float l = (float) (0.8*apothem);
+	float[] vertices = {
+			w, h, 0.0f, //upper right 0
+			w, -h, 0.0f,//upper left 1
+			l, 0.0f, 0.0f, //right	2
+			-l, 0.0f, 0.0f, //left 3
+			-w, -h, 0.0f, //lower left 4
+			-w, h, 0.0f, //lower right 5
+			0.0f, 0.0f, 0.0f //center 6
+			}; 
+	public byte[] indices = new byte[]{6,1,2,6,3,4,6,0,2,6,0,5,6,1,4,6,3,5};
 	public Player(){
 		this.count = indices.length;
 		this.position = new Vector3f();
@@ -58,4 +69,10 @@ public class Player extends GameObject{
 		}
 	}
 	}
+	/*public void draw(){
+		shaderManager.shader1.start();
+		shaderManager.shader1.setUniform3f("pos",player.position);
+		player.draw();	
+		shaderManager.shader1.stop();
+	}*/
 }

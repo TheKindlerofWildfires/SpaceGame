@@ -4,7 +4,7 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.system.MemoryUtil.*;
 import gameEngine.GameObject;
-import gameEngine.Level;
+import gameEngine.*;
 
 import java.awt.Graphics;
 
@@ -23,7 +23,7 @@ public class Window implements Runnable {
 	public Long window;
 
 	
-	Level level1; //rwff
+	EntityManager entityManager; 
 	public static void main(String args[]) {
 		Window game = new Window();
 		game.start();
@@ -63,14 +63,14 @@ public class Window implements Runnable {
 		
 		glEnable(GL_DEPTH_TEST);
 		
-		level1 = new Level(); //rwff
+		entityManager = new EntityManager(); //rwff
 		
 		
 		//System.out.println(glGetString(GL_VERSION));
 	}
 
 	public void update() {
-		level1.update();
+		entityManager.update();
 		
 		glfwPollEvents();
 		/*
@@ -91,7 +91,7 @@ public class Window implements Runnable {
 		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-		level1.draw();
+		entityManager.draw();
 	}
 
 	@Override

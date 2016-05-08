@@ -7,33 +7,24 @@ public class Level { //prolly should not be called level
 	ShaderManager shaderManager;
 	Player player;
 	Monster monster;
-	Hexagon hex;
 	
 	public Level(){
 		shaderManager = new ShaderManager();
 		shaderManager.loadAll();
 		player = new Player(); //I suspect this will have to be cleaner --need to do all entities
 		monster = new Monster();
-		hex = new Hexagon();
-		
 		player.position.y = 0.5f;
 		player.position.x = 0.5f;//sets starting poss
 	}
 	public void update(){
 		checkCollision(player);
 		player.update();
-		hex.update();
 		monster.update();
 	}
 	public void draw(){
 		shaderManager.shader1.start();
 		shaderManager.shader1.setUniform3f("pos",player.position);
 		player.draw();	
-		shaderManager.shader1.stop();
-		
-		shaderManager.shader1.start();
-		shaderManager.shader1.setUniform3f("pos",hex.position);
-		hex.draw();
 		shaderManager.shader1.stop();
 		
 		shaderManager.shader1.start();
