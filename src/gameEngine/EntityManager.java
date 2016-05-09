@@ -2,7 +2,7 @@ package gameEngine;
 
 import graphicEngine.ShaderManager;
 
-public class EntityManager { //prolly should not be called level
+public class EntityManager { 
 	
 	ShaderManager shaderManager;
 	Player player;
@@ -13,8 +13,8 @@ public class EntityManager { //prolly should not be called level
 		shaderManager.loadAll();
 		map = new Map();
 		player = new Player();
-		player.position.y = 0.5f;
-		player.position.x = 0.5f;//sets starting poss
+		player.position.y = -0.01f;
+		player.position.x = 0.0f;
 	}
 	public void update(){
 		player.update();

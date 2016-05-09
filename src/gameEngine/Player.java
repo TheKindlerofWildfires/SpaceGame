@@ -10,10 +10,11 @@ public class Player extends GameObject{
 	public float HEIGHT = 0.25f;
 	private VertexArrayObject vao;
 	public Vector3f position;
-	public double apothem = 0.03;
-	public float w = (float) (0.4*apothem);
-	public float h = (float) (Math.sqrt(3)/2*apothem);
-	public float l = (float) (0.8*apothem);
+	private double apothem = 0.03;
+	private float w = (float) (0.4*apothem);
+	private float h = (float) (Math.sqrt(3)/2*apothem);
+	private float l = (float) (0.8*apothem);
+	private long lastTime;
 	float[] vertices = {
 			w, h, 0.0f, //upper right 0
 			w, -h, 0.0f,//upper left 1
@@ -29,6 +30,7 @@ public class Player extends GameObject{
 		this.position = new Vector3f();
 		vao = new VertexArrayObject(this.vertices, this.indices);
 		this.vaoID = vao.getVaoID();
+		
 	}
 	public boolean checkBounds(){
 		if (position.y <= -1.0f){
@@ -54,20 +56,46 @@ public class Player extends GameObject{
 		return false;
 	}
 	public void update(){
-		if(!checkBounds()){
-		if(KeyboardInput.isKeyDown(GLFW_KEY_W)){
-			position.y += 0.01f;
+		if(canMove()){
+			if(!checkBounds()){
+				float dis = 0.0069f;
+				if(KeyboardInput.isKeyDown(GLFW_KEY_Q)){//why is this jumpy?
+					for(int x = 0; x<10;x++){
+					position.x -= (float)(dis*0.579);
+					position.y += (float)(dis*Math.sqrt(3)/4);
+					}
+				}
+				if(KeyboardInput.isKeyDown(GLFW_KEY_W)){
+					for(int x = 0; x<10;x++){
+						position.y += (float)(dis*Math.sqrt(3)/2);
+						}
+				}
+				if(KeyboardInput.isKeyDown(GLFW_KEY_E)){
+					for(int x = 0; x<10;x++){
+						position.x += (float)(dis*0.579);
+						position.y += (float)(dis*Math.sqrt(3)/4);
+						}
+				}
+				if(KeyboardInput.isKeyDown(GLFW_KEY_A)){
+					for(int x = 0; x<10;x++){
+						position.x -= (float)(dis*0.579);
+						position.y -= (float)(dis*Math.sqrt(3)/4);
+						}
+				}
+				if(KeyboardInput.isKeyDown(GLFW_KEY_S)){
+					for(int x = 0; x<10;x++){
+						position.y -= (float)(dis*Math.sqrt(3)/2);
+						}
+				}
+				if(KeyboardInput.isKeyDown(GLFW_KEY_D)){
+					for(int x = 0; x<10;x++){
+						position.x += (float)(dis*0.579);
+						position.y -= (float)(dis*Math.sqrt(3)/4);
+						}
+				}
+				lastTime = System.nanoTime();
+			}
 		}
-		if(KeyboardInput.isKeyDown(GLFW_KEY_S)){
-			position.y -= 0.01f;
-		}
-		if(KeyboardInput.isKeyDown(GLFW_KEY_A)){
-			position.x -= 0.01f;
-		}
-		if(KeyboardInput.isKeyDown(GLFW_KEY_D)){
-			position.x += 0.01f;
-		}
-	}
 	}
 	/*public void draw(){
 		shaderManager.shader1.start();
@@ -75,4 +103,12 @@ public class Player extends GameObject{
 		player.draw();	
 		shaderManager.shader1.stop();
 	}*/
+	private boolean canMove() {
+		long delta = System.nanoTime()-lastTime;
+		if(delta<100000000){
+			return false;
+		}else{
+			return true;
+		}
+	}
 }
