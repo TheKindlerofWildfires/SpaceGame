@@ -11,7 +11,7 @@ import GUI.Tile;
 public class Map{
 	private ArrayList<Hexagon> tiles = new ArrayList<Hexagon>();
 	ShaderManager shaderManager;
-	public static final int HEXAGONSACROSS = 101; //always prime
+	public static final int HEXAGONSACROSS = 101; //always prime cuz map gen is bad
 	public static final int HEXAGONSDOWN = 501;
 	public String mapType;
 	public int seedCount;
@@ -23,22 +23,28 @@ public class Map{
 	public Map(){
 		shaderManager = new ShaderManager();
 		ShaderManager.loadAll();
+		
+		mapType = "fractal";
+		seedCount = rng.nextInt(2) + 1;
+		
 		double apothem = 0.01;
 		double q = 1;
-		for(int i = 0; i < (21000); i++){
-			
-			tiles.add(new Hexagon(apothem));
+		for(int i = 0; i < (HEXAGONSACROSS*201); i++){
+			int j = 1;
+			tiles.add(new Hexagon(i, j,apothem));
 			if(i == 0){
 				tiles.get(i).position.x = -1f;
 				tiles.get(i).position.y = -1f;
 			}else{
+				//basically all needs to be redone
 				//is super intensive
-				//System.out.println(i);
-				if(!(i%(HEXAGONSACROSS) == 0)){
-					//System.out.println("ac");
+				//something funny is up here
+				//update for new for loop
+				//flips out when i%HEXAGONSACROSS=0 for some reason
+				if((i%(HEXAGONSACROSS)!=0)){
 					tiles.get(i).position.x = (float) (tiles.get(i-1).position.x + (apothem/0.375*q));
 					tiles.get(i).position.y = tiles.get(i-1).position.y;
-				}else if (!(i%(HEXAGONSDOWN) == 0)){
+				}else if (j<(HEXAGONSDOWN)&&!(i%(HEXAGONSDOWN) == 0)){
 					tiles.get(i).position.y = (float) (tiles.get(i-1).position.y + apothem);
 					tiles.get(i).position.x = (float) (tiles.get(i-1).position.x -apothem/0.375/2*q);
 					q *= -1;
@@ -98,6 +104,7 @@ public class Map{
 	
 	public void draw(){
 		for(int i = 0; i < tiles.size(); i++){
+			//System.out.println(tiles.get(i).isLand());
 			if(tiles.get(i).isLand()){
 				ShaderManager.shader1.start();
 				ShaderManager.shader1.setUniform3f("pos",tiles.get(i).position);
@@ -113,7 +120,7 @@ public class Map{
 		
 
 	}
-	
+	//looks like the old tiles were done based on position in array of nextInt and this doesnt have that.
 	private void initMap(){
 		seeds = new Hexagon[seedCount];
 		for (int i = 0; i < seedCount; i++) {
@@ -121,11 +128,11 @@ public class Map{
 			seedsx[i] = tiles.get(HEXAGONSDOWN /(8/3)  + rng.nextInt(HEXAGONSDOWN / 3));
 			Hexagon[] seedsy = new Hexagon[seedCount];
 			seedsy[i] =tiles.get(HEXAGONSACROSS / (8/3) + rng.nextInt(HEXAGONSACROSS / 3));
-			
 			seeds = concat(seedsy, seedsx);
 			seeds[i].setLand(true);
 		}
 		ArrayList<Hexagon> outerLand = new ArrayList<Hexagon>();
+		
 		for (Hexagon s : seeds) {
 			for (Hexagon i : getAllNeighbors(s)) {
 				i.setLand(true);
@@ -133,6 +140,7 @@ public class Map{
 			}
 		}
 		double i = 1;
+
 		while (outerLand.size() != 0 && i != 0) {
 			ArrayList<Hexagon> newLand = new ArrayList<Hexagon>();
 			for (int j = 0; j < outerLand.size(); j++) {

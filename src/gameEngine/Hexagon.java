@@ -14,7 +14,7 @@ public class Hexagon extends GameObject{
 	public int yIndex;
 	private boolean land;
 	//do some real math and remove rounding error--simons job
-	public Hexagon(double apothem){
+	public Hexagon(int xIndex, int yIndex, double apothem){
 		Hexagon.apothem =apothem;
 		float w = (float) (0.4*apothem);
 		float h = (float) (Math.sqrt(3)/2*apothem);
@@ -33,6 +33,8 @@ public class Hexagon extends GameObject{
 		this.position = new Vector3f();
 		vao = new VertexArrayObject(vertices, indices);
 		this.vaoID = vao.getVaoID();
+		this.xIndex=xIndex;
+		this.yIndex=yIndex;
 	}
 	
 	public boolean checkBounds(){
