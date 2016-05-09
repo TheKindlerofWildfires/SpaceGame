@@ -10,7 +10,7 @@ public class Player extends GameObject{
 	public float HEIGHT = 0.25f;
 	private VertexArrayObject vao;
 	public Vector3f position;
-	private double apothem = 0.03;
+	private double apothem = Map.apothem;
 	private float w = (float) (0.4*apothem);
 	private float h = (float) (Math.sqrt(3)/2*apothem);
 	private float l = (float) (0.8*apothem);
@@ -58,7 +58,7 @@ public class Player extends GameObject{
 	public void update(){
 		if(canMove()){
 			if(!checkBounds()){
-				float dis = 0.0069f;
+				float dis = (float)(apothem/4.34782608696);//0.0069
 				if(KeyboardInput.isKeyDown(GLFW_KEY_Q)){//why is this jumpy?
 					for(int x = 0; x<10;x++){
 					position.x -= (float)(dis*0.579);
@@ -105,7 +105,7 @@ public class Player extends GameObject{
 	}*/
 	private boolean canMove() {
 		long delta = System.nanoTime()-lastTime;
-		if(delta<50000000){
+		if(delta<20000000){
 			return false;
 		}else{
 			return true;

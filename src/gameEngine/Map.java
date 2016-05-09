@@ -18,16 +18,14 @@ public class Map{
 	private Hexagon[] seeds;
 	private Random rng = new Random();
 	public String[] maps = { "fractal", "soft", "disk", "stand", "trig" };
-	
+	public static final double apothem = 0.01;
 	
 	public Map(){
-		shaderManager = new ShaderManager();
+		//shaderManager = new ShaderManager();
 		ShaderManager.loadAll();
 		
 		mapType = "fractal";
 		seedCount = rng.nextInt(2) + 1;
-		
-		double apothem = 0.01;
 		double q = 1;
 		for(int i = 0; i < (HEXAGONSACROSS*201); i++){
 			int j = 1;
@@ -53,7 +51,7 @@ public class Map{
 				}
 			}
 		}
-		initMap();
+		//initMap(); cuz nullpointers
 	}
 	private Hexagon[] getAllNeighbors(Hexagon hex) {
 		if (hex.xIndex > 0 && hex.yIndex > 0 && hex.xIndex < HEXAGONSACROSS - 1 && hex.yIndex < HEXAGONSDOWN - 1) {
@@ -106,15 +104,15 @@ public class Map{
 		for(int i = 0; i < tiles.size(); i++){
 			//System.out.println(tiles.get(i).isLand());
 			if(tiles.get(i).isLand()){
-				ShaderManager.shader1.start();
-				ShaderManager.shader1.setUniform3f("pos",tiles.get(i).position);
+				ShaderManager.landShader.start();
+				ShaderManager.landShader.setUniform3f("pos",tiles.get(i).position);
 				tiles.get(i).draw();	
-				ShaderManager.shader1.stop();
+				ShaderManager.landShader.stop();
 			}else{ //looks like there is no land
-				ShaderManager.playerShader.start();
-				ShaderManager.playerShader.setUniform3f("pos",tiles.get(i).position);
+				ShaderManager.waterShader.start();
+				ShaderManager.waterShader.setUniform3f("pos",tiles.get(i).position);
 				tiles.get(i).draw();	
-				ShaderManager.playerShader.stop();	
+				ShaderManager.waterShader.stop();	
 			}
 		}
 		
