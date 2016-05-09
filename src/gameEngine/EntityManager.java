@@ -10,7 +10,7 @@ public class EntityManager {
 	
 	public EntityManager(){
 		shaderManager = new ShaderManager();
-		shaderManager.loadAll();
+		ShaderManager.loadAll();
 		map = new Map();
 		player = new Player();
 		player.position.y = -0.01f;
@@ -21,10 +21,10 @@ public class EntityManager {
 		map.update();
 	}
 	public void draw(){
-		shaderManager.playerShader.start();
-		shaderManager.playerShader.setUniform3f("pos",player.position);
+		ShaderManager.playerShader.start();
+		ShaderManager.playerShader.setUniform3f("pos",player.position);
 		player.draw();	
-		shaderManager.playerShader.stop();
+		ShaderManager.playerShader.stop();
 		map.draw();
 		
 	}

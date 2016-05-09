@@ -3,7 +3,6 @@ package GUI;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.system.MemoryUtil.*;
-import gameEngine.GameObject;
 import gameEngine.*;
 
 import java.awt.Graphics;
@@ -126,10 +125,5 @@ public class Window implements Runnable {
 			}
 		}
 		keyCallback.release();
-	}
-
-	public void paintComponent(Graphics g) {
-		// TODO Auto-generated method stub
-		
-	}
+	} 
 }

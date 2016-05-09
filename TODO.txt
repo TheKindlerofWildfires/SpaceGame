@@ -11,3 +11,7 @@ Fix biome generation and colouring (I’m a brit)
 
 
 colliders are death
+
+Makes some enemies to fight
+Actually gen a world
+Do all the sad terrain stuff --> simons job

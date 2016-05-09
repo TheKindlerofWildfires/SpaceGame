@@ -10,7 +10,7 @@ public class Level { //prolly should not be called level
 	
 	public Level(){
 		shaderManager = new ShaderManager();
-		shaderManager.loadAll();
+		ShaderManager.loadAll();
 		player = new Player(); //I suspect this will have to be cleaner --need to do all entities
 		monster = new Monster();
 		player.position.y = 0.5f;
@@ -22,15 +22,15 @@ public class Level { //prolly should not be called level
 		monster.update();
 	}
 	public void draw(){
-		shaderManager.shader1.start();
-		shaderManager.shader1.setUniform3f("pos",player.position);
+		ShaderManager.shader1.start();
+		ShaderManager.shader1.setUniform3f("pos",player.position);
 		player.draw();	
-		shaderManager.shader1.stop();
+		ShaderManager.shader1.stop();
 		
-		shaderManager.shader1.start();
-		shaderManager.shader1.setUniform3f("pos",monster.position);
+		ShaderManager.shader1.start();
+		ShaderManager.shader1.setUniform3f("pos",monster.position);
 		monster.draw();
-		shaderManager.shader1.stop();
+		ShaderManager.shader1.stop();
 	}
 	public void checkCollision(Player player){
 		if(player.position.x<monster.position.x+monster.WIDTH&&

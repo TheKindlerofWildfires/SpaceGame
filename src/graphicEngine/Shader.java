@@ -2,7 +2,6 @@ package graphicEngine;
 
 import static graphicEngine.Utilities.*;
 import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.*;
 import GUI.Vector3f;
 
 public class Shader {

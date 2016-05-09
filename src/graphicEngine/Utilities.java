@@ -5,10 +5,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
-import static org.lwjgl.opengl.GL30.*;
+
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL11.*;
-
 
 import org.lwjgl.BufferUtils;
 public class Utilities {

@@ -26,7 +26,8 @@ import noiseLibrary.module.source.Perlin;
  * @author Simon
  */
 
-//udfg	
+//udfg	wonder what that meant
+
 public class Canvas extends Window {
 	public static final int HEXESACROSS = 360;
 	public static final int HEXESDOWN = 240;
@@ -235,9 +236,6 @@ public class Canvas extends Window {
 		g2d.draw(poly);
 	}
 	
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		Graphics2D g2d = (Graphics2D) g;
 
 		/*
 		 * fillTile(g2d, tiles.get(3).get(4), Color.RED); fillTile(g2d,
@@ -252,10 +250,5 @@ public class Canvas extends Window {
 	//	for (Tile t : getAllNeighbors(tiles.get(26).get(25))) {
 	//		fillTile(g2d, t, Color.CYAN);
 	//	}
-		tiles.stream().forEach(l -> l.stream().forEach(h -> fillTile(g2d, h)));
-		tiles.stream().forEach(l -> l.stream().forEach(h -> drawTile(g2d, h)));
-		System.out.println(seedCount);
-		System.out.println(mapType);
 	}
 
-}

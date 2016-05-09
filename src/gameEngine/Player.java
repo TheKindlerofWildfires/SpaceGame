@@ -105,7 +105,7 @@ public class Player extends GameObject{
 	}*/
 	private boolean canMove() {
 		long delta = System.nanoTime()-lastTime;
-		if(delta<100000000){
+		if(delta<50000000){
 			return false;
 		}else{
 			return true;
