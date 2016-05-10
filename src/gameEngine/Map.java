@@ -5,32 +5,45 @@ import graphicEngine.ShaderManager;
 import java.util.ArrayList;
 import java.util.Random;
 
+import GUI.Tile;
+
 
 public class Map{
 	private ArrayList<ArrayList<Hexagon>> tiles = new ArrayList<ArrayList<Hexagon>>();
 	ShaderManager shaderManager;
+<<<<<<< HEAD
 	public static final double apothem = 0.01;//really just hex constant
 	public static final int HEXAGONSACROSS = (int) (0.65/apothem); //always prime cuz map gen is bad
 	public static final int HEXAGONSDOWN = (int)(2.02/apothem);//both of these need to be stabalized to ln functions
 	//distance across = 2f
 	//distance across/apothem should equal number of tiles
+=======
+	public static final int HEXAGONSACROSS = 101; //always prime cuz map gen is bad
+	public static final int HEXAGONSDOWN = 501;
+>>>>>>> parent of c02ca9b... So bug fix, much wow
 	public String mapType;
 	public int seedCount;
 	private Hexagon[] seeds;
 	private Random rng = new Random();
 	public String[] maps = { "fractal", "soft", "disk", "stand", "trig" };
-	
+	public static final double apothem = 0.01;
 	
 	public Map(){
 		//shaderManager = new ShaderManager();
 		ShaderManager.loadAll();
-		System.out.println(HEXAGONSDOWN);
+		
 		mapType = "fractal";
 		seedCount = rng.nextInt(2) + 1;
 		double q = 1;
+<<<<<<< HEAD
 		for(int i = 0; i < (HEXAGONSACROSS); i++){
 			for(int j = 0; j < (HEXAGONSDOWN); j++){
 			System.out.println(j);
+=======
+		for(int i = 0; i < (HEXAGONSACROSS*201); i++){
+			int j = 1;
+			tiles.add(new Hexagon(i, j,apothem));
+>>>>>>> parent of c02ca9b... So bug fix, much wow
 			if(i == 0){
 				tiles.get(j).add(0,new Hexagon(i,j,apothem));
 				tiles.get(i).get(j).position.x = -1f;
@@ -43,11 +56,19 @@ public class Map{
 				//update for new for loop
 				//flips out when i%HEXAGONSACROSS=0 for some reason
 				if((i%(HEXAGONSACROSS)!=0)){
+<<<<<<< HEAD
 					tiles.get(i).get(j).position.x = (float) (tiles.get(i-1).get(j).position.x + (apothem/0.3*q));//0.375
 					tiles.get(i).get(j).position.y = tiles.get(i-1).get(j).position.y;
 				}else if (!(i%(HEXAGONSDOWN) == 0)){
 					tiles.get(i).get(j).position.y = (float) (tiles.get(i-1).get(j).position.y + apothem);
 					tiles.get(i).get(j).position.x = (float) (tiles.get(i-1).get(j).position.x -apothem/0.3/2*q);
+=======
+					tiles.get(i).position.x = (float) (tiles.get(i-1).position.x + (apothem/0.375*q));
+					tiles.get(i).position.y = tiles.get(i-1).position.y;
+				}else if (j<(HEXAGONSDOWN)&&!(i%(HEXAGONSDOWN) == 0)){
+					tiles.get(i).position.y = (float) (tiles.get(i-1).position.y + apothem);
+					tiles.get(i).position.x = (float) (tiles.get(i-1).position.x -apothem/0.375/2*q);
+>>>>>>> parent of c02ca9b... So bug fix, much wow
 					q *= -1;
 				}else{
 					System.out.println(i);
