@@ -7,11 +7,13 @@ import java.util.Random;
 
 
 public class Map{
-	private ArrayList<Hexagon> tiles = new ArrayList<Hexagon>();
+	private ArrayList<ArrayList<Hexagon>> tiles = new ArrayList<ArrayList<Hexagon>>();
 	ShaderManager shaderManager;
-	public static final double apothem = 0.01;
+	public static final double apothem = 0.01;//really just hex constant
 	public static final int HEXAGONSACROSS = (int) (0.65/apothem); //always prime cuz map gen is bad
 	public static final int HEXAGONSDOWN = (int)(2.02/apothem);//both of these need to be stabalized to ln functions
+	//distance across = 2f
+	//distance across/apothem should equal number of tiles
 	public String mapType;
 	public int seedCount;
 	private Hexagon[] seeds;
@@ -26,29 +28,32 @@ public class Map{
 		mapType = "fractal";
 		seedCount = rng.nextInt(2) + 1;
 		double q = 1;
-		for(int i = 0; i < (HEXAGONSACROSS*HEXAGONSDOWN); i++){
-			int j = 1;
-			tiles.add(new Hexagon(i, j,apothem));
+		for(int i = 0; i < (HEXAGONSACROSS); i++){
+			for(int j = 0; j < (HEXAGONSDOWN); j++){
+			System.out.println(j);
 			if(i == 0){
-				tiles.get(i).position.x = -1f;
-				tiles.get(i).position.y = -1f;
+				tiles.get(j).add(0,new Hexagon(i,j,apothem));
+				tiles.get(i).get(j).position.x = -1f;
+				tiles.get(i).get(j).position.y = -1f;
 			}else{
+				tiles.get(i).add(j,new Hexagon(i, j,apothem));
 				//basically all needs to be redone
 				//is super intensive
 				//something funny is up here
 				//update for new for loop
 				//flips out when i%HEXAGONSACROSS=0 for some reason
 				if((i%(HEXAGONSACROSS)!=0)){
-					tiles.get(i).position.x = (float) (tiles.get(i-1).position.x + (apothem/0.3*q));//0.375
-					tiles.get(i).position.y = tiles.get(i-1).position.y;
+					tiles.get(i).get(j).position.x = (float) (tiles.get(i-1).get(j).position.x + (apothem/0.3*q));//0.375
+					tiles.get(i).get(j).position.y = tiles.get(i-1).get(j).position.y;
 				}else if (!(i%(HEXAGONSDOWN) == 0)){
-					tiles.get(i).position.y = (float) (tiles.get(i-1).position.y + apothem);
-					tiles.get(i).position.x = (float) (tiles.get(i-1).position.x -apothem/0.3/2*q);
+					tiles.get(i).get(j).position.y = (float) (tiles.get(i-1).get(j).position.y + apothem);
+					tiles.get(i).get(j).position.x = (float) (tiles.get(i-1).get(j).position.x -apothem/0.3/2*q);
 					q *= -1;
 				}else{
 					System.out.println(i);
 				}
 			}
+		}
 		}
 		//initMap(); cuz nullpointers
 	}
@@ -93,25 +98,29 @@ public class Map{
 	}
 	
 	public void update(){
-		for(int i = 0; i < tiles.size(); i++){
-			tiles.get(i).update();
+		for(int i = 1; i < tiles.size(); i++){
+			for(int j = 1; j < tiles.size(); j++){
+				tiles.get(i).get(j).update();
+			}
 		}
 
 	}
 	
 	public void draw(){
 		for(int i = 0; i < tiles.size(); i++){
+			for(int j = 0; j < tiles.size(); j++){
 			//System.out.println(tiles.get(i).isLand());
-			if(tiles.get(i).isLand()){
+			if(tiles.get(i).get(j).isLand()){
 				ShaderManager.landShader.start();
 				ShaderManager.landShader.setUniform3f("pos",tiles.get(i).position);
-				tiles.get(i).draw();	
+				tiles.get(i).get(j).draw();	
 				ShaderManager.landShader.stop();
 			}else{ //looks like there is no land
 				ShaderManager.waterShader.start();
 				ShaderManager.waterShader.setUniform3f("pos",tiles.get(i).position);
-				tiles.get(i).draw();	
+				tiles.get(i).get(j).draw();	
 				ShaderManager.waterShader.stop();	
+			}
 			}
 		}
 		
