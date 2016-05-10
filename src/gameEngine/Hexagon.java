@@ -16,9 +16,9 @@ public class Hexagon extends GameObject{
 	//do some real math and remove rounding error--simons job
 	public Hexagon(int xIndex, int yIndex, double apothem){
 		Hexagon.apothem =apothem;
-		float w = (float) (0.4*apothem);
+		float w = (float) (0.5*apothem);
 		float h = (float) (Math.sqrt(3)/2*apothem);
-		float l = (float) (0.8*apothem);
+		float l = (float) (1.0*apothem);
 		float[] vertices = {
 				w, h, 0.0f, //upper right 0
 				w, -h, 0.0f,//upper left 1

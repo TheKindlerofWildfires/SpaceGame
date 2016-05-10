@@ -5,29 +5,28 @@ import graphicEngine.ShaderManager;
 import java.util.ArrayList;
 import java.util.Random;
 
-import GUI.Tile;
-
 
 public class Map{
 	private ArrayList<Hexagon> tiles = new ArrayList<Hexagon>();
 	ShaderManager shaderManager;
-	public static final int HEXAGONSACROSS = 101; //always prime cuz map gen is bad
-	public static final int HEXAGONSDOWN = 501;
+	public static final double apothem = 0.01;
+	public static final int HEXAGONSACROSS = (int) (0.65/apothem); //always prime cuz map gen is bad
+	public static final int HEXAGONSDOWN = (int)(2.02/apothem);//both of these need to be stabalized to ln functions
 	public String mapType;
 	public int seedCount;
 	private Hexagon[] seeds;
 	private Random rng = new Random();
 	public String[] maps = { "fractal", "soft", "disk", "stand", "trig" };
-	public static final double apothem = 0.01;
+	
 	
 	public Map(){
 		//shaderManager = new ShaderManager();
 		ShaderManager.loadAll();
-		
+		System.out.println(HEXAGONSDOWN);
 		mapType = "fractal";
 		seedCount = rng.nextInt(2) + 1;
 		double q = 1;
-		for(int i = 0; i < (HEXAGONSACROSS*201); i++){
+		for(int i = 0; i < (HEXAGONSACROSS*HEXAGONSDOWN); i++){
 			int j = 1;
 			tiles.add(new Hexagon(i, j,apothem));
 			if(i == 0){
@@ -40,11 +39,11 @@ public class Map{
 				//update for new for loop
 				//flips out when i%HEXAGONSACROSS=0 for some reason
 				if((i%(HEXAGONSACROSS)!=0)){
-					tiles.get(i).position.x = (float) (tiles.get(i-1).position.x + (apothem/0.375*q));
+					tiles.get(i).position.x = (float) (tiles.get(i-1).position.x + (apothem/0.3*q));//0.375
 					tiles.get(i).position.y = tiles.get(i-1).position.y;
-				}else if (j<(HEXAGONSDOWN)&&!(i%(HEXAGONSDOWN) == 0)){
+				}else if (!(i%(HEXAGONSDOWN) == 0)){
 					tiles.get(i).position.y = (float) (tiles.get(i-1).position.y + apothem);
-					tiles.get(i).position.x = (float) (tiles.get(i-1).position.x -apothem/0.375/2*q);
+					tiles.get(i).position.x = (float) (tiles.get(i-1).position.x -apothem/0.3/2*q);
 					q *= -1;
 				}else{
 					System.out.println(i);

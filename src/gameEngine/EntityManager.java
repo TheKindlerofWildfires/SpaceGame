@@ -13,7 +13,7 @@ public class EntityManager {
 		ShaderManager.loadAll();
 		map = new Map();
 		player = new Player();
-		player.position.y = -0.01f;
+		player.position.y = 0.0f;
 		player.position.x = 0.0f;
 	}
 	public void update(){
