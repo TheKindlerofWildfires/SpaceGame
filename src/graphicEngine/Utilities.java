@@ -25,6 +25,7 @@ public class Utilities {
 	}
 	public static int loadShader(String filepath, int type){
 		StringBuilder result = new StringBuilder();
+		System.out.println(filepath);
 		try{
 			BufferedReader reader = new BufferedReader(new FileReader(filepath));
 			String buffer = "";
@@ -32,6 +33,8 @@ public class Utilities {
 				result.append(buffer);
 				result.append("\n");
 			}
+			System.out.println(result);
+
 		}catch (IOException e){
 			System.err.println(e);
 		}
