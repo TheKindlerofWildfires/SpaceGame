@@ -1,142 +1,73 @@
 package gameEngine;
 
 import graphicEngine.ShaderManager;
+import noiseLibrary.module.source.Perlin;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 import GUI.Tile;
 
+public class Map {
+	public static final int HEXESACROSS = 360;
+	public static final int HEXESDOWN = 240;
 
-public class Map{
-	private ArrayList<Hexagon> tiles = new ArrayList<Hexagon>();
-	ShaderManager shaderManager;
-	public static final int HEXAGONSACROSS = 101; //always prime
-	public static final int HEXAGONSDOWN = 501;
+	public static final int MOISTURESCALER = 12;
+	public static final int ELEVATIONSCALER = 17;
+
 	public String mapType;
 	public int seedCount;
-	private Hexagon[] seeds;
-	private Random rng = new Random();
+
 	public String[] maps = { "fractal", "soft", "disk", "stand", "trig" };
-	
-	
-	public Map(){
-		shaderManager = new ShaderManager();
-		ShaderManager.loadAll();
-		double apothem = 0.01;
-		double q = 1;
-		for(int i = 0; i < (21000); i++){
-			
-			tiles.add(new Hexagon(apothem));
-			if(i == 0){
-				tiles.get(i).position.x = -1f;
-				tiles.get(i).position.y = -1f;
-			}else{
-				//is super intensive
-				//System.out.println(i);
-				if(!(i%(HEXAGONSACROSS) == 0)){
-					//System.out.println("ac");
-					tiles.get(i).position.x = (float) (tiles.get(i-1).position.x + (apothem/0.375*q));
-					tiles.get(i).position.y = tiles.get(i-1).position.y;
-				}else if (!(i%(HEXAGONSDOWN) == 0)){
-					tiles.get(i).position.y = (float) (tiles.get(i-1).position.y + apothem);
-					tiles.get(i).position.x = (float) (tiles.get(i-1).position.x -apothem/0.375/2*q);
-					q *= -1;
-				}else{
-					System.out.println(i);
-				}
-			}
-		}
-		initMap();
-	}
-	private Hexagon[] getAllNeighbors(Hexagon hex) {
-		if (hex.xIndex > 0 && hex.yIndex > 0 && hex.xIndex < HEXAGONSACROSS - 1 && hex.yIndex < HEXAGONSDOWN - 1) {
-			Hexagon[] neighborsx = new Hexagon[6];
-			Hexagon[] neighborsy = new Hexagon[6];
-			neighborsx[0] = tiles.get(hex.yIndex + 1);
-			neighborsx[0] = tiles.get(hex.xIndex);
-			neighborsx[1] = tiles.get(hex.yIndex - 1);
-			neighborsy[1] = tiles.get(hex.xIndex);
-			neighborsx[2] = tiles.get(hex.yIndex);
-			neighborsy[2] = tiles.get(hex.xIndex + 1);
-			neighborsx[3] = tiles.get(hex.yIndex);
-			neighborsy[3] = tiles.get(hex.xIndex - 1);
-			if(hex.xIndex%2==0){
-				neighborsx[4] = tiles.get(hex.yIndex - 1);
-				neighborsy[4] = tiles.get(hex.xIndex + 1);
-				neighborsx[5] = tiles.get(hex.yIndex - 1);
-				neighborsy[5] = tiles.get(hex.xIndex - 1);
-			} else{
-				neighborsx[4] = tiles.get(hex.yIndex + 1);
-				neighborsy[4] = tiles.get(hex.xIndex + 1);
-				neighborsx[5] = tiles.get(hex.yIndex + 1);
-				neighborsy[5] = tiles.get(hex.xIndex - 1);
-			}//other option is to make an pair class
-			//cross your fingers boyz 
-			return concat(neighborsx, neighborsy);
-			
-		} else {
-			return new Hexagon[0];
-		}
-	}
-	
-	private Hexagon[] concat(Hexagon[] a, Hexagon[] b){
-		int aLen = a.length;
-		int bLen = b.length;
-		Hexagon[] c= new Hexagon[aLen+bLen];
-		System.arraycopy(a, 0, c, 0, aLen);
-		System.arraycopy(b, 0, c, aLen, bLen);
-		return c;
-	}
-	
-	public void update(){
-		for(int i = 0; i < tiles.size(); i++){
-			tiles.get(i).update();
+
+	private ArrayList<ArrayList<Tile>> tiles = new ArrayList<ArrayList<Tile>>();
+
+	private Tile[] seeds;
+
+	private Random rng = new Random();
+
+	private double apothem = 3;
+
+	ShaderManager shaderManager;
+
+	private void initTiles() {
+		// INIT TILES
+		for (int i = 0; i <= HEXESACROSS; i++) {
+			tiles.add(new ArrayList<Tile>());
 		}
 
-	}
-	
-	public void draw(){
-		for(int i = 0; i < tiles.size(); i++){
-			if(tiles.get(i).isLand()){
-				ShaderManager.shader1.start();
-				ShaderManager.shader1.setUniform3f("pos",tiles.get(i).position);
-				tiles.get(i).draw();	
-				ShaderManager.shader1.stop();
-			}else{ //looks like there is no land
-				ShaderManager.playerShader.start();
-				ShaderManager.playerShader.setUniform3f("pos",tiles.get(i).position);
-				tiles.get(i).draw();	
-				ShaderManager.playerShader.stop();	
+		Perlin noise = new Perlin();
+		noise.setSeed(rng.nextInt(1000000));
+		for (int j = 0; j <= HEXESDOWN; j++) {
+			for (int i = 0; i <= HEXESACROSS; i++) {
+				tiles.get(j).add(new Tile(i, j, Math.abs(noise.getValue(i / MOISTURESCALER, j / MOISTURESCALER, .1)),
+						Math.abs(noise.getValue(i / ELEVATIONSCALER, j / ELEVATIONSCALER, .3))));
 			}
 		}
-		
 
-	}
-	
-	private void initMap(){
-		seeds = new Hexagon[seedCount];
+		// INIT SEEDS
+		seeds = new Tile[seedCount];
 		for (int i = 0; i < seedCount; i++) {
-			Hexagon[] seedsx = new Hexagon[seedCount];
-			seedsx[i] = tiles.get(HEXAGONSDOWN /(8/3)  + rng.nextInt(HEXAGONSDOWN / 3));
-			Hexagon[] seedsy = new Hexagon[seedCount];
-			seedsy[i] =tiles.get(HEXAGONSACROSS / (8/3) + rng.nextInt(HEXAGONSACROSS / 3));
-			
-			seeds = concat(seedsy, seedsx);
+			seeds[i] = tiles.get(HEXESDOWN / (8 / 3) + rng.nextInt(HEXESDOWN / 3))
+					.get(HEXESACROSS / (8 / 3) + rng.nextInt(HEXESACROSS / 3));
 			seeds[i].setLand(true);
 		}
-		ArrayList<Hexagon> outerLand = new ArrayList<Hexagon>();
-		for (Hexagon s : seeds) {
-			for (Hexagon i : getAllNeighbors(s)) {
+
+		// GEN LAND
+		ArrayList<Tile> outerLand = new ArrayList<Tile>();
+		for (Tile s : seeds) {
+			for (Tile i : getAllNeighbors(s)) {
 				i.setLand(true);
 				outerLand.add(i);
 			}
 		}
 		double i = 1;
 		while (outerLand.size() != 0 && i != 0) {
-			ArrayList<Hexagon> newLand = new ArrayList<Hexagon>();
+			ArrayList<Tile> newLand = new ArrayList<Tile>();
 			for (int j = 0; j < outerLand.size(); j++) {
-				for (Hexagon k : getAllNeighbors(outerLand.get(j))) {
+
+				for (Tile k : getAllNeighbors(outerLand.get(j))) {
+
 					if (!k.isLand()) {
 						if (rng.nextDouble() <= i) {
 							k.setLand(true);
@@ -154,7 +85,7 @@ public class Map{
 				i = 0.29 / (Math.log(i + 2));
 				break;
 			case "soft":
-				i = 0.18 /i;
+				i = 0.18 / i;
 				break;
 			case "disk":
 				i = Math.pow(2.618, -2.47 * i);
@@ -170,5 +101,39 @@ public class Map{
 				i = 0;
 			}
 		}
+	}
+
+	public Map() {// do we really need a new shaderManager? we have one in
+					// entity manager
+		shaderManager = new ShaderManager();
+		ShaderManager.loadAll();
+
+		initTiles();
+
+	}
+
+	private Tile[] getAllNeighbors(Tile tile) {
+		if (tile.xIndex > 0 && tile.yIndex > 0 && tile.xIndex < HEXESACROSS - 1 && tile.yIndex < HEXESDOWN - 1) {
+			Tile[] neighbors = new Tile[6];
+			neighbors[0] = tiles.get(tile.yIndex + 1).get(tile.xIndex);
+			neighbors[1] = tiles.get(tile.yIndex - 1).get(tile.xIndex);
+			neighbors[2] = tiles.get(tile.yIndex).get(tile.xIndex + 1);
+			neighbors[3] = tiles.get(tile.yIndex).get(tile.xIndex - 1);
+			if (tile.xIndex % 2 == 0) {
+				neighbors[4] = tiles.get(tile.yIndex - 1).get(tile.xIndex + 1);
+				neighbors[5] = tiles.get(tile.yIndex - 1).get(tile.xIndex - 1);
+			} else {
+				neighbors[4] = tiles.get(tile.yIndex + 1).get(tile.xIndex + 1);
+				neighbors[5] = tiles.get(tile.yIndex + 1).get(tile.xIndex - 1);
+			}
+			return neighbors;
+		} else {
+			return new Tile[0];
+		}
+	}
+
+	public void draw() {
+		
+
 	}
 }
