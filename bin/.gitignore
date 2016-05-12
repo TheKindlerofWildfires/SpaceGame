@@ -1,3 +1,10 @@
 /testing/
 /GUI/
+<<<<<<< HEAD
 /gameEngine/
+=======
+/graphicEngine/
+/gameEngine/
+/entity/
+/shaders/
+>>>>>>> parent of 78dce87... This commit works on Simon's computer
