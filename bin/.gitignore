@@ -1,5 +1,10 @@
+/testing/
 /GUI/
+<<<<<<< HEAD
+/gameEngine/
+=======
+/graphicEngine/
+/gameEngine/
 /entity/
-/gen/
-/perlinNoise/
-/noiseLibrary/
+/shaders/
+>>>>>>> parent of 78dce87... This commit works on Simon's computer

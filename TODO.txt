@@ -8,3 +8,10 @@ Map regen—if less than 500 land, more than ⅔ of screen, etc
 Make ocean a thing
 Make borders have neighbors
 Fix biome generation and colouring (I’m a brit)
+
+
+colliders are death
+
+Makes some enemies to fight
+Actually gen a world
+Do all the sad terrain stuff --> simons job
