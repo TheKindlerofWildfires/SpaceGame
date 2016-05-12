@@ -5,8 +5,6 @@ import graphicEngine.*;
 
 public class Hexagon extends GameObject{
 	public static double apothem;
-	public float WIDTH = 0.05f;
-	public float HEIGHT = 0.25f;
 	private VertexArrayObject vao;
 	public Vector3f position;
 	//public double apothem = 0.03;

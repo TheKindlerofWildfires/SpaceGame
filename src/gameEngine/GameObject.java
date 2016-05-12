@@ -11,13 +11,10 @@ public class GameObject {
 	public int count;
 	public float SIZE = 1.0f;
 	
-	
-	public GameObject(){
-	}
 	public void draw(){
 		glBindVertexArray(this.vaoID);
 		glEnableVertexAttribArray(0);
-		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_BYTE, 0);
+		glDrawElements(GL_POLYGON, count, GL_UNSIGNED_BYTE, 0);
 		glDisableVertexAttribArray(0);
 		glBindVertexArray(0);
 	}

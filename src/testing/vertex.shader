@@ -1,8 +1,10 @@
 #version 150
 
-in vec2 position;
+precision highp float;
 
-void main()
-{
-    gl_Position = vec4(position, 0.0, 1.0);
+in  vec3 ex_Color;
+out vec4 gl_FragColor;
+
+void main(void) {
+    gl_FragColor = vec4(ex_Color,1.0);
 }
