@@ -1,9 +1,7 @@
 package entity.monster;
 
-import entity.Entity;
 
-
-public class Juggernaut extends Entity{
+public class Juggernaut extends Monster{
 	public Juggernaut(){
 		entityTag = "Juggernaut";
 		entityHealth = 200;

@@ -1,8 +1,6 @@
 package entity.monster;
 
-import entity.Entity;
-
-public class Grunt extends Entity{
+public class Grunt extends Monster{
 	public Grunt(){
 		entityTag = "Grunt"; //Not that dangerous
 		entityHealth = 50;

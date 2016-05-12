@@ -10,12 +10,8 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-//import javax.swing.BorderFactory;
-//import javax.swing.JPanel;
-
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.system.MemoryUtil.*;
+import javax.swing.BorderFactory;
+import javax.swing.JPanel;
 
 import noiseLibrary.module.source.Perlin;
 
@@ -26,9 +22,13 @@ import noiseLibrary.module.source.Perlin;
  * @author Simon
  */
 
-//udfg	wonder what that meant
+@SuppressWarnings("serial")
+public class Canvas extends JPanel {
+	
+//	public World world;
+//	public WorldGenerator gen;
 
-public class Canvas extends Window {
+	
 	public static final int HEXESACROSS = 360;
 	public static final int HEXESDOWN = 240;
 
@@ -47,26 +47,27 @@ public class Canvas extends Window {
 	private double apothem = 3;
 
 	public Canvas() {
-		//udfg	
-		//setLayout(null);
-		//setBorder(BorderFactory.createLineBorder(Color.black));
-		//setBackground(Color.BLACK);
+		setLayout(null);
+		setBorder(BorderFactory.createLineBorder(Color.black));
+		setBackground(Color.BLACK);
 
 		//mapType = maps[rng.nextInt(maps.length)];
 		mapType = "fractal";
 		seedCount = rng.nextInt(2) + 1;
 
 		initializeMap();
-		/*
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask(){
 			public void run(){
 				apothem=10;
 				repaint();
-			}	
-		}, 2000); */
+			}
+		}, 2000);
 	}
 
+	public Dimension getPreferredSize() {
+		return new Dimension(1920, 1080);
+	}
 
 	private Tile[] getAllNeighbors(Tile tile) {
 		if (tile.xIndex > 0 && tile.yIndex > 0 && tile.xIndex < HEXESACROSS - 1 && tile.yIndex < HEXESDOWN - 1) {
@@ -236,6 +237,9 @@ public class Canvas extends Window {
 		g2d.draw(poly);
 	}
 	
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		Graphics2D g2d = (Graphics2D) g;
 
 		/*
 		 * fillTile(g2d, tiles.get(3).get(4), Color.RED); fillTile(g2d,
@@ -250,5 +254,10 @@ public class Canvas extends Window {
 	//	for (Tile t : getAllNeighbors(tiles.get(26).get(25))) {
 	//		fillTile(g2d, t, Color.CYAN);
 	//	}
+		tiles.stream().forEach(l -> l.stream().forEach(h -> fillTile(g2d, h)));
+		tiles.stream().forEach(l -> l.stream().forEach(h -> drawTile(g2d, h)));
+		System.out.println(seedCount);
+		System.out.println(mapType);
 	}
 
+}
