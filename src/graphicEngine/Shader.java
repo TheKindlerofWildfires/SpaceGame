@@ -9,6 +9,7 @@ import static org.lwjgl.opengl.GL20.glGetUniformLocation;
 import static org.lwjgl.opengl.GL20.glLinkProgram;
 import static org.lwjgl.opengl.GL20.glUniform3f;
 import static org.lwjgl.opengl.GL20.glUniform1f;
+import static org.lwjgl.opengl.GL20.glUniform1i;
 import static org.lwjgl.opengl.GL20.glUseProgram;
 import static org.lwjgl.opengl.GL20.glValidateProgram;
 
@@ -48,6 +49,10 @@ public class Shader {
 
 	public void setUniform1f(String name, float position) {
 		glUniform1f(getUniform(name), position);
+	}
+	
+	public void setUniform1i(String name, int position) {
+		glUniform1i(getUniform(name),position);
 	}
 
 	public void start() {

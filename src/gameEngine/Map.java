@@ -16,8 +16,8 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 
 public class Map {
-	public static final int HEXESACROSS = 100;
-	public static final int HEXESDOWN = 100;
+	public static final int HEXESACROSS = 20;
+	public static final int HEXESDOWN = 20;
 
 	public static final int MOISTURESCALER = 12;
 	public static final int ELEVATIONSCALER = 17;
@@ -64,10 +64,10 @@ public class Map {
 		initializeMap();
 		shaderManager.shader1.start();
 		shaderManager.shader1.setUniform1f("side", side);
-		shaderManager.shader1.setUniform1f("hexesAcross", 360);
+		shaderManager.shader1.setUniform1i("hexesAcross", HEXESACROSS);
 		shaderManager.shader1.setUniform1f("apothem", APOTHEM);
 		shaderManager.shader1.setUniform1f("aspect", aspectScaler);
-		shaderManager.shader1.setUniform3f("pos", new Vector3f(-1,0,0));
+		shaderManager.shader1.setUniform3f("pos", new Vector3f(-1,1,0));
 		shaderManager.shader1.stop();
 
 	}
@@ -113,7 +113,7 @@ public class Map {
 //.shader1.setUniform3f("color", new Vector3f(1,1,1));
 		glBindVertexArray(vaoID);
 		glEnableVertexAttribArray(0);
-		glDrawArraysInstanced(GL_TRIANGLE_FAN, 0,  6, 86400);
+		glDrawArraysInstanced(GL_TRIANGLE_FAN, 0,  6, HEXESACROSS*HEXESDOWN);
 		//glDrawElementsInstanced(GL_TRIANGLE_FAN, indices, 1);
 		glDisableVertexAttribArray(0);
 		glBindVertexArray(0);
