@@ -2,25 +2,30 @@ package gameEngine;
 
 import graphicEngine.ShaderManager;
 
-public class EntityManager { 
-	
+public class EntityManager {
+
 	ShaderManager shaderManager;
-	Player player;	
-	public EntityManager(){
+	//Player player;
+	Map map;
+	Hexagon hexagon;
+
+	public EntityManager() {
 		shaderManager = new ShaderManager();
 		ShaderManager.loadAll();
-		player = new Player();
-		player.position.y = -0.01f;
-		player.position.x = 0.0f;
+		map = new Map();
+		//	player = new Player();
+		//	player.position.y = -0.01f;
+		//	player.position.x = 0.0f;
 	}
-	public void update(){
-		player.update();
+
+	public void update() {
+		//	player.update();
+		//map.update();
 	}
-	public void draw(){
-		ShaderManager.playerShader.start();
-		ShaderManager.playerShader.setUniform3f("pos",player.position);
-		player.draw();	
-		ShaderManager.playerShader.stop();
-		
+
+	public void draw() {
+
+		map.draw();
+
 	}
 }
