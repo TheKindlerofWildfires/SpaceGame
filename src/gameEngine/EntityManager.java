@@ -10,8 +10,8 @@ public class EntityManager {
 	Hexagon hexagon;
 
 	public EntityManager() {
-		shaderManager = new ShaderManager();
-		ShaderManager.loadAll();
+		//shaderManager = new ShaderManager();
+	//	ShaderManager.loadAll();
 		map = new Map();
 		//	player = new Player();
 		//	player.position.y = -0.01f;
