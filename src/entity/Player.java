@@ -64,17 +64,12 @@ public class Player {
 		shaderManager.playerShader.stop();
 	}
 
-	public boolean checkBounds() {
-		return false;
-	}
-
 	public void update(){
-				float dis = 1f;
 
 				if(KeyboardInput.isKeyDown(GLFW_KEY_Q)){//why is this jumpy?
 					for(int x = 0; x<10;x++){
-					this.position.x -= (float)(dis*0.579);
-					this.position.y += (float)(dis*Math.sqrt(3)/4);
+					this.position.x -= (float)(0.579);
+					this.position.y += (float)(Math.sqrt(3)/4);
 					System.out.println(position.x);
 			}
 	}
