@@ -1,6 +1,8 @@
 package combat;
 
 import java.util.Random;
+
+import maths.Gaussian;
 import entity.*;
 
 public class Mechanics {

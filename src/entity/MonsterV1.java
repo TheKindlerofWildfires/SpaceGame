@@ -4,6 +4,9 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
+
+import java.util.Random;
+
 import maths.Vector3f;
 import classesSimonDoesntLike.KeyboardInput;
 import gameEngine.Map;
@@ -11,7 +14,7 @@ import graphicEngine.ShaderManager;
 import graphicEngine.VertexArrayObject;
 
 
-public class Player {
+public class MonsterV1 {
 
 	public int vaoID;
 	public int count;
@@ -34,9 +37,11 @@ public class Player {
 			side / 2, apothem * aspectScaler, 0, //upper right 5
 			0, 0, 0 //center 6
 	};
+	private Random rng;
 	byte[] indices = new byte[] { 0, 1, 2, 3, 4, 5, 0 };
 
-	public Player(){
+	public MonsterV1(){
+		rng = new Random();
 		shaderManager = new ShaderManager();
 		shaderManager.loadAll();
 		xIndex = 14;
@@ -58,14 +63,14 @@ public class Player {
 	}
 
 	public void draw() {
-		shaderManager.playerShader.start();
-		shaderManager.playerShader.setUniform3f("pos", this.position);
+		shaderManager.monsterShader.start();
+		shaderManager.monsterShader.setUniform3f("pos", this.position);
 		glBindVertexArray(this.vaoID);
 		glEnableVertexAttribArray(0);
 		glDrawElements(GL_TRIANGLE_FAN, 7, GL_UNSIGNED_BYTE, 0);
 		glDisableVertexAttribArray(0);
 		glBindVertexArray(0);
-		shaderManager.playerShader.stop();
+		shaderManager.monsterShader.stop();
 	}
 
 	public void update(){
@@ -80,30 +85,32 @@ public class Player {
 			//20/3 = 5/2
 			//less than 2.5, more than 2
 			float dis = (2.4f);
-			if(KeyboardInput.isKeyDown(GLFW_KEY_Q)){
+			int r = rng.nextInt(50);
+			if(r==0){
 				this.destination.x = this.position.x-(apothem*sqrt3/2*dis);
 				this.destination.y = this.position.y+(apothem/2*aspectScaler*dis);
 			}
-			if(KeyboardInput.isKeyDown(GLFW_KEY_W)){
+			if(r== 1){
 				this.destination.y = this.position.y+(apothem*aspectScaler*dis);
 			}
-			if(KeyboardInput.isKeyDown(GLFW_KEY_E)){
+			if(r== 2){
 				this.destination.x = this.position.x+(apothem*sqrt3/2*dis);
 				this.destination.y = this.position.y+(apothem/2*aspectScaler*dis);
 			}
-			if(KeyboardInput.isKeyDown(GLFW_KEY_A)){
+			if(r == 3){
 				this.destination.x = this.position.x-(apothem*sqrt3/2*dis);
 				this.destination.y = this.position.y-(apothem/2*aspectScaler*dis);
 			}
-			if(KeyboardInput.isKeyDown(GLFW_KEY_S)){
+			if(r == 4){
 				this.destination.y = this.position.y-(apothem*aspectScaler*dis);
 			}
-			if(KeyboardInput.isKeyDown(GLFW_KEY_D)){
+			if(r == 5){
 				this.destination.x = this.position.x+(apothem*sqrt3/2*dis);
 				this.destination.y = this.position.y-(apothem/2*aspectScaler*dis);
 			}
 	}
 	private boolean checkDestination(){
+		System.out.println(Map.hexes.get(this.xIndex).get(this.yIndex).isLand());
 		if(Map.hexes.get(this.xIndex).get(this.yIndex).isLand()){
 			return true;
 		}

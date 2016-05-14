@@ -7,8 +7,8 @@ import static org.lwjgl.opengl.GL30.glBindVertexArray;
 
 import java.nio.ByteBuffer;
 
-import GUI.Vector3f;
-import graphicEngine.Utilities;
+import maths.Utilities;
+import maths.Vector3f;
 import graphicEngine.VertexArrayObject;
 
 public class Hexagon {

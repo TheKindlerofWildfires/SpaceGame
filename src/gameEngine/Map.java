@@ -12,10 +12,10 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Random;
 
-import GUI.Vector3f;
 import graphicEngine.ShaderManager;
-import graphicEngine.Utilities;
 import graphicEngine.VertexArrayObject;
+import maths.Utilities;
+import maths.Vector3f;
 import noiseLibrary.module.source.Perlin;
 
 public class Map {

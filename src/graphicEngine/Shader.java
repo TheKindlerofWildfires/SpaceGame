@@ -1,6 +1,6 @@
 package graphicEngine;
 
-import static graphicEngine.Utilities.loadShader;
+import static maths.Utilities.loadShader;
 import static org.lwjgl.opengl.GL20.GL_FRAGMENT_SHADER;
 import static org.lwjgl.opengl.GL20.GL_VERTEX_SHADER;
 import static org.lwjgl.opengl.GL20.glAttachShader;
@@ -16,7 +16,7 @@ import static org.lwjgl.opengl.GL20.glValidateProgram;
 
 import java.nio.IntBuffer;
 
-import GUI.Vector3f;
+import maths.Vector3f;
 
 public class Shader {
 	private int programID;
