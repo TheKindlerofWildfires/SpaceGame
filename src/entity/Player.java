@@ -4,8 +4,10 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
+import combat.Mechanics;
 import maths.Vector3f;
 import classesSimonDoesntLike.KeyboardInput;
+import gameEngine.EntityManager;
 import gameEngine.Map;
 import graphicEngine.ShaderManager;
 import graphicEngine.VertexArrayObject;
@@ -23,6 +25,8 @@ public class Player {
 	ShaderManager shaderManager;
 	public int xIndex;
 	public int yIndex;
+	Entity self = Entity.getEntity("Neo");
+	Entity target = MonsterV1.self; //rwff
 	public static final float aspectScaler = 16 / 9f;
 	float apothem = gameEngine.Map.APOTHEM;
 	float side = (float) (apothem * 2 / sqrt3);
@@ -37,6 +41,10 @@ public class Player {
 	byte[] indices = new byte[] { 0, 1, 2, 3, 4, 5, 0 };
 
 	public Player(){
+		
+		
+		
+		
 		shaderManager = new ShaderManager();
 		shaderManager.loadAll();
 		xIndex = 14;
@@ -79,28 +87,33 @@ public class Player {
 	public void getDestination(){
 			//20/3 = 5/2
 			//less than 2.5, more than 2
-			float dis = (2.4f);
-			if(KeyboardInput.isKeyDown(GLFW_KEY_Q)){
-				this.destination.x = this.position.x-(apothem*sqrt3/2*dis);
-				this.destination.y = this.position.y+(apothem/2*aspectScaler*dis);
-			}
-			if(KeyboardInput.isKeyDown(GLFW_KEY_W)){
-				this.destination.y = this.position.y+(apothem*aspectScaler*dis);
-			}
-			if(KeyboardInput.isKeyDown(GLFW_KEY_E)){
-				this.destination.x = this.position.x+(apothem*sqrt3/2*dis);
-				this.destination.y = this.position.y+(apothem/2*aspectScaler*dis);
-			}
-			if(KeyboardInput.isKeyDown(GLFW_KEY_A)){
-				this.destination.x = this.position.x-(apothem*sqrt3/2*dis);
-				this.destination.y = this.position.y-(apothem/2*aspectScaler*dis);
-			}
-			if(KeyboardInput.isKeyDown(GLFW_KEY_S)){
-				this.destination.y = this.position.y-(apothem*aspectScaler*dis);
-			}
-			if(KeyboardInput.isKeyDown(GLFW_KEY_D)){
-				this.destination.x = this.position.x+(apothem*sqrt3/2*dis);
-				this.destination.y = this.position.y-(apothem/2*aspectScaler*dis);
+				float dis = (2.4f);
+				if(KeyboardInput.isKeyDown(GLFW_KEY_Q)){
+					this.destination.x = this.position.x-(apothem*sqrt3/2*dis);
+					this.destination.y = this.position.y+(apothem/2*aspectScaler*dis);
+				}
+				if(KeyboardInput.isKeyDown(GLFW_KEY_W)){
+					this.destination.y = this.position.y+(apothem*aspectScaler*dis);
+				}
+				if(KeyboardInput.isKeyDown(GLFW_KEY_E)){
+					this.destination.x = this.position.x+(apothem*sqrt3/2*dis);
+					this.destination.y = this.position.y+(apothem/2*aspectScaler*dis);
+				}
+				if(KeyboardInput.isKeyDown(GLFW_KEY_A)){
+					this.destination.x = this.position.x-(apothem*sqrt3/2*dis);
+					this.destination.y = this.position.y-(apothem/2*aspectScaler*dis);
+				}
+				if(KeyboardInput.isKeyDown(GLFW_KEY_S)){
+					this.destination.y = this.position.y-(apothem*aspectScaler*dis);
+				}
+				if(KeyboardInput.isKeyDown(GLFW_KEY_D)){
+					this.destination.x = this.position.x+(apothem*sqrt3/2*dis);
+					this.destination.y = this.position.y-(apothem/2*aspectScaler*dis);
+				}
+				if(KeyboardInput.isKeyDown(GLFW_KEY_R)){
+					Mechanics ah = new Mechanics();
+					MonsterV1 monster = EntityManager.monster; 
+					ah.attackHandler(self, target, position, monster.getPosition());
 			}
 	}
 	private boolean checkDestination(){
@@ -111,6 +124,9 @@ public class Player {
 			return false;
 			//this function ensures that is its land... or it would
 		}
+	}
+	public Vector3f getPosition(){
+		return this.position;
 	}
 
 }

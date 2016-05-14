@@ -10,7 +10,7 @@ public class EntityManager {
 	//Player player;
 	Map map;
 	Player player;
-	MonsterV1 monster;
+	public static MonsterV1 monster;
 
 	public EntityManager() {
 		//shaderManager = new ShaderManager();

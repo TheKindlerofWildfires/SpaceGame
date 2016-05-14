@@ -29,6 +29,7 @@ public class MonsterV1 {
 	public static final float aspectScaler = 16 / 9f;
 	float apothem = gameEngine.Map.APOTHEM;
 	float side = (float) (apothem * 2 / sqrt3);
+	static Entity self = Entity.getEntity("Juggernaut");
 	float[] vertices = { side, 0, 0, //right 0
 			side / 2, -apothem * aspectScaler, 0, // lower right 1
 			-side / 2, -apothem * aspectScaler, 0, //lower left 2
@@ -36,6 +37,7 @@ public class MonsterV1 {
 			-side / 2, apothem * aspectScaler, 0, //upper left 4
 			side / 2, apothem * aspectScaler, 0, //upper right 5
 			0, 0, 0 //center 6
+			
 	};
 	private Random rng;
 	byte[] indices = new byte[] { 0, 1, 2, 3, 4, 5, 0 };
@@ -78,14 +80,16 @@ public class MonsterV1 {
 			if(checkDestination()){
 					this.position.x = this.destination.x;
 					this.position.y = this.destination.y;
+
 			}
 			
 	}
 	public void getDestination(){
 			//20/3 = 5/2
 			//less than 2.5, more than 2
+			if(false){
 			float dis = (2.4f);
-			int r = rng.nextInt(50);
+			int r = rng.nextInt(500);
 			if(r==0){
 				this.destination.x = this.position.x-(apothem*sqrt3/2*dis);
 				this.destination.y = this.position.y+(apothem/2*aspectScaler*dis);
@@ -108,9 +112,10 @@ public class MonsterV1 {
 				this.destination.x = this.position.x+(apothem*sqrt3/2*dis);
 				this.destination.y = this.position.y-(apothem/2*aspectScaler*dis);
 			}
+			}
 	}
 	private boolean checkDestination(){
-		System.out.println(Map.hexes.get(this.xIndex).get(this.yIndex).isLand());
+		//System.out.println(Map.hexes.get(this.xIndex).get(this.yIndex).isLand());
 		if(Map.hexes.get(this.xIndex).get(this.yIndex).isLand()){
 			return true;
 		}
@@ -118,6 +123,9 @@ public class MonsterV1 {
 			return false;
 			//this function ensures that is its land... or it would
 		}
+	}
+	public Vector3f getPosition(){
+		return this.position;
 	}
 
 }
