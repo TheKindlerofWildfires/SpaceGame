@@ -32,7 +32,7 @@ public class Map {
 	public int seedCount;
 
 	public String[] maps = { "fractal", "soft", "disk", "stand", "trig" };
-	private ArrayList<ArrayList<Hexagon>> hexes = new ArrayList<ArrayList<Hexagon>>();
+	public static ArrayList<ArrayList<Hexagon>> hexes = new ArrayList<ArrayList<Hexagon>>();
 	private Hexagon[] seeds;
 
 	ShaderManager shaderManager;
@@ -63,6 +63,9 @@ public class Map {
 		mapType = "fractal";
 		initializeMap();
 		initShader();
+	}
+	public ArrayList<ArrayList<Hexagon>> getMapHexes(){
+		return hexes;
 	}
 
 	private void initShader() {

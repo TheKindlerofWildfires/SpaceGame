@@ -6,6 +6,7 @@ import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 import classesSimonDoesntLike.KeyboardInput;
 import GUI.Vector3f;
+import gameEngine.Map;
 import graphicEngine.ShaderManager;
 import graphicEngine.VertexArrayObject;
 
@@ -102,9 +103,14 @@ public class Player {
 				this.destination.y = this.position.y-(apothem/2*aspectScaler*dis);
 			}
 	}
-	public boolean checkDestination(){
-		return true;
-		//this function ensures that is its land... or it would
+	private boolean checkDestination(){
+		if(Map.hexes.get(this.xIndex).get(this.yIndex).isLand()){
+			return true;
+		}
+		else{
+			return false;
+			//this function ensures that is its land... or it would
+		}
 	}
 
 }
