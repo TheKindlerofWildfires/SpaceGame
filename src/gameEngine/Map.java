@@ -26,7 +26,7 @@ public class Map {
 	public static final int ELEVATIONSCALER = 17;
 
 
-	public static final float APOTHEM = 0.004f;
+	public static final float APOTHEM = 0.01f;
 
 	public String mapType;
 	public int seedCount;

@@ -17,8 +17,11 @@ public class Player {
 	public static final float sqrt3 = 1.7320508075688772f;
 	private VertexArrayObject vao;
 	public Vector3f position;
+	public Vector3f destination;
 	private float elevation;
 	ShaderManager shaderManager;
+	public int xIndex;
+	public int yIndex;
 	public static final float aspectScaler = 16 / 9f;
 	float apothem = gameEngine.Map.APOTHEM;
 	float side = (float) (apothem * 2 / sqrt3);
@@ -35,15 +38,22 @@ public class Player {
 	public Player(){
 		shaderManager = new ShaderManager();
 		shaderManager.loadAll();
-	
+		xIndex = 14;
+		yIndex = 17;
 		this.count = indices.length;
 		this.position = new Vector3f();
+		this.destination = this.position;
 		vao = new VertexArrayObject(vertices, indices);
 		this.vaoID = vao.getVaoID();
 
 		this.position.z = this.elevation;
-		this.position.x = 0f;
-		this.position.y = 0f;
+		if (xIndex % 2 == 0) {
+			this.position.y = -1.2f * (yIndex * apothem * 2) * aspectScaler + 1;
+			this.position.x = 1.2f * (xIndex * 3 * apothem / sqrt3) - 1;
+		} else {
+			this.position.y = -1.2f * (yIndex * apothem * 2 + apothem) * aspectScaler + 1;
+			this.position.x = 1.2f * (xIndex * 3 * apothem / sqrt3) - 1;
+		}
 	}
 
 	public void draw() {
@@ -58,15 +68,45 @@ public class Player {
 	}
 
 	public void update(){
-
-				if(KeyboardInput.isKeyDown(GLFW_KEY_Q)){//why is this jumpy?
-					for(int x = 0; x<10;x++){
-					this.position.x -= (float)(0.579);
-					this.position.y += (float)(Math.sqrt(3)/4);
-					System.out.println(position.x);
+			getDestination();
+			if(checkDestination()){
+					this.position.x = this.destination.x;
+					this.position.y = this.destination.y;
+			}
+			
+	}
+	public void getDestination(){
+			//20/3 = 5/2
+			//less than 2.5, more than 2
+			float dis = (2.4f);
+			if(KeyboardInput.isKeyDown(GLFW_KEY_Q)){
+				this.destination.x = this.position.x-(apothem*sqrt3/2*dis);
+				this.destination.y = this.position.y+(apothem/2*aspectScaler*dis);
+			}
+			if(KeyboardInput.isKeyDown(GLFW_KEY_W)){
+				this.destination.y = this.position.y+(apothem*aspectScaler*dis);
+			}
+			if(KeyboardInput.isKeyDown(GLFW_KEY_E)){
+				this.destination.x = this.position.x+(apothem*sqrt3/2*dis);
+				this.destination.y = this.position.y+(apothem/2*aspectScaler*dis);
+			}
+			if(KeyboardInput.isKeyDown(GLFW_KEY_A)){
+				this.destination.x = this.position.x-(apothem*sqrt3/2*dis);
+				this.destination.y = this.position.y-(apothem/2*aspectScaler*dis);
+			}
+			if(KeyboardInput.isKeyDown(GLFW_KEY_S)){
+				this.destination.y = this.position.y-(apothem*aspectScaler*dis);
+			}
+			if(KeyboardInput.isKeyDown(GLFW_KEY_D)){
+				this.destination.x = this.position.x+(apothem*sqrt3/2*dis);
+				this.destination.y = this.position.y-(apothem/2*aspectScaler*dis);
 			}
 	}
+	public boolean checkDestination(){
+		return true;
+		//this function ensures that is its land... or it would
 	}
+
 }
 
 

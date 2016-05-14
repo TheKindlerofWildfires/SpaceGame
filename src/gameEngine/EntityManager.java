@@ -27,8 +27,10 @@ public class EntityManager {
 	}
 
 	public void draw() {
-		map.draw();
+		//first drawn is on top
 		player.draw();
+		map.draw();
+
 
 	}
 }
