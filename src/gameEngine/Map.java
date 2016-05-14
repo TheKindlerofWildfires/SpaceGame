@@ -1,5 +1,13 @@
 package gameEngine;
 
+import static org.lwjgl.opengl.GL11.GL_FALSE;
+import static org.lwjgl.opengl.GL11.GL_TRIANGLE_FAN;
+import static org.lwjgl.opengl.GL11.GL_TRUE;
+import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
+import static org.lwjgl.opengl.GL30.glBindVertexArray;
+import static org.lwjgl.opengl.GL31.glDrawArraysInstanced;
+
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Random;
@@ -9,20 +17,19 @@ import graphicEngine.ShaderManager;
 import graphicEngine.Utilities;
 import graphicEngine.VertexArrayObject;
 import noiseLibrary.module.source.Perlin;
-import static org.lwjgl.opengl.GL30.*;
-import static org.lwjgl.opengl.GL31.*;
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL15.*;
 
 public class Map {
-	public static final int HEXESACROSS = 20;
-	public static final int HEXESDOWN = 20;
+	public static final int HEXESACROSS = 320; //REMEMBER TO CHANGE TOTAL HEXES IN SHADER WHEN THESE CHANGE
+	public static final int HEXESDOWN = 180;
 
 	public static final int MOISTURESCALER = 12;
 	public static final int ELEVATIONSCALER = 17;
 
+<<<<<<< HEAD
 	public static final float APOTHEM = 0.02f;
+=======
+	public static final float APOTHEM = 0.002f;
+>>>>>>> refs/remotes/origin/tesselation-optimization
 
 	public String mapType;
 	public int seedCount;
@@ -35,7 +42,6 @@ public class Map {
 
 	private Random rng = new Random();
 
-	
 	public float sqrt3 = 1.7320508075688772f;
 	public float aspectScaler = 16 / 9f;
 	public float side = (float) (APOTHEM * 2 / sqrt3);
@@ -48,28 +54,37 @@ public class Map {
 			side / 2, APOTHEM * aspectScaler, 0, //upper right 5
 			0, 0, 0 //center 6
 	};
-	
+
 	public byte[] indexes = new byte[] { 0, 1, 2, 3, 4, 5, 0 };
 	public ByteBuffer indices = Utilities.createByteBuffer(indexes);
-	public VertexArrayObject vao = new VertexArrayObject(vertices,indexes);
+	public VertexArrayObject vao = new VertexArrayObject(vertices, indexes);
 	public int vaoID = vao.getVaoID();
 
-	
 	public Map() {
-		shaderManager = new ShaderManager();
-		shaderManager.loadAll();
 		seedCount = rng.nextInt(2) + 1;
 		///mapType = maps[rng.nextInt(maps.length)];
 		mapType = "fractal";
 		initializeMap();
+		initShader();
+	}
+
+	private void initShader() {
+		shaderManager = new ShaderManager();
+		shaderManager.loadAll();
 		shaderManager.shader1.start();
 		shaderManager.shader1.setUniform1f("side", side);
 		shaderManager.shader1.setUniform1i("hexesAcross", HEXESACROSS);
 		shaderManager.shader1.setUniform1f("apothem", APOTHEM);
 		shaderManager.shader1.setUniform1f("aspect", aspectScaler);
-		shaderManager.shader1.setUniform3f("pos", new Vector3f(-1,1,0));
+		shaderManager.shader1.setUniform3f("pos", new Vector3f(-1, 1, 0));
+		int[] land = new int[HEXESACROSS*HEXESDOWN];
+		for(int i=0;i<HEXESDOWN;i++){
+			for(int j=0;j<HEXESACROSS;j++){
+				land[i]= hexes.get(i).get(j).isLand()?GL_TRUE:GL_FALSE;
+			}
+		}
+		shaderManager.shader1.setUniform1iv("land", Utilities.createIntBuffer(land));
 		shaderManager.shader1.stop();
-
 	}
 
 	private Hexagon[] getAllNeighbors(Hexagon hex) {
@@ -108,12 +123,12 @@ public class Map {
 	}
 
 	public void draw() {
-	
+
 		shaderManager.shader1.start();
-//.shader1.setUniform3f("color", new Vector3f(1,1,1));
+		//.shader1.setUniform3f("color", new Vector3f(1,1,1));
 		glBindVertexArray(vaoID);
 		glEnableVertexAttribArray(0);
-		glDrawArraysInstanced(GL_TRIANGLE_FAN, 0,  6, HEXESACROSS*HEXESDOWN);
+		glDrawArraysInstanced(GL_TRIANGLE_FAN, 0, 6, HEXESACROSS * HEXESDOWN);
 		//glDrawElementsInstanced(GL_TRIANGLE_FAN, indices, 1);
 		glDisableVertexAttribArray(0);
 		glBindVertexArray(0);
