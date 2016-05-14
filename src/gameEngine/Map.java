@@ -22,7 +22,7 @@ public class Map {
 	public static final int MOISTURESCALER = 12;
 	public static final int ELEVATIONSCALER = 17;
 
-	public static final float APOTHEM = 0.05f;
+	public static final float APOTHEM = 0.02f;
 
 	public String mapType;
 	public int seedCount;
