@@ -18,8 +18,6 @@ public class Player {
 	private VertexArrayObject vao;
 	public Vector3f position;
 	private float elevation;
-	public int xIndex;
-	public int yIndex;
 	ShaderManager shaderManager;
 	public static final float aspectScaler = 16 / 9f;
 	float apothem = gameEngine.Map.APOTHEM;
@@ -44,13 +42,8 @@ public class Player {
 		this.vaoID = vao.getVaoID();
 
 		this.position.z = this.elevation;
-		if (xIndex % 2 == 0) {
-			this.position.y = -1.2f * (yIndex * apothem * 2) * aspectScaler + 1;
-			this.position.x = 1.2f * (xIndex * 3 * apothem / sqrt3) - 1;
-		} else {
-			this.position.y = -1.2f * (yIndex * apothem * 2 + apothem) * aspectScaler + 1;
-			this.position.x = 1.2f * (xIndex * 3 * apothem / sqrt3) - 1;
-		}
+		this.position.x = 0f;
+		this.position.y = 0f;
 	}
 
 	public void draw() {

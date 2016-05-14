@@ -9,7 +9,7 @@ uniform float side;
 uniform float apothem;
 uniform float aspect;
 uniform int hexesAcross;
-uniform int land[57600];
+uniform int land[10000];
 
 void main(void){
 	int yPos = gl_InstanceID/hexesAcross;

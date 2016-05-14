@@ -19,17 +19,14 @@ import graphicEngine.VertexArrayObject;
 import noiseLibrary.module.source.Perlin;
 
 public class Map {
-	public static final int HEXESACROSS = 320; //REMEMBER TO CHANGE TOTAL HEXES IN SHADER WHEN THESE CHANGE
-	public static final int HEXESDOWN = 180;
+	public static final int HEXESACROSS = 100; //REMEMBER TO CHANGE TOTAL HEXES IN SHADER WHEN THESE CHANGE
+	public static final int HEXESDOWN = 100;
 
 	public static final int MOISTURESCALER = 12;
 	public static final int ELEVATIONSCALER = 17;
 
-<<<<<<< HEAD
-	public static final float APOTHEM = 0.02f;
-=======
-	public static final float APOTHEM = 0.002f;
->>>>>>> refs/remotes/origin/tesselation-optimization
+
+	public static final float APOTHEM = 0.004f;
 
 	public String mapType;
 	public int seedCount;
