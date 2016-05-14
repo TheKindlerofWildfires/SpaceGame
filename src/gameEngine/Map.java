@@ -197,7 +197,6 @@ public class Map {
 				i = 0;
 			}
 		}
-
 		/*hexes.get(10).get(10).setLand(true);
 		hexes.get(11).get(10).setLand(true);
 		hexes.get(12).get(10).setLand(true);
