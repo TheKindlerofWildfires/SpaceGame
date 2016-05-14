@@ -1,20 +1,28 @@
 package gameEngine;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Random;
 
 import GUI.Vector3f;
 import graphicEngine.ShaderManager;
+import graphicEngine.Utilities;
+import graphicEngine.VertexArrayObject;
 import noiseLibrary.module.source.Perlin;
+import static org.lwjgl.opengl.GL30.*;
+import static org.lwjgl.opengl.GL31.*;
+import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL15.*;
 
 public class Map {
-	public static final int HEXESACROSS = 100;
-	public static final int HEXESDOWN = 100;
-	static int i = 0;
+	public static final int HEXESACROSS = 20;
+	public static final int HEXESDOWN = 20;
+
 	public static final int MOISTURESCALER = 12;
 	public static final int ELEVATIONSCALER = 17;
 
-	public static final float APOTHEM = 0.005f;
+	public static final float APOTHEM = 0.05f;
 
 	public String mapType;
 	public int seedCount;
@@ -27,13 +35,41 @@ public class Map {
 
 	private Random rng = new Random();
 
+	
+	public float sqrt3 = 1.7320508075688772f;
+	public float aspectScaler = 16 / 9f;
+	public float side = (float) (APOTHEM * 2 / sqrt3);
+
+	public float[] vertices = { side, 0, 0, //right 0
+			side / 2, -APOTHEM * aspectScaler, 0, // lower right 1
+			-side / 2, -APOTHEM * aspectScaler, 0, //lower left 2
+			-side, 0, 0, //left 3
+			-side / 2, APOTHEM * aspectScaler, 0, //upper left 4
+			side / 2, APOTHEM * aspectScaler, 0, //upper right 5
+			0, 0, 0 //center 6
+	};
+	
+	public byte[] indexes = new byte[] { 0, 1, 2, 3, 4, 5, 0 };
+	public ByteBuffer indices = Utilities.createByteBuffer(indexes);
+	public VertexArrayObject vao = new VertexArrayObject(vertices,indexes);
+	public int vaoID = vao.getVaoID();
+
+	
 	public Map() {
 		shaderManager = new ShaderManager();
-		ShaderManager.loadAll();
-		seedCount = rng.nextInt(2)+1;
+		shaderManager.loadAll();
+		seedCount = rng.nextInt(2) + 1;
 		///mapType = maps[rng.nextInt(maps.length)];
 		mapType = "fractal";
 		initializeMap();
+		shaderManager.shader1.start();
+		shaderManager.shader1.setUniform1f("side", side);
+		shaderManager.shader1.setUniform1i("hexesAcross", HEXESACROSS);
+		shaderManager.shader1.setUniform1f("apothem", APOTHEM);
+		shaderManager.shader1.setUniform1f("aspect", aspectScaler);
+		shaderManager.shader1.setUniform3f("pos", new Vector3f(-1,1,0));
+		shaderManager.shader1.stop();
+
 	}
 
 	private Hexagon[] getAllNeighbors(Hexagon hex) {
@@ -59,9 +95,9 @@ public class Map {
 	public void drawHex(Hexagon hex) {
 		//	long time = System.nanoTime();
 		//	ShaderManager.shader1.start();
-		ShaderManager.shader1.setUniform3f("pos", hex.position);
+		shaderManager.shader1.setUniform3f("pos", hex.position);
 		Vector3f color = hex.isLand() ? new Vector3f(0f, 1.0f, 0f) : new Vector3f(0f, 0f, 1.0f);
-		ShaderManager.shader1.setUniform3f("color", color);
+		shaderManager.shader1.setUniform3f("color", color);
 		//	long time2 = System.nanoTime();
 		hex.draw();
 		//	long time3 = System.nanoTime();
@@ -72,12 +108,16 @@ public class Map {
 	}
 
 	public void draw() {
-		ShaderManager.shader1.start();
-		hexes.stream()
-				.forEach(l -> l.stream()
-						.filter(t -> (t.position.x < 1 && t.position.y < 1 && t.position.x > -1 && t.position.y > -1))
-						.forEach(t -> drawHex(t)));
-		ShaderManager.shader1.stop();
+	
+		shaderManager.shader1.start();
+//.shader1.setUniform3f("color", new Vector3f(1,1,1));
+		glBindVertexArray(vaoID);
+		glEnableVertexAttribArray(0);
+		glDrawArraysInstanced(GL_TRIANGLE_FAN, 0,  6, HEXESACROSS*HEXESDOWN);
+		//glDrawElementsInstanced(GL_TRIANGLE_FAN, indices, 1);
+		glDisableVertexAttribArray(0);
+		glBindVertexArray(0);
+		shaderManager.shader1.stop();
 	}
 
 	private void initializeMap() {
@@ -157,7 +197,6 @@ public class Map {
 				i = 0;
 			}
 		}
-		
 		/*hexes.get(10).get(10).setLand(true);
 		hexes.get(11).get(10).setLand(true);
 		hexes.get(12).get(10).setLand(true);
@@ -169,7 +208,7 @@ public class Map {
 		hexes.get(13).get(11).setLand(true);
 		hexes.get(13).get(12).setLand(true);
 		hexes.get(13).get(13).setLand(true);
-
+		
 		hexes.get(10).get(13).setLand(true);
 		hexes.get(11).get(13).setLand(true);
 		hexes.get(12).get(13).setLand(true);

@@ -6,6 +6,10 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Test/lib/natives"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/Simon/Documents/SpaceGame/lib/jars/lwjgl.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Mitchell/Desktop/SpaceGame/SpaceGame/lib/jars/lwjgl.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="SpaceGame/lib/natives"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

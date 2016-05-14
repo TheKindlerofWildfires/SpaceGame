@@ -23,6 +23,10 @@ public class VertexArrayObject {
 		createArrayObject(vertices, indices);
 	}
 
+	public VertexArrayObject(float[] vertices) {
+		createArrayObject(vertices);
+	}
+
 	public void createArrayObject(float[] vertices, byte[] indices) {
 		vaoID = glGenVertexArrays();
 		glBindVertexArray(vaoID);
@@ -30,6 +34,13 @@ public class VertexArrayObject {
 		createVerticesBuffer(vertices);
 		createIndicesBuffer(indices);
 
+		glBindVertexArray(0);
+	}
+
+	public void createArrayObject(float[] vertices) {
+		vaoID = glGenVertexArrays();
+		glBindVertexArray(vaoID);
+		createVerticesBuffer(vertices);
 		glBindVertexArray(0);
 	}
 
