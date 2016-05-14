@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 
 import org.lwjgl.BufferUtils;
 
@@ -26,6 +27,13 @@ public class Utilities {
 
 	public static ByteBuffer createByteBuffer(byte[] data) {
 		ByteBuffer buffer = BufferUtils.createByteBuffer(data.length);
+		buffer.put(data);
+		buffer.flip();
+		return buffer;
+	}
+
+	public static IntBuffer createIntBuffer(int[] data) {
+		IntBuffer buffer = BufferUtils.createIntBuffer(data.length);
 		buffer.put(data);
 		buffer.flip();
 		return buffer;
