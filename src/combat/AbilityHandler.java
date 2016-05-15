@@ -15,6 +15,7 @@ public class AbilityHandler {
 			case "onHit":
 				// looks like this should all be multi-threaded
 				//System.out.println(attacker.getEntityAbility().get(x));
+				System.out.println(attacker.getEntityAbility().get(x));
 				switch (attacker.getEntityAbility().get(x)) {
 				case "Knockdown":
 					new Knockdown(attacker, target);

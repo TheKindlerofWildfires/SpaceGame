@@ -7,9 +7,11 @@ import static org.lwjgl.opengl.GL30.*;
 
 import java.util.Random;
 
+import combat.Mechanics;
 import GUI.Tick;
 import maths.Vector3f;
 import classesSimonDoesntLike.KeyboardInput;
+import gameEngine.EntityManager;
 import gameEngine.Map;
 import graphicEngine.ShaderManager;
 import graphicEngine.VertexArrayObject;
@@ -28,10 +30,11 @@ public class MonsterV1 {
 	ShaderManager shaderManager;
 	public int xIndex;
 	public int yIndex;
+	Entity target = Player.self;
 	public static final float aspectScaler = 16 / 9f;
 	float apothem = gameEngine.Map.APOTHEM;
 	float side = (float) (apothem * 2 / sqrt3);
-	static Entity self = Entity.getEntity("Hunter");
+	static Entity self = Entity.getEntity("Leader");
 	float[] vertices = { side, 0, 0, //right 0
 			side / 2, -apothem * aspectScaler, 0, // lower right 1
 			-side / 2, -apothem * aspectScaler, 0, //lower left 2
@@ -72,7 +75,6 @@ public class MonsterV1 {
 
 	public void draw() {
 		if(dead()){
-			System.out.print("death");
 			shaderManager.deathShader.start();
 			shaderManager.deathShader.setUniform3f("pos", this.position);
 			glBindVertexArray(this.vaoID);
@@ -118,10 +120,11 @@ public class MonsterV1 {
 	public void getDestination(){
 			//20/3 = 5/2
 			//less than 2.5, more than 2
+			//welcome to rng
 			int time = Tick.getUpdateTick();
 		if(time-lastMove >5*(6-self.getEntitySpeed())){ //5*(6-Entity.getSpeed())
 			float dis = (2.4f);
-			int r = rng.nextInt(5);
+			int r = rng.nextInt(6);
 			if(r==0){
 				this.destination.x = this.position.x-(apothem*sqrt3/2*dis);
 				this.destination.y = this.position.y+(apothem/2*aspectScaler*dis);
@@ -144,6 +147,10 @@ public class MonsterV1 {
 				this.destination.x = this.position.x+(apothem*sqrt3/2*dis);
 				this.destination.y = this.position.y-(apothem/2*aspectScaler*dis);
 			}
+				Mechanics ah = new Mechanics();
+				Player tarHex = EntityManager.player; 
+				ah.attackHandler(self, target, position, tarHex.getPosition());
+				//SSystem.out.println(target.getEntityHealth());
 			}
 	}
 	private boolean checkDestination(){

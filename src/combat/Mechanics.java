@@ -22,9 +22,9 @@ public class Mechanics {
 
 	public boolean tryAttack(Entity attacker, Entity target) {
 		//this is called when someone tries to hit something
-		for (int AR = 1; AR < 6;AR++) {
+		
+		for (int AR = 1; AR < 6;) {
 			double hitChance = Gaussian.cdf(AR*target.getEntitySpeed(), 12.5, 3);
-			//System.out.println(hitChance);
 			if (rng.nextDouble() <= hitChance) {
 				//dodge event
 				return false;
@@ -41,9 +41,10 @@ public class Mechanics {
 	}
 	public void attackHit(Entity attacker, Entity target){
 		ab.checkAbility("onHit", attacker, target);
-		double damage = attacker.getEntityWeaponDamage() * (10/(10*target.getEntityArmor())); 
+		double damage = attacker.getEntityWeaponDamage() * (10/(10+target.getEntityArmor())); 
+		//System.out.println(target.getEntityArmor());
 		target.setEntityHealth(target.getEntityHealth()-damage);
-		System.out.println(target.getEntityHealth());
+		System.out.println(target.getEntityTag()+" " +target.getEntityHealth());
 	}
 	public void attackMiss(Entity attacker, Entity target){
 		ab.checkAbility("onMiss", attacker, target);
@@ -51,7 +52,7 @@ public class Mechanics {
 	public static boolean inRange(Entity attacker){
 		Euclidian e = new Euclidian();
 		double disInHexes = e.euclidDis(attHex, tarHex)*23.4374961583;
-		System.out.println(e.euclidDis(attHex, tarHex)*23.4374961583);
+		//System.out.println(e.euclidDis(attHex, tarHex)*23.4374961583);
 		if(attacker.getEntityRange()>(disInHexes-1) ){
 			return true;
 		}else{

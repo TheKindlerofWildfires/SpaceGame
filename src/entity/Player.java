@@ -67,17 +67,34 @@ public class Player {
 		}
 	}
 
-	public void draw() {
-		shaderManager.playerShader.start();
-		shaderManager.playerShader.setUniform3f("pos", this.position);
-		glBindVertexArray(this.vaoID);
-		glEnableVertexAttribArray(0);
-		glDrawElements(GL_TRIANGLE_FAN, 7, GL_UNSIGNED_BYTE, 0);
-		glDisableVertexAttribArray(0);
-		glBindVertexArray(0);
-		shaderManager.playerShader.stop();
+	public void draw() {	
+		if(dead()){
+			shaderManager.deathShader.start();
+			shaderManager.deathShader.setUniform3f("pos", this.position);
+			glBindVertexArray(this.vaoID);
+			glEnableVertexAttribArray(0);
+			glDrawElements(GL_TRIANGLE_FAN, 7, GL_UNSIGNED_BYTE, 0);
+			glDisableVertexAttribArray(0);
+			glBindVertexArray(0);
+			shaderManager.deathShader.stop();
+		}else{
+			shaderManager.playerShader.start();
+			shaderManager.playerShader.setUniform3f("pos", this.position);
+			glBindVertexArray(this.vaoID);
+			glEnableVertexAttribArray(0);
+			glDrawElements(GL_TRIANGLE_FAN, 7, GL_UNSIGNED_BYTE, 0);
+			glDisableVertexAttribArray(0);
+			glBindVertexArray(0);
+			shaderManager.playerShader.stop();
+		}
+}
+public boolean dead(){
+	if(self.getEntityHealth()<=0){
+		return true;
+	}else{
+		return false;
 	}
-
+}
 	public void update(){
 			getDestination();
 			if(checkDestination()){//thisisnevercalled
@@ -93,6 +110,7 @@ public class Player {
 	}
 	public void getDestination(){
 		int time = Tick.getUpdateTick();
+		if(!dead()){
 		if(time-lastMove >1.8*(6-self.getEntitySpeed())){ //between 6.66 - 33 tiles per second
 				float dis = (2.4f);
 				if(KeyboardInput.isKeyDown(GLFW_KEY_Q)){
@@ -118,6 +136,7 @@ public class Player {
 					//System.out.println("posx "+position.x+" posy" +position.y);
 					//System.out.println("posx "+monster.getPosition().x+" posy" +monster.getPosition().y);
 				}
+		}
 		}
 	}
 	private boolean checkDestination(){
