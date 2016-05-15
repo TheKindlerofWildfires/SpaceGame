@@ -26,7 +26,7 @@ public class Map {
 	public static final int ELEVATIONSCALER = 17;
 
 
-	public static final float APOTHEM = 0.01f;
+	public static final float APOTHEM = 0.005f;
 
 	public String mapType;
 	public int seedCount;
@@ -60,7 +60,7 @@ public class Map {
 	public Map() {
 		seedCount = rng.nextInt(2) + 1;
 		///mapType = maps[rng.nextInt(maps.length)];
-		mapType = "fractal";
+		mapType = "disk";
 		initializeMap();
 		initShader();
 	}
@@ -167,7 +167,7 @@ public class Map {
 		System.out.println("Genning Land");
 		ArrayList<Hexagon> outerLand = new ArrayList<Hexagon>();
 		for (Hexagon s : seeds) {
-			for (Hexagon i : getAllNeighbors(s)) {
+			for (Hexagon i : getAllNeighbors(s)) {	
 				i.setLand(true);
 				outerLand.add(i);
 			}
@@ -238,5 +238,6 @@ public class Map {
 		hexes.get(15).get(15).setLand(true);*/
 
 		System.out.println("Map init complete");
+
 	}
 }

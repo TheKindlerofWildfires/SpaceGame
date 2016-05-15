@@ -78,7 +78,7 @@ public class Player {
 
 	public void update(){
 			getDestination();
-			if(checkDestination()){
+			if(checkDestination()){//thisisnevercalled
 					this.position.x = this.destination.x;
 					this.position.y = this.destination.y;
 			}
@@ -114,6 +114,8 @@ public class Player {
 					Mechanics ah = new Mechanics();
 					MonsterV1 monster = EntityManager.monster; 
 					ah.attackHandler(self, target, position, monster.getPosition());
+					System.out.println("posx "+position.x+" posy" +position.y);
+					
 			}
 	}
 	private boolean checkDestination(){
