@@ -4,6 +4,7 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
+import GUI.Tick;
 import combat.Mechanics;
 import maths.Vector3f;
 import classesSimonDoesntLike.KeyboardInput;
@@ -25,8 +26,9 @@ public class Player {
 	ShaderManager shaderManager;
 	public int xIndex;
 	public int yIndex;
-	Entity self = Entity.getEntity("Neo");
-	Entity target = MonsterV1.self; //rwff
+	public int lastMove;
+	static Entity self = Entity.getEntity("Neo");
+	Entity target = MonsterV1.self; //rwff --Monsterv1.self
 	public static final float aspectScaler = 16 / 9f;
 	float apothem = gameEngine.Map.APOTHEM;
 	float side = (float) (apothem * 2 / sqrt3);
@@ -41,27 +43,27 @@ public class Player {
 	byte[] indices = new byte[] { 0, 1, 2, 3, 4, 5, 0 };
 
 	public Player(){
-		
-		
-		
-		
+		lastMove = 0;
 		shaderManager = new ShaderManager();
 		shaderManager.loadAll();
 		xIndex = 14;
-		yIndex = 17;
+		yIndex = 21;
 		this.count = indices.length;
 		this.position = new Vector3f();
-		this.destination = this.position;
+		this.destination = new Vector3f();
 		vao = new VertexArrayObject(vertices, indices);
 		this.vaoID = vao.getVaoID();
-
 		this.position.z = this.elevation;
 		if (xIndex % 2 == 0) {
 			this.position.y = -1.2f * (yIndex * apothem * 2) * aspectScaler + 1;
 			this.position.x = 1.2f * (xIndex * 3 * apothem / sqrt3) - 1;
+			this.destination.x = this.position.x;
+			this.destination.y = this.position.y;
 		} else {
 			this.position.y = -1.2f * (yIndex * apothem * 2 + apothem) * aspectScaler + 1;
 			this.position.x = 1.2f * (xIndex * 3 * apothem / sqrt3) - 1;
+			this.destination.x = this.position.x;
+			this.destination.y = this.position.y;
 		}
 	}
 
@@ -79,44 +81,44 @@ public class Player {
 	public void update(){
 			getDestination();
 			if(checkDestination()){//thisisnevercalled
+				if ((this.position.x-this.destination.x !=0)||(this.position.y-this.destination.y !=0)){
+					lastMove = Tick.getUpdateTick();
 					this.position.x = this.destination.x;
 					this.position.y = this.destination.y;
+				}
+			}else{
+					destination.x = position.x;
+					destination.y = position.y;
 			}
-			
 	}
 	public void getDestination(){
-			//20/3 = 5/2
-			//less than 2.5, more than 2
+		int time = Tick.getUpdateTick();
+		if(time-lastMove >1.8*(6-self.getEntitySpeed())){ //between 6.66 - 33 tiles per second
 				float dis = (2.4f);
 				if(KeyboardInput.isKeyDown(GLFW_KEY_Q)){
-					this.destination.x = this.position.x-(apothem*sqrt3/2*dis);
-					this.destination.y = this.position.y+(apothem/2*aspectScaler*dis);
-				}
-				if(KeyboardInput.isKeyDown(GLFW_KEY_W)){
-					this.destination.y = this.position.y+(apothem*aspectScaler*dis);
-				}
-				if(KeyboardInput.isKeyDown(GLFW_KEY_E)){
-					this.destination.x = this.position.x+(apothem*sqrt3/2*dis);
-					this.destination.y = this.position.y+(apothem/2*aspectScaler*dis);
-				}
-				if(KeyboardInput.isKeyDown(GLFW_KEY_A)){
-					this.destination.x = this.position.x-(apothem*sqrt3/2*dis);
-					this.destination.y = this.position.y-(apothem/2*aspectScaler*dis);
-				}
-				if(KeyboardInput.isKeyDown(GLFW_KEY_S)){
-					this.destination.y = this.position.y-(apothem*aspectScaler*dis);
-				}
-				if(KeyboardInput.isKeyDown(GLFW_KEY_D)){
-					this.destination.x = this.position.x+(apothem*sqrt3/2*dis);
-					this.destination.y = this.position.y-(apothem/2*aspectScaler*dis);
-				}
-				if(KeyboardInput.isKeyDown(GLFW_KEY_R)){
+					destination.x = position.x-(apothem*sqrt3/2*dis);
+					destination.y = position.y+(apothem/2*aspectScaler*dis);
+				}else if(KeyboardInput.isKeyDown(GLFW_KEY_W)){
+					destination.y = position.y+(apothem*aspectScaler*dis);
+				}else if(KeyboardInput.isKeyDown(GLFW_KEY_E)){
+					destination.x = position.x+(apothem*sqrt3/2*dis);
+					destination.y = position.y+(apothem/2*aspectScaler*dis);
+				}else if(KeyboardInput.isKeyDown(GLFW_KEY_A)){
+					destination.x = position.x-(apothem*sqrt3/2*dis);
+					destination.y = position.y-(apothem/2*aspectScaler*dis);
+				}else if(KeyboardInput.isKeyDown(GLFW_KEY_S)){
+					destination.y = position.y-(apothem*aspectScaler*dis);
+				}else if(KeyboardInput.isKeyDown(GLFW_KEY_D)){
+					destination.x = position.x+(apothem*sqrt3/2*dis);
+					destination.y = position.y-(apothem/2*aspectScaler*dis);
+				}else if(KeyboardInput.isKeyDown(GLFW_KEY_R)){
 					Mechanics ah = new Mechanics();
 					MonsterV1 monster = EntityManager.monster; 
 					ah.attackHandler(self, target, position, monster.getPosition());
-					System.out.println("posx "+position.x+" posy" +position.y);
-					
-			}
+					//System.out.println("posx "+position.x+" posy" +position.y);
+					//System.out.println("posx "+monster.getPosition().x+" posy" +monster.getPosition().y);
+				}
+		}
 	}
 	private boolean checkDestination(){
 		if(Map.hexes.get(this.xIndex).get(this.yIndex).isLand()){

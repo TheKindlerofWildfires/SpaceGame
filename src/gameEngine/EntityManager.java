@@ -31,9 +31,10 @@ public class EntityManager {
 	}
 
 	public void draw() {
+		player.draw();
 		monster.draw();
 		//first drawn is on top
-		player.draw();
+		
 		map.draw();
 
 

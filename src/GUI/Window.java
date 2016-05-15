@@ -138,6 +138,7 @@ public class Window implements Runnable {
 			delta += (now - lastTime) / ns;
 			lastTime = now;
 			if (delta >= 1.0) {
+				Tick.updateTick();
 				update();
 				updates++;
 				delta--;

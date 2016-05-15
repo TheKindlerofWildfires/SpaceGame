@@ -1,9 +1,5 @@
 /GUI/
-/classesSimonDoesntLike/
-/combat/
 /entity/
 /gameEngine/
-/graphicEngine/
-/noiseLibrary/
 /shaders/
-/maths/
+/graphicEngine/
