@@ -1,22 +1,20 @@
 package combat;
-import GUI.Tick;
+import java.util.Random;
+
 import entity.*;
 
 public class CombatExpertiseHit {
-	boolean used = true;
-	int lastTime;
-	String attTag;
+	Random rng = new Random();
 	public CombatExpertiseHit(Entity attacker, Entity target){
-		lastTime = 0;
-		attTag = attacker.getEntityTag();
-		if(!used){
-		attacker.setEntitySpeed(attacker.getEntitySpeed() + 1);
-		used = true;
-		lastTime = Tick.getUpdateTick();
-		}else if (Tick.getUpdateTick()-lastTime > 30){
-			System.out.println(attTag);
-			attacker.setEntitySpeed(Entity.getEntity(attTag).getEntitySpeed());
-			used = false;
+		//System.out.println(ah.buffLoop(30));
+		String attTag = attacker.getEntityTag();
+		Entity natAttacker = Entity.getEntity(attTag);
+		if(rng.nextInt(1)== 0){
+			attacker.setEntitySpeed(natAttacker.getEntitySpeed() + 1);
 		}
-	}//second decay
+		else{
+			attacker.setEntitySpeed(natAttacker.getEntitySpeed());
+		}
+		//System.out.println(natAttacker.getEntitySpeed());
+	}
 }

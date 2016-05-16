@@ -7,6 +7,7 @@ import maths.Gaussian;
 import maths.Vector3f;
 import entity.*;
 import gameEngine.Hexagon;
+import gameEngine.Map;
 
 public class Mechanics {
 	private AbilityHandler ab;
@@ -51,9 +52,9 @@ public class Mechanics {
 	}
 	public static boolean inRange(Entity attacker){
 		Euclidian e = new Euclidian();
-		double disInHexes = e.euclidDis(attHex, tarHex)*23.4374961583;
-		//System.out.println(e.euclidDis(attHex, tarHex)*23.4374961583);
-		if(attacker.getEntityRange()>(disInHexes-1) ){
+		double disInHexes = e.euclidDis(attHex, tarHex)/Map.APOTHEM/4.26666625;
+		//System.out.println(disInHexes);
+		if(attacker.getEntityRange()>(disInHexes) ){
 			return true;
 		}else{
 			return false;

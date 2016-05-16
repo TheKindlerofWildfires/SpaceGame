@@ -26,7 +26,7 @@ public class MonsterV1 {
 	public Vector3f position;
 	public Vector3f destination;
 	private float elevation;
-	int lastMove;
+	private int lastMove;
 	ShaderManager shaderManager;
 	public int xIndex;
 	public int yIndex;
@@ -122,7 +122,7 @@ public class MonsterV1 {
 			//less than 2.5, more than 2
 			//welcome to rng
 			int time = Tick.getUpdateTick();
-		if(time-lastMove >5*(6-self.getEntitySpeed())){ //5*(6-Entity.getSpeed())
+		if(time-lastMove >50*(6-self.getEntitySpeed())){ //5*(6-Entity.getSpeed())
 			float dis = (2.4f);
 			int r = rng.nextInt(6);
 			if(r==0){
@@ -150,7 +150,7 @@ public class MonsterV1 {
 				Mechanics ah = new Mechanics();
 				Player tarHex = EntityManager.player; 
 				ah.attackHandler(self, target, position, tarHex.getPosition());
-				//SSystem.out.println(target.getEntityHealth());
+				//System.out.println(target.getEntityHealth());
 			}
 	}
 	private boolean checkDestination(){

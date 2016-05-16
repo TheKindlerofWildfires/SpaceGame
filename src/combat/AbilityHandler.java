@@ -7,7 +7,7 @@ public class AbilityHandler {
 	public AbilityHandler() {
 
 	}
-
+	//System.out.println(used);
 	public void checkAbility(String callType, Entity attacker, Entity target) {
 
 		for (int x = 0; x < attacker.getEntityAbility().size(); x++) {

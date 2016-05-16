@@ -26,7 +26,7 @@ public class Player {
 	ShaderManager shaderManager;
 	public int xIndex;
 	public int yIndex;
-	public int lastMove;
+	private int lastMove;
 	static Entity self = Entity.getEntity("Agent");
 	Entity target = MonsterV1.self; //rwff --Monsterv1.self
 	public static final float aspectScaler = 16 / 9f;
@@ -40,6 +40,7 @@ public class Player {
 			side / 2, apothem * aspectScaler, 0, //upper right 5
 			0, 0, 0 //center 6
 	};
+	Mechanics ah = new Mechanics();
 	byte[] indices = new byte[] { 0, 1, 2, 3, 4, 5, 0 };
 
 	public Player(){
@@ -139,7 +140,7 @@ public boolean dead(){
 					destination.x = position.x+(apothem*sqrt3/2*dis);
 					destination.y = position.y-(apothem/2*aspectScaler*dis);
 				}else if(KeyboardInput.isKeyDown(GLFW_KEY_R)){
-					Mechanics ah = new Mechanics();
+					
 					MonsterV1 monster = EntityManager.monster; 
 					ah.attackHandler(self, target, position, monster.getPosition());
 					//System.out.println("posx "+position.x+" posy" +position.y);
