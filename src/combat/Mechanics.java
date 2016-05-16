@@ -65,11 +65,13 @@ public class Mechanics {
 		this.attHex = attHex;
 		this.tarHex = tarHex;
 		if(inRange(attacker)){
+
 			//consume animation time or action counter - just a delay in code
 			//Entity attacker = Entity.getEntity(attackerTag);
 			//Entity target = Entity.getEntity(targetTag);
 			if (tryAttack(attacker, target)){
 				//System.out.println("Hit");
+				//called 5 times
 				attackHit(attacker,target);
 			}else{
 				//System.out.println("Miss");

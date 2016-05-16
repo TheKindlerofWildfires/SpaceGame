@@ -27,7 +27,7 @@ public class Player {
 	public int xIndex;
 	public int yIndex;
 	public int lastMove;
-	static Entity self = Entity.getEntity("Neo");
+	static Entity self = Entity.getEntity("Agent");
 	Entity target = MonsterV1.self; //rwff --Monsterv1.self
 	public static final float aspectScaler = 16 / 9f;
 	float apothem = gameEngine.Map.APOTHEM;
@@ -96,6 +96,8 @@ public boolean dead(){
 	}
 }
 	public void update(){
+		//System.out.println(Tick.getUpdateTick());
+		System.out.println(self.getEntitySpeed());
 			getDestination();
 			if(checkDestination()){//thisisnevercalled
 				if ((this.position.x-this.destination.x !=0)||(this.position.y-this.destination.y !=0)){
@@ -109,14 +111,20 @@ public boolean dead(){
 			}
 	}
 	public void getDestination(){
+		
 		int time = Tick.getUpdateTick();
+		//why is only r called 5 times
+		//only called once per tick
 		if(!dead()){
 		if(time-lastMove >1.8*(6-self.getEntitySpeed())){ //between 6.66 - 33 tiles per second
-				float dis = (2.4f);
+			//only called once per tick
+			//System.out.println(time);
+			float dis = (2.4f);
 				if(KeyboardInput.isKeyDown(GLFW_KEY_Q)){
 					destination.x = position.x-(apothem*sqrt3/2*dis);
 					destination.y = position.y+(apothem/2*aspectScaler*dis);
 				}else if(KeyboardInput.isKeyDown(GLFW_KEY_W)){
+					
 					destination.y = position.y+(apothem*aspectScaler*dis);
 				}else if(KeyboardInput.isKeyDown(GLFW_KEY_E)){
 					destination.x = position.x+(apothem*sqrt3/2*dis);
@@ -127,6 +135,7 @@ public boolean dead(){
 				}else if(KeyboardInput.isKeyDown(GLFW_KEY_S)){
 					destination.y = position.y-(apothem*aspectScaler*dis);
 				}else if(KeyboardInput.isKeyDown(GLFW_KEY_D)){
+					
 					destination.x = position.x+(apothem*sqrt3/2*dis);
 					destination.y = position.y-(apothem/2*aspectScaler*dis);
 				}else if(KeyboardInput.isKeyDown(GLFW_KEY_R)){
