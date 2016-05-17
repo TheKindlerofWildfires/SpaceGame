@@ -1,14 +1,17 @@
 package gameEngine;
 
-import static org.lwjgl.opengl.GL11.GL_FALSE;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.*;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLE_FAN;
 import static org.lwjgl.opengl.GL11.GL_TRUE;
 import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
-import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL31.glDrawArraysInstanced;
+import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL15.*;
+import static org.lwjgl.opengl.GL30.*;
+import static org.lwjgl.opengl.GL31.*;
 
 import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -19,68 +22,86 @@ import graphicEngine.VertexArrayObject;
 import noiseLibrary.module.source.Perlin;
 
 public class Map {
-	public static final int HEXESACROSS = 320; //REMEMBER TO CHANGE TOTAL HEXES IN SHADER WHEN THESE CHANGE
-	public static final int HEXESDOWN = 180;
+	public static final int HEXESACROSS = 300;
+	public static final int HEXESDOWN = 200;
 
 	public static final int MOISTURESCALER = 12;
 	public static final int ELEVATIONSCALER = 17;
 
-	public static final float APOTHEM = 0.002f;
+	public static final float APOTHEM = 0.003f;
+
+	public static final int LAND = 100;
+	public static final int WATER = 0;
+	public static final int SEED = 50;
 
 	public String mapType;
 	public int seedCount;
 
 	public String[] maps = { "fractal", "soft", "disk", "stand", "trig" };
 	private ArrayList<ArrayList<Hexagon>> hexes = new ArrayList<ArrayList<Hexagon>>();
-	private Hexagon[] seeds;
-
-	ShaderManager shaderManager;
+	//private Hexagon[] seeds;
 
 	private Random rng = new Random();
 
-	public float sqrt3 = 1.7320508075688772f;
-	public float aspectScaler = 16 / 9f;
-	public float side = (float) (APOTHEM * 2 / sqrt3);
+	public static final float sqrt3 = 1.7320508075688772f;
+	public static final float aspectScaler = 16 / 9f;
+	public static final float side = APOTHEM * 2 / sqrt3;
 
-	public float[] vertices = { side, 0, 0, //right 0
+	public static float[] vertices = { side, 0, 0, //right 0
 			side / 2, -APOTHEM * aspectScaler, 0, // lower right 1
 			-side / 2, -APOTHEM * aspectScaler, 0, //lower left 2
 			-side, 0, 0, //left 3
 			-side / 2, APOTHEM * aspectScaler, 0, //upper left 4
 			side / 2, APOTHEM * aspectScaler, 0, //upper right 5
-			0, 0, 0 //center 6
 	};
 
-	public byte[] indexes = new byte[] { 0, 1, 2, 3, 4, 5, 0 };
-	public ByteBuffer indices = Utilities.createByteBuffer(indexes);
-	public VertexArrayObject vao = new VertexArrayObject(vertices, indexes);
+	public byte[] indices = new byte[] { 0, 1, 2, 3, 4, 5, 0 };
+	public VertexArrayObject vao = new VertexArrayObject(vertices, indices);
 	public int vaoID = vao.getVaoID();
 
+	public int[][] land = new int[HEXESACROSS][HEXESDOWN];
+	public int[][] seeds;
+
 	public Map() {
-		seedCount = rng.nextInt(2) + 1;
-		///mapType = maps[rng.nextInt(maps.length)];
-		mapType = "fractal";
+		long seed = rng.nextLong();
+		rng.setSeed(seed);
+		System.out.println("Random Seed is " + seed);
 		initializeMap();
 		initShader();
 	}
 
 	private void initShader() {
-		shaderManager = new ShaderManager();
-		shaderManager.loadAll();
-		shaderManager.shader1.start();
-		shaderManager.shader1.setUniform1f("side", side);
-		shaderManager.shader1.setUniform1i("hexesAcross", HEXESACROSS);
-		shaderManager.shader1.setUniform1f("apothem", APOTHEM);
-		shaderManager.shader1.setUniform1f("aspect", aspectScaler);
-		shaderManager.shader1.setUniform3f("pos", new Vector3f(-1, 1, 0));
-		int[] land = new int[HEXESACROSS*HEXESDOWN];
-		for(int i=0;i<HEXESDOWN;i++){
-			for(int j=0;j<HEXESACROSS;j++){
-				land[i]= hexes.get(i).get(j).isLand()?GL_TRUE:GL_FALSE;
+		ShaderManager.shader1.start();
+		ShaderManager.shader1.setUniform1f("side", side);
+		ShaderManager.shader1.setUniform1i("hexesAcross", HEXESACROSS);
+		ShaderManager.shader1.setUniform1f("apothem", APOTHEM);
+		ShaderManager.shader1.setUniform1f("aspect", aspectScaler);
+		ShaderManager.shader1.setUniform3f("pos", new Vector3f(-1f, 1f, 0));
+		int[] land = new int[HEXESACROSS * HEXESDOWN];
+		int counter = 0;
+		for (int x = 0; x < HEXESACROSS; x++) {
+			for (int y = 0; y < HEXESDOWN; y++) {
+				land[counter] = this.land[x][y];
+				counter++;
 			}
 		}
-		shaderManager.shader1.setUniform1iv("land", Utilities.createIntBuffer(land));
-		shaderManager.shader1.stop();
+		//land[2025] = SEED;
+		int bufferID = glGenBuffers();
+
+		glBindBuffer(GL_ARRAY_BUFFER, bufferID);
+		glBindBuffer(GL_TEXTURE_BUFFER, bufferID);
+		IntBuffer data = Utilities.createIntBuffer(land);
+		glBufferData(GL_ARRAY_BUFFER, data, GL_STATIC_DRAW);
+
+		int textureID = glGenTextures();
+		glBindTexture(GL_TEXTURE_BUFFER, textureID);
+		glTexBuffer(GL_TEXTURE_BUFFER, GL_R32UI, bufferID);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+		glActiveTexture(GL_TEXTURE5);
+		glBindTexture(GL_TEXTURE_BUFFER, textureID);
+		float color[] = { 1.0f, 0.0f, 0.0f, 1.0f };
+		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, Utilities.createFloatBuffer(color));
 	}
 
 	private Hexagon[] getAllNeighbors(Hexagon hex) {
@@ -103,43 +124,59 @@ public class Map {
 		}
 	}
 
-	public void drawHex(Hexagon hex) {
-		//	long time = System.nanoTime();
-		//	ShaderManager.shader1.start();
-		shaderManager.shader1.setUniform3f("pos", hex.position);
-		Vector3f color = hex.isLand() ? new Vector3f(0f, 1.0f, 0f) : new Vector3f(0f, 0f, 1.0f);
-		shaderManager.shader1.setUniform3f("color", color);
-		//	long time2 = System.nanoTime();
-		hex.draw();
-		//	long time3 = System.nanoTime();
-		//	ShaderManager.shader1.stop();
-		//	long time4 = System.nanoTime();
-		//	System.out.println("Shader Stuff: " + ((time2-time) + (time4-time3)));
-		//	System.out.println("drawing: " + (time3-time2));
+	private int[][] getNeighborIndices(int x, int y) {
+		System.out.println(x + "," + y);
+		if (x > 0 && y > 0 && x < HEXESACROSS - 1 && y < HEXESDOWN - 1) {
+			int[][] neighbors = new int[6][2];
+			neighbors[0][0] = x;
+			neighbors[0][1] = y + 1;
+			neighbors[1][0] = x;
+			neighbors[1][1] = y - 1;
+			neighbors[2][0] = x + 1;
+			neighbors[2][1] = y;
+			neighbors[3][0] = x - 1;
+			neighbors[3][1] = y;
+			if (x % 2 == 0) {
+				neighbors[4][0] = x + 1;
+				neighbors[4][1] = y - 1;
+				neighbors[5][0] = x + 1;
+				neighbors[5][1] = y + 1;
+			} else {
+				neighbors[4][0] = x - 1;
+				neighbors[4][1] = y - 1;
+				neighbors[5][0] = x - 1;
+				neighbors[5][1] = y + 1;
+			}
+			return neighbors;
+		} else {
+			return new int[0][0];
+		}
 	}
 
 	public void draw() {
-
-		shaderManager.shader1.start();
-		//.shader1.setUniform3f("color", new Vector3f(1,1,1));
+		ShaderManager.shader1.start();
 		glBindVertexArray(vaoID);
 		glEnableVertexAttribArray(0);
 		glDrawArraysInstanced(GL_TRIANGLE_FAN, 0, 6, HEXESACROSS * HEXESDOWN);
-		//glDrawElementsInstanced(GL_TRIANGLE_FAN, indices, 1);
 		glDisableVertexAttribArray(0);
 		glBindVertexArray(0);
-		shaderManager.shader1.stop();
+		ShaderManager.shader1.stop();
 	}
 
 	private void initializeMap() {
-		System.out.println("Initiailzing Tiles");
-		// INIT TILES
+		//INIT MAPTYPE ETC
+		mapType = "fractal";
+		seedCount = 1;
+		seeds = new int[seedCount][2];
+		///mapType = maps[rng.nextInt(maps.length)];
+
+		/*// INIT TILES
 		for (int i = 0; i <= HEXESACROSS; i++) {
 			hexes.add(new ArrayList<Hexagon>());
 		}
-
-		Perlin noise = new Perlin();
-		noise.setSeed(rng.nextInt(1000000));
+		
+		//Perlin noise = new Perlin();
+		//noise.setSeed(rng.nextInt(1000000));
 		for (int j = 0; j < HEXESDOWN; j++) {
 			for (int i = 0; i < HEXESACROSS; i++) {
 				hexes.get(j)
@@ -147,38 +184,54 @@ public class Map {
 								(float) Math.abs(noise.getValue(i / MOISTURESCALER, j / MOISTURESCALER, .1)),
 								(float) Math.abs(noise.getValue(i / ELEVATIONSCALER, j / ELEVATIONSCALER, .3))));
 			}
-		}
+		}*/
 
 		// INIT SEEDS
 		System.out.println("Initiailzing Seeds");
+		seeds[0][0] = 100;
+		seeds[0][1] = 100;
 
-		seeds = new Hexagon[seedCount];
+		//INIT LAND ARRAY
+		for (int x = 0; x < HEXESACROSS; x++) {
+			for (int y = 0; y < HEXESDOWN; y++) {
+				land[x][y] = WATER;
+			}
+		}
+
+		/*seeds = new Hexagon[seedCount];
 		for (int i = 0; i < seedCount; i++) {
 			seeds[i] = hexes.get(HEXESDOWN / (8 / 3) + rng.nextInt(HEXESDOWN / 3))
 					.get(HEXESACROSS / (8 / 3) + rng.nextInt(HEXESACROSS / 3));
 			seeds[i].setLand(true);
-		}
+		}*/
 
 		// GEN LAND
 		System.out.println("Genning Land");
-		ArrayList<Hexagon> outerLand = new ArrayList<Hexagon>();
-		for (Hexagon s : seeds) {
-			for (Hexagon i : getAllNeighbors(s)) {
-				i.setLand(true);
-				outerLand.add(i);
-			}
+		ArrayList<int[]> outerLand = new ArrayList<int[]>();
+		for (int i = 0; i < seedCount; i++) {
+			int[] seed = { seeds[i][0], seeds[i][1] };
+			outerLand.add(seed);
+			land[seed[0]][seed[1]] = SEED;
 		}
-		double i = 1;
-		while (outerLand.size() != 0 && i != 0) {
-			ArrayList<Hexagon> newLand = new ArrayList<Hexagon>();
-			for (int j = 0; j < outerLand.size(); j++) {
 
-				for (Hexagon k : getAllNeighbors(outerLand.get(j))) {
-
-					if (!k.isLand()) {
-						if (rng.nextDouble() <= i) {
-							k.setLand(true);
-							newLand.add(k);
+		/*	ArrayList<int[]> newLand = new ArrayList<int[]>();
+			for (int i = 0; i < outerLand.size(); i++) {
+				int[][] neighbors = getNeighborIndices(seeds[0][1], seeds[0][1]);
+				for (int j = 0; j < neighbors.length; j++) {
+					land[neighbors[j][0]][neighbors[j][1]] = LAND;
+					newLand.add(neighbors[j]);
+				}
+			}*/
+		double p = 1;
+		while (outerLand.size() != 0 && p != 0) {
+			ArrayList<int[]> newLand = new ArrayList<int[]>();
+			for (int i = 0; i < outerLand.size(); i++) {
+				int[][] neighbors = getNeighborIndices(outerLand.get(i)[0], outerLand.get(i)[1]);
+				for (int j = 0; j < neighbors.length; j++) {
+					if (land[neighbors[j][0]][neighbors[j][1]] != LAND && land[neighbors[j][0]][neighbors[j][1]] != SEED ) {
+						if (rng.nextDouble() <= p) {
+							land[neighbors[j][0]][neighbors[j][1]] = LAND;
+							newLand.add(neighbors[j]);
 						}
 					}
 				}
@@ -189,25 +242,27 @@ public class Map {
 
 			switch (mapType) {
 			case "fractal":
-				i = 0.29 / (Math.log(i + 2));
+				p = 0.29 / (Math.log(p + 2));
 				break;
 			case "soft":
-				i = 0.18 / i;
+				p = 0.18 / p;
 				break;
 			case "disk":
-				i = Math.pow(2.618, -2.47 * i);
+				p = Math.pow(2.618, -2.47 * p);
 				break;
 			case "stand":
-				i = 0.988 * i;
+				p = 0.988 * p;
 				break;
 			case "trig":
-				i = Math.cos(1.443 * i);
+				p = Math.cos(1.443 * p);
 				break;
 			default:
 				System.err.println("invalid map type");
-				i = 0;
+				System.exit(-1);
+				p = 0;
 			}
 		}
+
 		/*hexes.get(10).get(10).setLand(true);
 		hexes.get(11).get(10).setLand(true);
 		hexes.get(12).get(10).setLand(true);

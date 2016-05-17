@@ -1,14 +1,13 @@
 package gameEngine;
 
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_TRIANGLE_FAN;
+import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
+import static org.lwjgl.opengl.GL11.glDrawElements;
 import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 
-import java.nio.ByteBuffer;
-
 import GUI.Vector3f;
-import graphicEngine.Utilities;
 import graphicEngine.VertexArrayObject;
 
 public class Hexagon {

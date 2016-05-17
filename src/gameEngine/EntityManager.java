@@ -11,24 +11,25 @@ public class EntityManager {
 	Player player;
 
 	public EntityManager() {
+		ShaderManager.loadAll();
 		//shaderManager = new ShaderManager();
 	//	ShaderManager.loadAll();
 		map = new Map();
-		player = new Player();
+		//player = new Player();
 		//	player = new Player();
 		//	player.position.y = -0.01f;
 		//	player.position.x = 0.0f;
 	}
 
 	public void update() {
-		player.update();
+		//player.update();
 		//map.update();
 	
 	}
 
 	public void draw() {
 		map.draw();
-		player.draw();
+		//player.draw();
 
 	}
 }

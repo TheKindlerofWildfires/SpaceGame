@@ -9,7 +9,7 @@ uniform float side;
 uniform float apothem;
 uniform float aspect;
 uniform int hexesAcross;
-uniform int land[57600];
+uniform usamplerBuffer land;
 
 void main(void){
 	int yPos = gl_InstanceID/hexesAcross;
@@ -21,6 +21,15 @@ void main(void){
 	} else{
 		yOfset = 1.2*(aspect*(yPos*2*apothem-apothem));
 	}
+	uint land = texelFetch(land,gl_InstanceID).x;
+	vec3 color;
+	if(land==100){
+		color = vec3(1,1,1);
+	} else if(land ==50){
+		color = vec3(1,0,1);
+	} else{
+		color = vec3(0,0,1);
+	}
 	gl_Position = vec4(position.x+pos.x+xOfset,position.y+pos.y-yOfset,position.z+pos.z, 1.0);
-	colour = vec3(2*position.x, 1.0, 2*position.y+0.5);
+	colour = color;
 }
