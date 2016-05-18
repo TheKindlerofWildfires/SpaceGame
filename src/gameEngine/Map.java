@@ -1,16 +1,26 @@
 package gameEngine;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL13.*;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_BORDER_COLOR;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLE_FAN;
-import static org.lwjgl.opengl.GL11.GL_TRUE;
+import static org.lwjgl.opengl.GL11.glBindTexture;
+import static org.lwjgl.opengl.GL11.glGenTextures;
+import static org.lwjgl.opengl.GL11.glTexParameterfv;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE5;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
+import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
+import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
+import static org.lwjgl.opengl.GL15.glBindBuffer;
+import static org.lwjgl.opengl.GL15.glBufferData;
+import static org.lwjgl.opengl.GL15.glGenBuffers;
 import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL30.*;
-import static org.lwjgl.opengl.GL31.*;
+import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
+import static org.lwjgl.opengl.GL30.GL_R32UI;
+import static org.lwjgl.opengl.GL30.glBindVertexArray;
+import static org.lwjgl.opengl.GL31.GL_TEXTURE_BUFFER;
+import static org.lwjgl.opengl.GL31.glDrawArraysInstanced;
+import static org.lwjgl.opengl.GL31.glTexBuffer;
 
-import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Random;
@@ -19,11 +29,10 @@ import GUI.Vector3f;
 import graphicEngine.ShaderManager;
 import graphicEngine.Utilities;
 import graphicEngine.VertexArrayObject;
-import noiseLibrary.module.source.Perlin;
 
 public class Map {
-	public static final int HEXESACROSS = 200; //THESE ARE BACKWARDS NOW?????
-	public static final int HEXESDOWN = 300;
+	public static final int HEXESACROSS = 300;
+	public static final int HEXESDOWN = 200;
 
 	public static final int MOISTURESCALER = 12;
 	public static final int ELEVATIONSCALER = 17;
@@ -73,15 +82,15 @@ public class Map {
 	private void initShader() {
 		ShaderManager.shader1.start();
 		ShaderManager.shader1.setUniform1f("side", side);
-		ShaderManager.shader1.setUniform1i("hexesAcross", HEXESDOWN);
+		ShaderManager.shader1.setUniform1i("hexesAcross", HEXESACROSS);
 		ShaderManager.shader1.setUniform1f("apothem", APOTHEM);
 		ShaderManager.shader1.setUniform1f("aspect", aspectScaler);
 		ShaderManager.shader1.setUniform3f("pos", new Vector3f(-1f, 1f, 0));
 		int[] land = new int[HEXESACROSS * HEXESDOWN];
 		int counter = 0;
-		for (int x = 0; x < HEXESACROSS; x++) {
-			for (int y = 0; y < HEXESDOWN; y++) {
-				land[counter] = this.land[x][y];
+		for (int x = 0; x < HEXESDOWN; x++) {
+			for (int y = 0; y < HEXESACROSS; y++) {
+				land[counter] = this.land[y][x];
 				counter++;
 			}
 		}
