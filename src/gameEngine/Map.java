@@ -9,6 +9,7 @@ import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.opengl.GL31.*;
 
+
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Random;
@@ -59,7 +60,7 @@ public class Map {
 	public VertexArrayObject vao = new VertexArrayObject(vertices, indices);
 	public int vaoID = vao.getVaoID();
 
-	public int[][] land = new int[HEXESACROSS][HEXESDOWN];
+	public static int[][] land = new int[HEXESACROSS][HEXESDOWN];
 	public int[][] seeds;
 
 	public Map() {

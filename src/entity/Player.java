@@ -100,6 +100,7 @@ public boolean dead(){
 		//System.out.println(Tick.getUpdateTick());
 		//System.out.println(self.getEntitySpeed());
 			getDestination();
+			
 			if(checkDestination()){//thisisnevercalled
 				if ((this.position.x-this.destination.x !=0)||(this.position.y-this.destination.y !=0)){
 					lastMove = Tick.getUpdateTick();
@@ -124,21 +125,29 @@ public boolean dead(){
 				if(KeyboardInput.isKeyDown(GLFW_KEY_Q)){
 					destination.x = position.x-(apothem*sqrt3/2*dis);
 					destination.y = position.y+(apothem/2*aspectScaler*dis);
+					yIndex +=1; //I suspect this is much more complicated
+					xIndex -=1;
 				}else if(KeyboardInput.isKeyDown(GLFW_KEY_W)){
-					
 					destination.y = position.y+(apothem*aspectScaler*dis);
+					yIndex +=1;
 				}else if(KeyboardInput.isKeyDown(GLFW_KEY_E)){
 					destination.x = position.x+(apothem*sqrt3/2*dis);
 					destination.y = position.y+(apothem/2*aspectScaler*dis);
+					yIndex +=1;
+					xIndex +=1;
 				}else if(KeyboardInput.isKeyDown(GLFW_KEY_A)){
 					destination.x = position.x-(apothem*sqrt3/2*dis);
 					destination.y = position.y-(apothem/2*aspectScaler*dis);
+					yIndex -=1;
+					xIndex -=1;
 				}else if(KeyboardInput.isKeyDown(GLFW_KEY_S)){
 					destination.y = position.y-(apothem*aspectScaler*dis);
+					yIndex -=1;
 				}else if(KeyboardInput.isKeyDown(GLFW_KEY_D)){
-					
 					destination.x = position.x+(apothem*sqrt3/2*dis);
 					destination.y = position.y-(apothem/2*aspectScaler*dis);
+					yIndex -=1;
+					xIndex +=1;
 				}else if(KeyboardInput.isKeyDown(GLFW_KEY_R)){
 					
 					MonsterV1 monster = EntityManager.monster; 
@@ -150,9 +159,12 @@ public boolean dead(){
 		}
 	}
 	private boolean checkDestination(){
-		//if(Map.hexes.get(this.xIndex).get(this.yIndex).isLand()){
+		System.out.println(xIndex + " "+ yIndex);
+		System.out.println(Map.land[xIndex][yIndex]);//x,y
+		if(Map.land[xIndex][yIndex] == Map.LAND){
+			
+		}
 			return true;
-		//}
 		//else{
 		//	return false;
 			//this function ensures that is its land... or it would
