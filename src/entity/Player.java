@@ -22,22 +22,22 @@ public class Player {
 	public int yIndex;
 	ShaderManager shaderManager;
 	public static final float aspectScaler = 16 / 9f;
+	float apothem = gameEngine.Map.APOTHEM;
+	float side = (float) (apothem * 2 / sqrt3);
+	float[] vertices = { side, 0, 0, //right 0
+			side / 2, -apothem * aspectScaler, 0, // lower right 1
+			-side / 2, -apothem * aspectScaler, 0, //lower left 2
+			-side, 0, 0, //left 3
+			-side / 2, apothem * aspectScaler, 0, //upper left 4
+			side / 2, apothem * aspectScaler, 0, //upper right 5
+			0, 0, 0 //center 6
+	};
+	byte[] indices = new byte[] { 0, 1, 2, 3, 4, 5, 0 };
 
 	public Player(){
 		shaderManager = new ShaderManager();
 		shaderManager.loadAll();
-		float apothem = gameEngine.Map.APOTHEM;
-		float side = (float) (apothem * 2 / sqrt3);
-		float[] vertices = { side, 0, 0, //right 0
-				side / 2, -apothem * aspectScaler, 0, // lower right 1
-				-side / 2, -apothem * aspectScaler, 0, //lower left 2
-				-side, 0, 0, //left 3
-				-side / 2, apothem * aspectScaler, 0, //upper left 4
-				side / 2, apothem * aspectScaler, 0, //upper right 5
-				0, 0, 0 //center 6
-		};
-
-		byte[] indices = new byte[] { 0, 1, 2, 3, 4, 5, 0 };
+	
 		this.count = indices.length;
 		this.position = new Vector3f();
 		vao = new VertexArrayObject(vertices, indices);
@@ -54,32 +54,25 @@ public class Player {
 	}
 
 	public void draw() {
-		shaderManager.shader1.start();
-		shaderManager.shader1.setUniform3f("pos", this.position);
-		Vector3f color =  new Vector3f(0f, 1.0f, 1.0f);
-		shaderManager.shader1.setUniform3f("color", color);
+		shaderManager.playerShader.start();
+		shaderManager.playerShader.setUniform3f("pos", this.position);
 		glBindVertexArray(this.vaoID);
 		glEnableVertexAttribArray(0);
 		glDrawElements(GL_TRIANGLE_FAN, 7, GL_UNSIGNED_BYTE, 0);
 		glDisableVertexAttribArray(0);
 		glBindVertexArray(0);
-		shaderManager.shader1.stop();
-	}
-
-	public boolean checkBounds() {
-		return false;
+		shaderManager.playerShader.stop();
 	}
 
 	public void update(){
-			if(!checkBounds()){
-				float dis = 0.0069f;
+
 				if(KeyboardInput.isKeyDown(GLFW_KEY_Q)){//why is this jumpy?
 					for(int x = 0; x<10;x++){
-					position.x -= (float)(dis*0.579);
-					position.y += (float)(dis*Math.sqrt(3)/4);
-					}
-				}
+					this.position.x -= (float)(0.579);
+					this.position.y += (float)(Math.sqrt(3)/4);
+					System.out.println(position.x);
 			}
+	}
 	}
 }
 
