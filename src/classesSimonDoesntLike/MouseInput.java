@@ -1,4 +1,4 @@
-package GUI;
+package classesSimonDoesntLike;
 
 import org.lwjgl.glfw.GLFWCursorPosCallback;
 

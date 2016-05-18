@@ -1,16 +1,38 @@
 package GUI;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.system.MemoryUtil.*;
-import gameEngine.*;
-
-import java.awt.Graphics;
+import static org.lwjgl.glfw.GLFW.GLFW_CONTEXT_VERSION_MAJOR;
+import static org.lwjgl.glfw.GLFW.GLFW_CONTEXT_VERSION_MINOR;
+import static org.lwjgl.glfw.GLFW.GLFW_OPENGL_CORE_PROFILE;
+import static org.lwjgl.glfw.GLFW.GLFW_OPENGL_FORWARD_COMPAT;
+import static org.lwjgl.glfw.GLFW.GLFW_OPENGL_PROFILE;
+import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
+import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
+import static org.lwjgl.glfw.GLFW.glfwDestroyWindow;
+import static org.lwjgl.glfw.GLFW.glfwInit;
+import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
+import static org.lwjgl.glfw.GLFW.glfwPollEvents;
+import static org.lwjgl.glfw.GLFW.glfwSetCursorPosCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetWindowPos;
+import static org.lwjgl.glfw.GLFW.glfwShowWindow;
+import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
+import static org.lwjgl.glfw.GLFW.glfwWindowHint;
+import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
+import static org.lwjgl.opengl.GL11.GL_TRUE;
+import static org.lwjgl.opengl.GL11.glClear;
+import static org.lwjgl.opengl.GL11.glClearColor;
+import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.system.MemoryUtil.NULL;
 
 import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
-import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
+
+import classesSimonDoesntLike.KeyboardInput;
+import classesSimonDoesntLike.MouseInput;
 import gameEngine.EntityManager;
 
 public class Window implements Runnable {
@@ -21,25 +43,31 @@ public class Window implements Runnable {
 	private GLFWCursorPosCallback cursorCallback;
 
 	public Long window;
-	
-	EntityManager entityManager; 
+
+	EntityManager entityManager;
+
 	public static void main(String args[]) {
+
 		Window game = new Window();
-		game.start();
+
+		game.run();
+
 	}
 
 	public void start() {
+
 		running = true;
 		thread = new Thread(this, "SpaceGame");
 		thread.start();
+
 	}
 
 	public void init() {
 		if (glfwInit() != GL_TRUE) {
 			System.err.println("GLFW init fail");
-			System.exit(-1);
 		}
 		glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -49,12 +77,12 @@ public class Window implements Runnable {
 
 		if (window == NULL) {
 			System.err.println("Could not create window");
-			System.exit(-1);
 		}
 
-		glfwSetKeyCallback(window, keyCallback = new KeyboardInput(this));
+		glfwSetKeyCallback(window, keyCallback = new KeyboardInput());
 		glfwSetCursorPosCallback(window, cursorCallback = (GLFWCursorPosCallback) new MouseInput());
 
+		//GLFWVidMode vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 		glfwSetWindowPos(window, 0, 20);
 
 		glfwMakeContextCurrent(window);
@@ -66,19 +94,26 @@ public class Window implements Runnable {
 
 		glEnable(GL_DEPTH_TEST);
 
-		entityManager = new EntityManager();
+		entityManager = new EntityManager(); //rwff
 
+		//System.out.println(glGetString(GL_VERSION));
 	}
 
 	public void update() {
 		entityManager.update();
+
 		glfwPollEvents();
 		/*
-		 * if (KeyboardInput.keys[GLFW_KEY_A]) { System.out.println("A"); }else
-		 * if(KeyboardInput.keys[GLFW_KEY_W]) { System.out.println("W"); }else
-		 * if(KeyboardInput.keys[GLFW_KEY_S]) { System.out.println("S"); }else
-		 * if(KeyboardInput.keys[GLFW_KEY_D]) { System.out.println("D"); }
-		 */
+		if (KeyboardInput.keys[GLFW_KEY_A]) {
+			System.out.println("A");
+		}else if(KeyboardInput.keys[GLFW_KEY_W]) {
+			System.out.println("W");
+		}else if(KeyboardInput.keys[GLFW_KEY_S]) {
+			System.out.println("S");
+		}else if(KeyboardInput.keys[GLFW_KEY_D]) {
+			System.out.println("D");
+		}
+		*/
 	}
 
 	public void render() {
@@ -89,15 +124,38 @@ public class Window implements Runnable {
 		entityManager.draw();
 	}
 
+	@Override
 	public void run() {
 		init();
+		long lastTime = System.nanoTime();
+		double delta = 0.0;
+		double ns = 1000000000.0 / 60.0;
+		long timer = System.currentTimeMillis();
+		int updates = 0;
+		int frames = 0;
 		while (running) {
-			update();
+			long now = System.nanoTime();
+			delta += (now - lastTime) / ns;
+			lastTime = now;
+			if (delta >= 1.0) {
+				update();
+				updates++;
+				delta--;
+			}
 			render();
+			frames++;
+			if (System.currentTimeMillis() - timer > 1000) {
+				timer += 1000;
+				System.out.println(updates + " UPS, " + frames + " FPS");
+				frames = 0;
+				updates = 0;
+			}
+
 			if (glfwWindowShouldClose(window) == GL_TRUE) {
 				running = false;
 			}
 		}
 		keyCallback.release();
+		glfwDestroyWindow(window);
 	}
 }
