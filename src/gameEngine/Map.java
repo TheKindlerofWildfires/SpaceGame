@@ -22,13 +22,13 @@ import graphicEngine.VertexArrayObject;
 import noiseLibrary.module.source.Perlin;
 
 public class Map {
-	public static final int HEXESACROSS = 300;
-	public static final int HEXESDOWN = 200;
+	public static final int HEXESACROSS = 200; //THESE ARE BACKWARDS NOW?????
+	public static final int HEXESDOWN = 300;
 
 	public static final int MOISTURESCALER = 12;
 	public static final int ELEVATIONSCALER = 17;
 
-	public static final float APOTHEM = 0.003f;
+	public static final float APOTHEM = 0.002f;
 
 	public static final int LAND = 100;
 	public static final int WATER = 0;
@@ -73,7 +73,7 @@ public class Map {
 	private void initShader() {
 		ShaderManager.shader1.start();
 		ShaderManager.shader1.setUniform1f("side", side);
-		ShaderManager.shader1.setUniform1i("hexesAcross", HEXESACROSS);
+		ShaderManager.shader1.setUniform1i("hexesAcross", HEXESDOWN);
 		ShaderManager.shader1.setUniform1f("apothem", APOTHEM);
 		ShaderManager.shader1.setUniform1f("aspect", aspectScaler);
 		ShaderManager.shader1.setUniform3f("pos", new Vector3f(-1f, 1f, 0));
@@ -125,7 +125,7 @@ public class Map {
 	}
 
 	private int[][] getNeighborIndices(int x, int y) {
-		System.out.println(x + "," + y);
+	//	System.out.println(x + "," + y);
 		if (x > 0 && y > 0 && x < HEXESACROSS - 1 && y < HEXESDOWN - 1) {
 			int[][] neighbors = new int[6][2];
 			neighbors[0][0] = x;
