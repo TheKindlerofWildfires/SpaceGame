@@ -1,45 +1,21 @@
 package gameEngine;
 
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_BORDER_COLOR;
-import static org.lwjgl.opengl.GL11.GL_TRIANGLE_FAN;
-<<<<<<< HEAD
-import static org.lwjgl.opengl.GL11.glBindTexture;
-import static org.lwjgl.opengl.GL11.glGenTextures;
-import static org.lwjgl.opengl.GL11.glTexParameterfv;
-import static org.lwjgl.opengl.GL13.GL_TEXTURE5;
-import static org.lwjgl.opengl.GL13.glActiveTexture;
-import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
-import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
-import static org.lwjgl.opengl.GL15.glBindBuffer;
-import static org.lwjgl.opengl.GL15.glBufferData;
-import static org.lwjgl.opengl.GL15.glGenBuffers;
-=======
->>>>>>> mitchell-bitches-about-gameplay
-import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
-import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
-import static org.lwjgl.opengl.GL30.GL_R32UI;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL31.GL_TEXTURE_BUFFER;
-import static org.lwjgl.opengl.GL31.glDrawArraysInstanced;
-import static org.lwjgl.opengl.GL31.glTexBuffer;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.*;
+import static org.lwjgl.opengl.GL15.*;
+import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL30.*;
+import static org.lwjgl.opengl.GL31.*;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> mitchell-bitches-about-gameplay
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Random;
 
 import graphicEngine.ShaderManager;
 import graphicEngine.VertexArrayObject;
-<<<<<<< HEAD
-=======
 import maths.Utilities;
 import maths.Vector3f;
-import noiseLibrary.module.source.Perlin;
->>>>>>> mitchell-bitches-about-gameplay
+import classesSimonDoesntLike.Hexagon;
 
 public class Map {
 	public static final int HEXESACROSS = 300;
@@ -48,25 +24,12 @@ public class Map {
 	public static final int MOISTURESCALER = 12;
 	public static final int ELEVATIONSCALER = 17;
 
-<<<<<<< HEAD
-	public static final float APOTHEM = 0.002f;
-=======
-
-	public static final float APOTHEM = 0.01f;
->>>>>>> mitchell-bitches-about-gameplay
-
 	public static final int LAND = 100;
 	public static final int WATER = 0;
 	public static final int SEED = 50;
-<<<<<<< HEAD
-
-
-=======
->>>>>>> mitchell-bitches-about-gameplay
 
 	public String mapType;
 	public int seedCount;
-
 
 	ShaderManager shaderManager;
 	public static ArrayList<ArrayList<Hexagon>> hexes = new ArrayList<ArrayList<Hexagon>>();
@@ -74,23 +37,10 @@ public class Map {
 
 	private Random rng = new Random();
 
-	public static final float sqrt3 = 1.7320508075688772f;
-	public static final float aspectScaler = 16 / 9f;
-	public static final float side = APOTHEM * 2 / sqrt3;
-
-	public static float[] vertices = { side, 0, 0, //right 0
-			side / 2, -APOTHEM * aspectScaler, 0, // lower right 1
-			-side / 2, -APOTHEM * aspectScaler, 0, //lower left 2
-			-side, 0, 0, //left 3
-			-side / 2, APOTHEM * aspectScaler, 0, //upper left 4
-			side / 2, APOTHEM * aspectScaler, 0, //upper right 5
-	};
-
-	public byte[] indices = new byte[] { 0, 1, 2, 3, 4, 5, 0 };
-	public VertexArrayObject vao = new VertexArrayObject(vertices, indices);
+	public VertexArrayObject vao = new VertexArrayObject(EntityManager.vertices, EntityManager.indices);
 	public int vaoID = vao.getVaoID();
 
-	public static int[][] land = new int[HEXESACROSS][HEXESDOWN];
+	public int[][] land = new int[HEXESACROSS][HEXESDOWN];
 	public int[][] seeds;
 
 	public Map() {
@@ -103,26 +53,19 @@ public class Map {
 		initializeMap();
 		initShader();
 	}
-	public ArrayList<ArrayList<Hexagon>> getMapHexes(){
+
+	public ArrayList<ArrayList<Hexagon>> getMapHexes() {
 		return hexes;
 	}
 
 	private void initShader() {
-<<<<<<< HEAD
-		ShaderManager.shader1.start();
-		ShaderManager.shader1.setUniform1f("side", side);
-		ShaderManager.shader1.setUniform1i("hexesAcross", HEXESACROSS);
-		ShaderManager.shader1.setUniform1f("apothem", APOTHEM);
-		ShaderManager.shader1.setUniform1f("aspect", aspectScaler);
-		ShaderManager.shader1.setUniform3f("pos", new Vector3f(-1f, 1f, 0));
-=======
-		ShaderManager.land.start();
-		ShaderManager.land.setUniform1f("side", side);
-		ShaderManager.land.setUniform1i("hexesAcross", HEXESDOWN);
-		ShaderManager.land.setUniform1f("apothem", APOTHEM);
-		ShaderManager.land.setUniform1f("aspect", aspectScaler);
-		ShaderManager.land.setUniform3f("pos", new Vector3f(-1f, 1f, 0));
->>>>>>> mitchell-bitches-about-gameplay
+		ShaderManager.landShader.start();
+		ShaderManager.landShader.setUniform1f("side", EntityManager.side);
+		ShaderManager.landShader.setUniform1i("hexesAcross", HEXESACROSS);
+		ShaderManager.landShader.setUniform1f("apothem", EntityManager.APOTHEM);
+		ShaderManager.landShader.setUniform1f("aspect", EntityManager.aspectScaler);
+		ShaderManager.landShader.setUniform3f("pos", new Vector3f(-1f, 1f, 0));
+
 		int[] land = new int[HEXESACROSS * HEXESDOWN];
 		int counter = 0;
 		for (int x = 0; x < HEXESDOWN; x++) {
@@ -150,6 +93,7 @@ public class Map {
 		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, Utilities.createFloatBuffer(color));
 	}
 
+	@Deprecated
 	private Hexagon[] getAllNeighbors(Hexagon hex) {
 		if (hex.xIndex > 0 && hex.yIndex > 0 && hex.xIndex < HEXESACROSS - 1 && hex.yIndex < HEXESDOWN - 1) {
 			Hexagon[] neighbors = new Hexagon[6];
@@ -171,7 +115,7 @@ public class Map {
 	}
 
 	private int[][] getNeighborIndices(int x, int y) {
-	//	System.out.println(x + "," + y);
+		//	System.out.println(x + "," + y);
 		if (x > 0 && y > 0 && x < HEXESACROSS - 1 && y < HEXESDOWN - 1) {
 			int[][] neighbors = new int[6][2];
 			neighbors[0][0] = x;
@@ -199,19 +143,14 @@ public class Map {
 		}
 	}
 
-<<<<<<< HEAD
 	public void render() {
-		ShaderManager.shader1.start();
-=======
-	public void draw() {
-		ShaderManager.land.start();
->>>>>>> mitchell-bitches-about-gameplay
+		ShaderManager.landShader.start();
 		glBindVertexArray(vaoID);
 		glEnableVertexAttribArray(0);
 		glDrawArraysInstanced(GL_TRIANGLE_FAN, 0, 6, HEXESACROSS * HEXESDOWN);
 		glDisableVertexAttribArray(0);
 		glBindVertexArray(0);
-		ShaderManager.land.stop();
+		ShaderManager.landShader.stop();
 	}
 
 	private void initializeMap() {
@@ -279,7 +218,8 @@ public class Map {
 			for (int i = 0; i < outerLand.size(); i++) {
 				int[][] neighbors = getNeighborIndices(outerLand.get(i)[0], outerLand.get(i)[1]);
 				for (int j = 0; j < neighbors.length; j++) {
-					if (land[neighbors[j][0]][neighbors[j][1]] != LAND && land[neighbors[j][0]][neighbors[j][1]] != SEED ) {
+					if (land[neighbors[j][0]][neighbors[j][1]] != LAND
+							&& land[neighbors[j][0]][neighbors[j][1]] != SEED) {
 						if (rng.nextDouble() <= p) {
 							land[neighbors[j][0]][neighbors[j][1]] = LAND;
 							newLand.add(neighbors[j]);

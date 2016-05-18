@@ -1,4 +1,4 @@
-package gameEngine;
+package classesSimonDoesntLike;
 
 import static org.lwjgl.opengl.GL11.GL_TRIANGLE_FAN;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
@@ -22,7 +22,7 @@ public class Hexagon {
 	private float elevation;
 	public int xIndex;
 	public int yIndex;
-	float apothem = Map.APOTHEM;
+	float apothem = EntityManager.APOTHEM;
 	public float side = (float) (apothem * 2 / sqrt3);
 	public static final float aspectScaler = 16 / 9f;
 	float[] vertices = { side, 0, 0, //right 0
