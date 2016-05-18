@@ -22,13 +22,8 @@ import maths.Vector3f;
 import noiseLibrary.module.source.Perlin;
 
 public class Map {
-<<<<<<< HEAD
-	public static final int HEXESACROSS = 100; //REMEMBER TO CHANGE TOTAL HEXES IN SHADER WHEN THESE CHANGE
-	public static final int HEXESDOWN = 100;
-=======
 	public static final int HEXESACROSS = 200; //THESE ARE BACKWARDS NOW?????
 	public static final int HEXESDOWN = 300;
->>>>>>> refs/remotes/origin/tesselation-optimization
 
 	public static final int MOISTURESCALER = 12;
 	public static final int ELEVATIONSCALER = 17;
@@ -43,16 +38,10 @@ public class Map {
 	public String mapType;
 	public int seedCount;
 
-	public String[] maps = { "fractal", "soft", "disk", "stand", "trig" };
-<<<<<<< HEAD
-	public static ArrayList<ArrayList<Hexagon>> hexes = new ArrayList<ArrayList<Hexagon>>();
-	private Hexagon[] seeds;
 
 	ShaderManager shaderManager;
-=======
-	private ArrayList<ArrayList<Hexagon>> hexes = new ArrayList<ArrayList<Hexagon>>();
+	public static ArrayList<ArrayList<Hexagon>> hexes = new ArrayList<ArrayList<Hexagon>>();
 	//private Hexagon[] seeds;
->>>>>>> refs/remotes/origin/tesselation-optimization
 
 	private Random rng = new Random();
 
@@ -76,15 +65,12 @@ public class Map {
 	public int[][] seeds;
 
 	public Map() {
-<<<<<<< HEAD
-		seedCount = rng.nextInt(2) + 1;
+		seedCount = 1;
 		///mapType = maps[rng.nextInt(maps.length)];
 		mapType = "disk";
-=======
 		long seed = rng.nextLong();
 		rng.setSeed(seed);
 		System.out.println("Random Seed is " + seed);
->>>>>>> refs/remotes/origin/tesselation-optimization
 		initializeMap();
 		initShader();
 	}
@@ -93,12 +79,12 @@ public class Map {
 	}
 
 	private void initShader() {
-		ShaderManager.shader1.start();
-		ShaderManager.shader1.setUniform1f("side", side);
-		ShaderManager.shader1.setUniform1i("hexesAcross", HEXESDOWN);
-		ShaderManager.shader1.setUniform1f("apothem", APOTHEM);
-		ShaderManager.shader1.setUniform1f("aspect", aspectScaler);
-		ShaderManager.shader1.setUniform3f("pos", new Vector3f(-1f, 1f, 0));
+		ShaderManager.land.start();
+		ShaderManager.land.setUniform1f("side", side);
+		ShaderManager.land.setUniform1i("hexesAcross", HEXESDOWN);
+		ShaderManager.land.setUniform1f("apothem", APOTHEM);
+		ShaderManager.land.setUniform1f("aspect", aspectScaler);
+		ShaderManager.land.setUniform3f("pos", new Vector3f(-1f, 1f, 0));
 		int[] land = new int[HEXESACROSS * HEXESDOWN];
 		int counter = 0;
 		for (int x = 0; x < HEXESACROSS; x++) {
@@ -176,13 +162,13 @@ public class Map {
 	}
 
 	public void draw() {
-		ShaderManager.shader1.start();
+		ShaderManager.land.start();
 		glBindVertexArray(vaoID);
 		glEnableVertexAttribArray(0);
 		glDrawArraysInstanced(GL_TRIANGLE_FAN, 0, 6, HEXESACROSS * HEXESDOWN);
 		glDisableVertexAttribArray(0);
 		glBindVertexArray(0);
-		ShaderManager.shader1.stop();
+		ShaderManager.land.stop();
 	}
 
 	private void initializeMap() {
@@ -229,20 +215,11 @@ public class Map {
 
 		// GEN LAND
 		System.out.println("Genning Land");
-<<<<<<< HEAD
-		ArrayList<Hexagon> outerLand = new ArrayList<Hexagon>();
-		for (Hexagon s : seeds) {
-			for (Hexagon i : getAllNeighbors(s)) {	
-				i.setLand(true);
-				outerLand.add(i);
-			}
-=======
 		ArrayList<int[]> outerLand = new ArrayList<int[]>();
 		for (int i = 0; i < seedCount; i++) {
 			int[] seed = { seeds[i][0], seeds[i][1] };
 			outerLand.add(seed);
 			land[seed[0]][seed[1]] = SEED;
->>>>>>> refs/remotes/origin/tesselation-optimization
 		}
 
 		/*	ArrayList<int[]> newLand = new ArrayList<int[]>();

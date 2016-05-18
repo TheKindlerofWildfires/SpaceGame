@@ -50,7 +50,7 @@ public class MonsterV1 {
 	public MonsterV1(){
 		rng = new Random();
 		shaderManager = new ShaderManager();
-		shaderManager.loadAll();
+		ShaderManager.loadAll();
 		xIndex = 14;
 		yIndex = 17;
 		this.count = indices.length;
@@ -75,23 +75,23 @@ public class MonsterV1 {
 
 	public void draw() {
 		if(dead()){
-			shaderManager.deathShader.start();
-			shaderManager.deathShader.setUniform3f("pos", this.position);
+			ShaderManager.deathShader.start();
+			ShaderManager.deathShader.setUniform3f("pos", this.position);
 			glBindVertexArray(this.vaoID);
 			glEnableVertexAttribArray(0);
 			glDrawElements(GL_TRIANGLE_FAN, 7, GL_UNSIGNED_BYTE, 0);
 			glDisableVertexAttribArray(0);
 			glBindVertexArray(0);
-			shaderManager.deathShader.stop();
+			ShaderManager.deathShader.stop();
 		}else{
-			shaderManager.monsterShader.start();
-			shaderManager.monsterShader.setUniform3f("pos", this.position);
+			ShaderManager.monsterShader.start();
+			ShaderManager.monsterShader.setUniform3f("pos", this.position);
 			glBindVertexArray(this.vaoID);
 			glEnableVertexAttribArray(0);
 			glDrawElements(GL_TRIANGLE_FAN, 7, GL_UNSIGNED_BYTE, 0);
 			glDisableVertexAttribArray(0);
 			glBindVertexArray(0);
-			shaderManager.monsterShader.stop();
+			ShaderManager.monsterShader.stop();
 		}
 	}
 	public boolean dead(){
@@ -155,14 +155,14 @@ public class MonsterV1 {
 	}
 	private boolean checkDestination(){
 		//System.out.println(Map.hexes.get(this.xIndex).get(this.yIndex).isLand());
-		if(Map.hexes.get(this.xIndex).get(this.yIndex).isLand()){
+		//if(Map.hexes.get(this.xIndex).get(this.yIndex).isLand()){
 			return true;
 		}
-		else{
-			return false;
+		//else{
+			//return false;
 			//this function ensures that is its land... or it would
-		}
-	}
+		//}
+	//}
 	public Vector3f getPosition(){
 		return this.position;
 	}

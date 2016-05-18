@@ -46,7 +46,7 @@ public class Player {
 	public Player(){
 		lastMove = 0;
 		shaderManager = new ShaderManager();
-		shaderManager.loadAll();
+		ShaderManager.loadAll();
 		xIndex = 14;
 		yIndex = 21;
 		this.count = indices.length;
@@ -70,23 +70,23 @@ public class Player {
 
 	public void draw() {	
 		if(dead()){
-			shaderManager.deathShader.start();
-			shaderManager.deathShader.setUniform3f("pos", this.position);
+			ShaderManager.deathShader.start();
+			ShaderManager.deathShader.setUniform3f("pos", this.position);
 			glBindVertexArray(this.vaoID);
 			glEnableVertexAttribArray(0);
 			glDrawElements(GL_TRIANGLE_FAN, 7, GL_UNSIGNED_BYTE, 0);
 			glDisableVertexAttribArray(0);
 			glBindVertexArray(0);
-			shaderManager.deathShader.stop();
+			ShaderManager.deathShader.stop();
 		}else{
-			shaderManager.playerShader.start();
-			shaderManager.playerShader.setUniform3f("pos", this.position);
+			ShaderManager.playerShader.start();
+			ShaderManager.playerShader.setUniform3f("pos", this.position);
 			glBindVertexArray(this.vaoID);
 			glEnableVertexAttribArray(0);
 			glDrawElements(GL_TRIANGLE_FAN, 7, GL_UNSIGNED_BYTE, 0);
 			glDisableVertexAttribArray(0);
 			glBindVertexArray(0);
-			shaderManager.playerShader.stop();
+			ShaderManager.playerShader.stop();
 		}
 }
 public boolean dead(){
@@ -98,7 +98,7 @@ public boolean dead(){
 }
 	public void update(){
 		//System.out.println(Tick.getUpdateTick());
-		System.out.println(self.getEntitySpeed());
+		//System.out.println(self.getEntitySpeed());
 			getDestination();
 			if(checkDestination()){//thisisnevercalled
 				if ((this.position.x-this.destination.x !=0)||(this.position.y-this.destination.y !=0)){
@@ -150,13 +150,13 @@ public boolean dead(){
 		}
 	}
 	private boolean checkDestination(){
-		if(Map.hexes.get(this.xIndex).get(this.yIndex).isLand()){
+		//if(Map.hexes.get(this.xIndex).get(this.yIndex).isLand()){
 			return true;
-		}
-		else{
-			return false;
+		//}
+		//else{
+		//	return false;
 			//this function ensures that is its land... or it would
-		}
+		//}
 	}
 	public Vector3f getPosition(){
 		return this.position;
