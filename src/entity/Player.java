@@ -160,8 +160,8 @@ public class Player {
 	}
 
 	private boolean checkDestination() {
-		System.out.println(xIndex + " " + yIndex);
-		System.out.println(map.land[xIndex][yIndex]);//x,y
+		//System.out.println(xIndex + " " + yIndex);
+		//System.out.println(map.land[xIndex][yIndex]);//x,y
 		if (map.land[xIndex][yIndex] == Map.LAND) {
 
 		}

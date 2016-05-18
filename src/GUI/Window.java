@@ -38,7 +38,6 @@ import gameEngine.EntityManager;
 public class Window implements Runnable {
 	private Thread thread;
 	public boolean running = true;
-
 	private GLFWKeyCallback keyCallback;
 	private GLFWCursorPosCallback cursorCallback;
 

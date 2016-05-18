@@ -40,22 +40,17 @@ public class Map {
 	public VertexArrayObject vao = new VertexArrayObject(EntityManager.vertices, EntityManager.indices);
 	public int vaoID = vao.getVaoID();
 
+	public static final String[] maps = { "fractal", "disk", "soft", "stand", "trig" };
+
 	public int[][] land = new int[HEXESACROSS][HEXESDOWN];
 	public int[][] seeds;
 
 	public Map() {
-		seedCount = 1;
-		///mapType = maps[rng.nextInt(maps.length)];
-		mapType = "disk";
 		long seed = rng.nextLong();
 		rng.setSeed(seed);
 		System.out.println("Random Seed is " + seed);
 		initializeMap();
 		initShader();
-	}
-
-	public ArrayList<ArrayList<Hexagon>> getMapHexes() {
-		return hexes;
 	}
 
 	private void initShader() {
@@ -127,8 +122,8 @@ public class Map {
 			neighbors[3][0] = x - 1;
 			neighbors[3][1] = y;
 			if (x % 2 == 0) {
-				neighbors[4][0] = x + 1;
-				neighbors[4][1] = y - 1;
+				neighbors[4][0] = x - 1;
+				neighbors[4][1] = y + 1;
 				neighbors[5][0] = x + 1;
 				neighbors[5][1] = y + 1;
 			} else {
@@ -155,26 +150,10 @@ public class Map {
 
 	private void initializeMap() {
 		//INIT MAPTYPE ETC
-		mapType = "fractal";
+		//mapType = "fractal";
+		mapType = maps[rng.nextInt(maps.length)];
 		seedCount = 1;
 		seeds = new int[seedCount][2];
-		///mapType = maps[rng.nextInt(maps.length)];
-
-		/*// INIT TILES
-		for (int i = 0; i <= HEXESACROSS; i++) {
-			hexes.add(new ArrayList<Hexagon>());
-		}
-		
-		//Perlin noise = new Perlin();
-		//noise.setSeed(rng.nextInt(1000000));
-		for (int j = 0; j < HEXESDOWN; j++) {
-			for (int i = 0; i < HEXESACROSS; i++) {
-				hexes.get(j)
-						.add(new Hexagon(i, j,
-								(float) Math.abs(noise.getValue(i / MOISTURESCALER, j / MOISTURESCALER, .1)),
-								(float) Math.abs(noise.getValue(i / ELEVATIONSCALER, j / ELEVATIONSCALER, .3))));
-			}
-		}*/
 
 		// INIT SEEDS
 		System.out.println("Initiailzing Seeds");
@@ -188,13 +167,6 @@ public class Map {
 			}
 		}
 
-		/*seeds = new Hexagon[seedCount];
-		for (int i = 0; i < seedCount; i++) {
-			seeds[i] = hexes.get(HEXESDOWN / (8 / 3) + rng.nextInt(HEXESDOWN / 3))
-					.get(HEXESACROSS / (8 / 3) + rng.nextInt(HEXESACROSS / 3));
-			seeds[i].setLand(true);
-		}*/
-
 		// GEN LAND
 		System.out.println("Genning Land");
 		ArrayList<int[]> outerLand = new ArrayList<int[]>();
@@ -204,14 +176,15 @@ public class Map {
 			land[seed[0]][seed[1]] = SEED;
 		}
 
-		/*	ArrayList<int[]> newLand = new ArrayList<int[]>();
-			for (int i = 0; i < outerLand.size(); i++) {
-				int[][] neighbors = getNeighborIndices(seeds[0][1], seeds[0][1]);
-				for (int j = 0; j < neighbors.length; j++) {
-					land[neighbors[j][0]][neighbors[j][1]] = LAND;
-					newLand.add(neighbors[j]);
-				}
-			}*/
+		//VALUE FOR TROUBLESHOOTING--DONT DELETE
+		/*int[][] neighbors = getNeighborIndices(seeds[0][0], seeds[0][1]);
+		for (int j = 0; j < neighbors.length; j++) {
+			if (land[neighbors[j][0]][neighbors[j][1]] != LAND && land[neighbors[j][0]][neighbors[j][1]] != SEED) {
+				land[neighbors[j][0]][neighbors[j][1]] = LAND;
+			}
+		}*/
+
+		
 		double p = 1;
 		while (outerLand.size() != 0 && p != 0) {
 			ArrayList<int[]> newLand = new ArrayList<int[]>();
@@ -230,7 +203,7 @@ public class Map {
 			outerLand.clear();
 			outerLand.addAll(newLand);
 			newLand.clear();
-
+		
 			switch (mapType) {
 			case "fractal":
 				p = 0.29 / (Math.log(p + 2));
@@ -254,32 +227,6 @@ public class Map {
 			}
 		}
 
-		/*hexes.get(10).get(10).setLand(true);
-		hexes.get(11).get(10).setLand(true);
-		hexes.get(12).get(10).setLand(true);
-		hexes.get(13).get(10).setLand(true);
-		hexes.get(14).get(10).setLand(true);
-		hexes.get(15).get(10).setLand(true);
-		
-		hexes.get(13).get(10).setLand(true);
-		hexes.get(13).get(11).setLand(true);
-		hexes.get(13).get(12).setLand(true);
-		hexes.get(13).get(13).setLand(true);
-		
-		hexes.get(10).get(13).setLand(true);
-		hexes.get(11).get(13).setLand(true);
-		hexes.get(12).get(13).setLand(true);
-		hexes.get(13).get(13).setLand(true);
-		hexes.get(14).get(13).setLand(true);
-		hexes.get(15).get(13).setLand(true);
-		
-		hexes.get(10).get(15).setLand(true);
-		hexes.get(12).get(15).setLand(true);
-		hexes.get(13).get(15).setLand(true);
-		hexes.get(14).get(15).setLand(true);
-		hexes.get(15).get(15).setLand(true);*/
-
 		System.out.println("Map init complete");
-
 	}
 }
