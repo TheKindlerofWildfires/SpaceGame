@@ -10,7 +10,6 @@ import java.util.Random;
 import combat.Mechanics;
 import GUI.Tick;
 import maths.Vector3f;
-import classesSimonDoesntLike.KeyboardInput;
 import gameEngine.EntityManager;
 import gameEngine.Map;
 import graphicEngine.ShaderManager;

@@ -8,7 +8,7 @@ public class EntityManager {
 
 	ShaderManager shaderManager;
 	//Player player;
-	Map map;
+	public Map map;
 	public static Player player;
 	public static MonsterV1 monster;
 

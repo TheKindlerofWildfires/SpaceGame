@@ -9,11 +9,7 @@ uniform float side;
 uniform float apothem;
 uniform float aspect;
 uniform int hexesAcross;
-<<<<<<< HEAD
-uniform int land[10000];
-=======
 uniform usamplerBuffer land;
->>>>>>> refs/remotes/origin/tesselation-optimization
 
 void main(void){
 	int yPos = gl_InstanceID/hexesAcross;
