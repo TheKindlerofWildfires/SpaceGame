@@ -1,13 +1,22 @@
-package classesSimonDoesntLike;
+package GUI;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
-import GUI.Tile;
-import GUI.Window;
+//import javax.swing.BorderFactory;
+//import javax.swing.JPanel;
+
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.system.MemoryUtil.*;
+
 import noiseLibrary.module.source.Perlin;
 
 /**
@@ -17,10 +26,11 @@ import noiseLibrary.module.source.Perlin;
  * @author Simon
  */
 
+//udfg	wonder what that meant
 
 public class Canvas extends Window {
-	public static final int HEXESACROSS = 3;
-	public static final int HEXESDOWN = 3;
+	public static final int HEXESACROSS = 360;
+	public static final int HEXESDOWN = 240;
 
 	public static final int MOISTURESCALER = 12;
 	public static final int ELEVATIONSCALER = 17;

@@ -17,6 +17,7 @@ import java.nio.FloatBuffer;
 import org.lwjgl.BufferUtils;
 
 public class Utilities {
+
 	public static FloatBuffer createFloatBuffer(float[] data) {
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(data.length);
 		buffer.put(data);
@@ -33,33 +34,29 @@ public class Utilities {
 
 	public static int loadShader(String filepath, int type) {
 		StringBuilder result = new StringBuilder();
-		BufferedReader reader = null;
-		try {
-			reader = new BufferedReader(new FileReader(filepath));
+		try{
+			BufferedReader reader = new BufferedReader(new FileReader(filepath));
 			String buffer = "";
 			while ((buffer = reader.readLine()) != null) {
 				result.append(buffer);
 				result.append("\n");
 			}
+			System.out.println(result);
+			reader.close();
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				reader.close();
-			} catch (IOException e) {
-				e.printStackTrace();
+		}catch (IOException e){
+			System.err.println(e);
+		} 
+		finally{
+			int shaderID = glCreateShader(type);
+			glShaderSource(shaderID, result.toString());
+			glCompileShader(shaderID);
+			if (glGetShaderi(shaderID, GL_COMPILE_STATUS) == GL_FALSE) {
+				System.err.println(glGetShaderInfoLog(shaderID, 500));
+				System.err.println("Could not compile shader");
+				System.err.println(-1);
 			}
-		}
-		int shaderID = glCreateShader(type);
-		glShaderSource(shaderID, result.toString());
-		glCompileShader(shaderID);
-		if (glGetShaderi(shaderID, GL_COMPILE_STATUS) == GL_FALSE) {
-			System.err.println(glGetShaderInfoLog(shaderID, 500));
-			System.err.println("Could not compile shader");
-			System.err.println(-1);
-		}
 		return shaderID;
-	}
-
+		}
+		}
 }

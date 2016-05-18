@@ -1,8 +1,7 @@
-package entity;
+package gameEngine;
 
 import GUI.Vector3f;
-import gameEngine.GameObject;
-import graphicEngine.VertexArrayObject;
+import graphicEngine.*;
 
 public class Monster extends GameObject{
 	public Vector3f movement;

@@ -1,7 +1,5 @@
-package classesSimonDoesntLike;
+package gameEngine;
 
-import entity.Monster;
-import entity.Player;
 import graphicEngine.ShaderManager;
 
 public class Level { //prolly should not be called level
@@ -10,7 +8,7 @@ public class Level { //prolly should not be called level
 	Player player;
 	Monster monster;
 	
-	public Level(){
+	/*public Level(){
 		shaderManager = new ShaderManager();
 		ShaderManager.loadAll();
 		player = new Player(); //I suspect this will have to be cleaner --need to do all entities
@@ -42,5 +40,5 @@ public class Level { //prolly should not be called level
 			monster.movement.x *= -1.0f;
 			monster.movement.y *= -1.0f;
 		}
-	}
+	}*/
 }
