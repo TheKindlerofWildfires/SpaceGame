@@ -15,7 +15,7 @@ public class EntityManager {
 		//shaderManager = new ShaderManager();
 	//	ShaderManager.loadAll();
 		map = new Map();
-		//player = new Player();
+		player = new Player();
 		//	player = new Player();
 		//	player.position.y = -0.01f;
 		//	player.position.x = 0.0f;
@@ -27,9 +27,9 @@ public class EntityManager {
 	
 	}
 
-	public void draw() {
-		map.draw();
-		//player.draw();
+	public void render() {
+		map.render();
+		player.render();
 
 	}
 }

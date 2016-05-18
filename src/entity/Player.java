@@ -35,8 +35,7 @@ public class Player {
 	byte[] indices = new byte[] { 0, 1, 2, 3, 4, 5, 0 };
 
 	public Player(){
-		shaderManager = new ShaderManager();
-		shaderManager.loadAll();
+	
 	
 		this.count = indices.length;
 		this.position = new Vector3f();
@@ -53,15 +52,15 @@ public class Player {
 		}
 	}
 
-	public void draw() {
-		shaderManager.playerShader.start();
-		shaderManager.playerShader.setUniform3f("pos", this.position);
+	public void render() {
+		ShaderManager.playerShader.start();
+		ShaderManager.playerShader.setUniform3f("pos", this.position);
 		glBindVertexArray(this.vaoID);
 		glEnableVertexAttribArray(0);
 		glDrawElements(GL_TRIANGLE_FAN, 7, GL_UNSIGNED_BYTE, 0);
 		glDisableVertexAttribArray(0);
 		glBindVertexArray(0);
-		shaderManager.playerShader.stop();
+		ShaderManager.playerShader.stop();
 	}
 
 	public void update(){

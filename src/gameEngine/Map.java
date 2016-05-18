@@ -37,15 +37,13 @@ public class Map {
 	public static final int MOISTURESCALER = 12;
 	public static final int ELEVATIONSCALER = 17;
 
-<<<<<<< HEAD
 	public static final float APOTHEM = 0.002f;
 
 	public static final int LAND = 100;
 	public static final int WATER = 0;
 	public static final int SEED = 50;
-=======
-	public static final float APOTHEM = 0.02f;
->>>>>>> mitchell-bitches-about-gameplay
+
+
 
 	public String mapType;
 	public int seedCount;
@@ -166,7 +164,7 @@ public class Map {
 		}
 	}
 
-	public void draw() {
+	public void render() {
 		ShaderManager.shader1.start();
 		glBindVertexArray(vaoID);
 		glEnableVertexAttribArray(0);
