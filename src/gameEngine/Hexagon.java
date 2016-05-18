@@ -1,14 +1,20 @@
 package gameEngine;
 
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_TRIANGLE_FAN;
+import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
+import static org.lwjgl.opengl.GL11.glDrawElements;
 import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 
+<<<<<<< HEAD
 import java.nio.ByteBuffer;
 
 import maths.Utilities;
 import maths.Vector3f;
+=======
+import GUI.Vector3f;
+>>>>>>> refs/remotes/origin/tesselation-optimization
 import graphicEngine.VertexArrayObject;
 
 public class Hexagon {
