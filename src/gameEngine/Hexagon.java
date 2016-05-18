@@ -7,7 +7,7 @@ import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 
-import GUI.Vector3f;
+import maths.Vector3f;
 import graphicEngine.VertexArrayObject;
 
 public class Hexagon {

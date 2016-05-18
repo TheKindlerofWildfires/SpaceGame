@@ -1,4 +1,4 @@
-package GUI;
+package maths;
 //This does cords
 public class Vector3f {
 	public float x = 0.0f;

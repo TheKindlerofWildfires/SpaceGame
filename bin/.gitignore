@@ -1,8 +1,12 @@
 /GUI/
-/classesSimonDoesntLike/
-/combat/
 /entity/
 /gameEngine/
+<<<<<<< HEAD
 /graphicEngine/
 /noiseLibrary/
 /shaders/
+=======
+/shaders/
+/graphicEngine/
+/combat/
+>>>>>>> mitchell-bitches-about-gameplay

@@ -1,4 +1,4 @@
-package combat;
+package maths;
 
 public class Gaussian {
     // return pdf(x) = standard Gaussian pdf

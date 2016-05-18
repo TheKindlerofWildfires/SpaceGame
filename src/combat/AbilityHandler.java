@@ -7,13 +7,14 @@ public class AbilityHandler {
 	public AbilityHandler() {
 
 	}
-
+	//System.out.println(used);
 	public void checkAbility(String callType, Entity attacker, Entity target) {
 
 		for (int x = 0; x < attacker.getEntityAbility().size(); x++) {
 			switch (callType) {
 			case "onHit":
 				// looks like this should all be multi-threaded
+				//System.out.println(attacker.getEntityAbility().get(x));
 				//System.out.println(attacker.getEntityAbility().get(x));
 				switch (attacker.getEntityAbility().get(x)) {
 				case "Knockdown":
@@ -47,7 +48,7 @@ public class AbilityHandler {
 				case "Alcolyte":
 					break;
 				default:
-					System.err.println("onHit error--Ability Unlisted");
+					//System.err.println("onHit error--Ability Unlisted");
 					break;
 				}
 				if (target.getEntityAbility().get(x) == "Reflect") {

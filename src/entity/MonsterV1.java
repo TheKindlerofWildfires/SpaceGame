@@ -4,17 +4,19 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
-import GUI.Tick;
+
+import java.util.Random;
+
 import combat.Mechanics;
+import GUI.Tick;
 import maths.Vector3f;
-import classesSimonDoesntLike.KeyboardInput;
 import gameEngine.EntityManager;
 import gameEngine.Map;
 import graphicEngine.ShaderManager;
 import graphicEngine.VertexArrayObject;
 
 
-public class Player {
+public class MonsterV1 {
 
 	public int vaoID;
 	public int count;
@@ -23,15 +25,15 @@ public class Player {
 	public Vector3f position;
 	public Vector3f destination;
 	private float elevation;
+	private int lastMove;
 	ShaderManager shaderManager;
 	public int xIndex;
 	public int yIndex;
-	private int lastMove;
-	static Entity self = Entity.getEntity("Agent");
-	Entity target = MonsterV1.self; //rwff --Monsterv1.self
+	Entity target = Player.self;
 	public static final float aspectScaler = 16 / 9f;
 	float apothem = gameEngine.Map.APOTHEM;
 	float side = (float) (apothem * 2 / sqrt3);
+	static Entity self = Entity.getEntity("Leader");
 	float[] vertices = { side, 0, 0, //right 0
 			side / 2, -apothem * aspectScaler, 0, // lower right 1
 			-side / 2, -apothem * aspectScaler, 0, //lower left 2
@@ -39,26 +41,23 @@ public class Player {
 			-side / 2, apothem * aspectScaler, 0, //upper left 4
 			side / 2, apothem * aspectScaler, 0, //upper right 5
 			0, 0, 0 //center 6
+			
 	};
-	Mechanics ah = new Mechanics();
+	private Random rng;
 	byte[] indices = new byte[] { 0, 1, 2, 3, 4, 5, 0 };
 
-	public Player(){
-<<<<<<< HEAD
-	
-	
-=======
-		lastMove = 0;
+	public MonsterV1(){
+		rng = new Random();
 		shaderManager = new ShaderManager();
 		ShaderManager.loadAll();
 		xIndex = 14;
-		yIndex = 21;
->>>>>>> mitchell-bitches-about-gameplay
+		yIndex = 17;
 		this.count = indices.length;
 		this.position = new Vector3f();
 		this.destination = new Vector3f();
 		vao = new VertexArrayObject(vertices, indices);
 		this.vaoID = vao.getVaoID();
+
 		this.position.z = this.elevation;
 		if (xIndex % 2 == 0) {
 			this.position.y = -1.2f * (yIndex * apothem * 2) * aspectScaler + 1;
@@ -73,18 +72,7 @@ public class Player {
 		}
 	}
 
-<<<<<<< HEAD
-	public void render() {
-		ShaderManager.playerShader.start();
-		ShaderManager.playerShader.setUniform3f("pos", this.position);
-		glBindVertexArray(this.vaoID);
-		glEnableVertexAttribArray(0);
-		glDrawElements(GL_TRIANGLE_FAN, 7, GL_UNSIGNED_BYTE, 0);
-		glDisableVertexAttribArray(0);
-		glBindVertexArray(0);
-		ShaderManager.playerShader.stop();
-=======
-	public void draw() {	
+	public void draw() {
 		if(dead()){
 			ShaderManager.deathShader.start();
 			ShaderManager.deathShader.setUniform3f("pos", this.position);
@@ -95,29 +83,26 @@ public class Player {
 			glBindVertexArray(0);
 			ShaderManager.deathShader.stop();
 		}else{
-			ShaderManager.playerShader.start();
-			ShaderManager.playerShader.setUniform3f("pos", this.position);
+			ShaderManager.monsterShader.start();
+			ShaderManager.monsterShader.setUniform3f("pos", this.position);
 			glBindVertexArray(this.vaoID);
 			glEnableVertexAttribArray(0);
 			glDrawElements(GL_TRIANGLE_FAN, 7, GL_UNSIGNED_BYTE, 0);
 			glDisableVertexAttribArray(0);
 			glBindVertexArray(0);
-			ShaderManager.playerShader.stop();
+			ShaderManager.monsterShader.stop();
 		}
-}
-public boolean dead(){
-	if(self.getEntityHealth()<=0){
-		return true;
-	}else{
-		return false;
->>>>>>> mitchell-bitches-about-gameplay
 	}
-}
+	public boolean dead(){
+		if(self.getEntityHealth()<=0){
+			return true;
+		}else{
+			return false;
+		}
+	}
 	public void update(){
-		//System.out.println(Tick.getUpdateTick());
-		//System.out.println(self.getEntitySpeed());
+			if(!dead()){
 			getDestination();
-			
 			if(checkDestination()){//thisisnevercalled
 				if ((this.position.x-this.destination.x !=0)||(this.position.y-this.destination.y !=0)){
 					lastMove = Tick.getUpdateTick();
@@ -128,65 +113,55 @@ public boolean dead(){
 					destination.x = position.x;
 					destination.y = position.y;
 			}
+			}
+			
 	}
 	public void getDestination(){
-		
-		int time = Tick.getUpdateTick();
-		//why is only r called 5 times
-		//only called once per tick
-		if(!dead()){
-		if(time-lastMove >1.8*(6-self.getEntitySpeed())){ //between 6.66 - 33 tiles per second
-			//only called once per tick
-			//System.out.println(time);
+			//20/3 = 5/2
+			//less than 2.5, more than 2
+			//welcome to rng
+			int time = Tick.getUpdateTick();
+		if(time-lastMove >50*(6-self.getEntitySpeed())){ //5*(6-Entity.getSpeed())
 			float dis = (2.4f);
-				if(KeyboardInput.isKeyDown(GLFW_KEY_Q)){
-					destination.x = position.x-(apothem*sqrt3/2*dis);
-					destination.y = position.y+(apothem/2*aspectScaler*dis);
-					yIndex +=1; //I suspect this is much more complicated
-					xIndex -=1;
-				}else if(KeyboardInput.isKeyDown(GLFW_KEY_W)){
-					destination.y = position.y+(apothem*aspectScaler*dis);
-					yIndex +=1;
-				}else if(KeyboardInput.isKeyDown(GLFW_KEY_E)){
-					destination.x = position.x+(apothem*sqrt3/2*dis);
-					destination.y = position.y+(apothem/2*aspectScaler*dis);
-					yIndex +=1;
-					xIndex +=1;
-				}else if(KeyboardInput.isKeyDown(GLFW_KEY_A)){
-					destination.x = position.x-(apothem*sqrt3/2*dis);
-					destination.y = position.y-(apothem/2*aspectScaler*dis);
-					yIndex -=1;
-					xIndex -=1;
-				}else if(KeyboardInput.isKeyDown(GLFW_KEY_S)){
-					destination.y = position.y-(apothem*aspectScaler*dis);
-					yIndex -=1;
-				}else if(KeyboardInput.isKeyDown(GLFW_KEY_D)){
-					destination.x = position.x+(apothem*sqrt3/2*dis);
-					destination.y = position.y-(apothem/2*aspectScaler*dis);
-					yIndex -=1;
-					xIndex +=1;
-				}else if(KeyboardInput.isKeyDown(GLFW_KEY_R)){
-					
-					MonsterV1 monster = EntityManager.monster; 
-					ah.attackHandler(self, target, position, monster.getPosition());
-					//System.out.println("posx "+position.x+" posy" +position.y);
-					//System.out.println("posx "+monster.getPosition().x+" posy" +monster.getPosition().y);
-				}
-		}
-		}
+			int r = rng.nextInt(6);
+			if(r==0){
+				this.destination.x = this.position.x-(apothem*sqrt3/2*dis);
+				this.destination.y = this.position.y+(apothem/2*aspectScaler*dis);
+			}
+			if(r== 1){
+				this.destination.y = this.position.y+(apothem*aspectScaler*dis);
+			}
+			if(r== 2){
+				this.destination.x = this.position.x+(apothem*sqrt3/2*dis);
+				this.destination.y = this.position.y+(apothem/2*aspectScaler*dis);
+			}
+			if(r == 3){
+				this.destination.x = this.position.x-(apothem*sqrt3/2*dis);
+				this.destination.y = this.position.y-(apothem/2*aspectScaler*dis);
+			}
+			if(r == 4){
+				this.destination.y = this.position.y-(apothem*aspectScaler*dis);
+			}
+			if(r == 5){
+				this.destination.x = this.position.x+(apothem*sqrt3/2*dis);
+				this.destination.y = this.position.y-(apothem/2*aspectScaler*dis);
+			}
+				Mechanics ah = new Mechanics();
+				Player tarHex = EntityManager.player; 
+				ah.attackHandler(self, target, position, tarHex.getPosition());
+				//System.out.println(target.getEntityHealth());
+			}
 	}
 	private boolean checkDestination(){
-		System.out.println(xIndex + " "+ yIndex);
-		System.out.println(Map.land[xIndex][yIndex]);//x,y
-		if(Map.land[xIndex][yIndex] == Map.LAND){
-			
-		}
+		//System.out.println(Map.hexes.get(this.xIndex).get(this.yIndex).isLand());
+		//if(Map.hexes.get(this.xIndex).get(this.yIndex).isLand()){
 			return true;
+		}
 		//else{
-		//	return false;
+			//return false;
 			//this function ensures that is its land... or it would
 		//}
-	}
+	//}
 	public Vector3f getPosition(){
 		return this.position;
 	}

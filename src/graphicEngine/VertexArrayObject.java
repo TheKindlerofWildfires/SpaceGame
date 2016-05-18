@@ -1,7 +1,7 @@
 package graphicEngine;
 
-import static graphicEngine.Utilities.createByteBuffer;
-import static graphicEngine.Utilities.createFloatBuffer;
+import static maths.Utilities.createByteBuffer;
+import static maths.Utilities.createFloatBuffer;
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;

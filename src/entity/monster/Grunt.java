@@ -11,7 +11,7 @@ public class Grunt extends Entity{
 		entityWeaponDamage = 5;
 		entityWeaponPriority = 5;
 		entityArmorTag = "null"; //Reflect 1/10th of damage taken
-		entityNatAbility = "null";
+		entityNatAbility = "null";//known bug
 		entitySpeed = 2;
  }
 }

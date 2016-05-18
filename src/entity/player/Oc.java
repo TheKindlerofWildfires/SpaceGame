@@ -16,6 +16,7 @@ public class Oc extends Entity{
 		entityArmorTag = "Robes";
 		entityNatAbility = "Alcolyte"; 
 		entitySpeed = 3;
+		entityRange = 1;
 		addEntityAbility(entityNatAbility);
 	}
 
