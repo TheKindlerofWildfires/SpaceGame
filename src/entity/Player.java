@@ -24,6 +24,8 @@ public class Player {
 	private float elevation;
 	public int xIndex;
 	public int yIndex;
+	public int xOld;
+	public int yOld;
 	private int lastMove;
 	static Entity self = Entity.getEntity("Agent");
 	Entity target = MonsterV1.self; //rwff --Monsterv1.self
@@ -44,8 +46,9 @@ public class Player {
 	public Player(Map map) {
 		this.map = map;
 		lastMove = 0;
-		xIndex = 14;
-		yIndex = 21;
+		
+		xIndex = Map.HEXESACROSS/2;
+		yIndex = Map.HEXESDOWN/2;
 		this.count = indices.length;
 		this.position = new Vector3f();
 		this.destination = new Vector3f();
@@ -109,6 +112,8 @@ public class Player {
 		} else {
 			destination.x = position.x;
 			destination.y = position.y;
+			yIndex = yOld;
+			xIndex = xOld;
 		}
 	}
 
@@ -121,33 +126,72 @@ public class Player {
 			if (time - lastMove > 1.8 * (6 - self.getEntitySpeed())) { //between 6.66 - 33 tiles per second
 				//only called once per tick
 				//System.out.println(time);
+				/*neighbors[0][0] = x;
+			neighbors[0][1] = y + 1;//w
+			neighbors[1][0] = x;
+			neighbors[1][1] = y - 1;//S
+			neighbors[2][0] = x + 1; 
+			neighbors[2][1] = y; //?
+			neighbors[3][0] = x - 1;
+			neighbors[3][1] = y; //? other side
+			if (x % 2 == 0) {
+				neighbors[4][0] = x - 1; 
+				neighbors[4][1] = y + 1; //Q
+				neighbors[5][0] = x + 1;
+				neighbors[5][1] = y + 1;//E
+			} else {
+				neighbors[4][0] = x - 1;//
+				neighbors[4][1] = y - 1;
+				neighbors[5][0] = x - 1;
+				neighbors[5][1] = y + 1;
+			}*/
 				float dis = (2.4f);
+				yOld = yIndex;
+				xOld = xIndex;
 				if (KeyboardInput.isKeyDown(GLFW_KEY_Q)) {
 					destination.x = position.x - (apothem * sqrt3 / 2 * dis);
 					destination.y = position.y + (apothem / 2 * aspectScaler * dis);
-					yIndex += 1; //I suspect this is much more complicated
-					xIndex -= 1;
+					if (xIndex % 2 == 0) {
+						yIndex += 1; 
+						xIndex -= 1;
+					} else {
+						xIndex -= 1;
+					}
+					
 				} else if (KeyboardInput.isKeyDown(GLFW_KEY_W)) {
 					destination.y = position.y + (apothem * aspectScaler * dis);
-					yIndex += 1;
+					yIndex += 1; //good
 				} else if (KeyboardInput.isKeyDown(GLFW_KEY_E)) {
 					destination.x = position.x + (apothem * sqrt3 / 2 * dis);
 					destination.y = position.y + (apothem / 2 * aspectScaler * dis);
-					yIndex += 1;
-					xIndex += 1;
+					if (xIndex % 2 == 0) {
+						yIndex += 1; 
+						xIndex += 1;
+					} else {
+						xIndex += 1;
+					}
 				} else if (KeyboardInput.isKeyDown(GLFW_KEY_A)) {
 					destination.x = position.x - (apothem * sqrt3 / 2 * dis);
 					destination.y = position.y - (apothem / 2 * aspectScaler * dis);
-					yIndex -= 1;
-					xIndex -= 1;
+					if (xIndex % 2 == 0) {
+						yIndex -= 1; 
+						xIndex -= 1;
+					} else {
+						xIndex -= 1;
+					}
 				} else if (KeyboardInput.isKeyDown(GLFW_KEY_S)) {
 					destination.y = position.y - (apothem * aspectScaler * dis);
-					yIndex -= 1;
+					yIndex -= 1;//good
 				} else if (KeyboardInput.isKeyDown(GLFW_KEY_D)) {
 					destination.x = position.x + (apothem * sqrt3 / 2 * dis);
 					destination.y = position.y - (apothem / 2 * aspectScaler * dis);
-					yIndex -= 1;
-					xIndex += 1;
+					if (xIndex % 2 == 0) {
+						yIndex -= 1; 
+						xIndex += 1;
+					} else {
+						xIndex += 1;
+					}
+
 				} else if (KeyboardInput.isKeyDown(GLFW_KEY_R)) {
 
 					MonsterV1 monster = EntityManager.monster;
@@ -160,12 +204,17 @@ public class Player {
 	}
 
 	private boolean checkDestination() {
-		//System.out.println(xIndex + " " + yIndex);
-		//System.out.println(map.land[xIndex][yIndex]);//x,y
-		if (map.land[xIndex][yIndex] == Map.LAND) {
-
+		System.out.println(xIndex + " " + yIndex);
+		//System.out.println(map.land[xIndex][yIndex]);
+		if((xIndex>0) && (yIndex> 0) &&(xIndex<(Map.HEXESACROSS)) &&(yIndex<(Map.HEXESDOWN))){
+			//if (map.land[xIndex][yIndex] == Map.LAND) {
+				return true;
+			//}else{
+			//	return false;
+			//}
+		}else{
+			return false;
 		}
-		return true;
 		//else{
 		//	return false;
 		//this function ensures that is its land... or it would

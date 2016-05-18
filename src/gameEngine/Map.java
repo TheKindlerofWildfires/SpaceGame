@@ -15,11 +15,11 @@ import graphicEngine.ShaderManager;
 import graphicEngine.VertexArrayObject;
 import maths.Utilities;
 import maths.Vector3f;
-import classesSimonDoesntLike.Hexagon;
+//import classesSimonDoesntLike.Hexagon;
 
 public class Map {
-	public static final int HEXESACROSS = 300;
-	public static final int HEXESDOWN = 200;
+	public static final int HEXESACROSS = 100;
+	public static final int HEXESDOWN = 50;
 
 	public static final int MOISTURESCALER = 12;
 	public static final int ELEVATIONSCALER = 17;
@@ -32,7 +32,7 @@ public class Map {
 	public int seedCount;
 
 	ShaderManager shaderManager;
-	public static ArrayList<ArrayList<Hexagon>> hexes = new ArrayList<ArrayList<Hexagon>>();
+	//public static ArrayList<ArrayList<Hexagon>> hexes = new ArrayList<ArrayList<Hexagon>>();
 	//private Hexagon[] seeds;
 
 	private Random rng = new Random();
@@ -88,7 +88,7 @@ public class Map {
 		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, Utilities.createFloatBuffer(color));
 	}
 
-	@Deprecated
+	/*@Deprecated
 	private Hexagon[] getAllNeighbors(Hexagon hex) {
 		if (hex.xIndex > 0 && hex.yIndex > 0 && hex.xIndex < HEXESACROSS - 1 && hex.yIndex < HEXESDOWN - 1) {
 			Hexagon[] neighbors = new Hexagon[6];
@@ -107,7 +107,7 @@ public class Map {
 		} else {
 			return new Hexagon[0];
 		}
-	}
+	}*/
 
 	private int[][] getNeighborIndices(int x, int y) {
 		//	System.out.println(x + "," + y);
@@ -157,8 +157,8 @@ public class Map {
 
 		// INIT SEEDS
 		System.out.println("Initiailzing Seeds");
-		seeds[0][0] = 100;
-		seeds[0][1] = 100;
+		seeds[0][0] = HEXESACROSS/2;
+		seeds[0][1] = HEXESDOWN/2;
 
 		//INIT LAND ARRAY
 		for (int x = 0; x < HEXESACROSS; x++) {
@@ -229,4 +229,12 @@ public class Map {
 
 		System.out.println("Map init complete");
 	}
+	/*public int getSeeds(String type){
+		if (type == "x"){
+			return seeds[0][0];
+		}else if (type =="y"){
+			return seeds[0][1];
+		}
+		return 15;
+	}*/
 }
