@@ -151,47 +151,48 @@ public class Player {
 				if (KeyboardInput.isKeyDown(GLFW_KEY_Q)) {
 					destination.x = position.x - (apothem * sqrt3 / 2 * dis);
 					destination.y = position.y + (apothem / 2 * aspectScaler * dis);
-					if (xIndex % 2 == 0) {
-						yIndex += 1; 
+					if(xIndex%2==0){
+						yIndex -=1;
 						xIndex -= 1;
-					} else {
+					}else{
 						xIndex -= 1;
 					}
 					
 				} else if (KeyboardInput.isKeyDown(GLFW_KEY_W)) {
 					destination.y = position.y + (apothem * aspectScaler * dis);
-					yIndex += 1; //good
+					yIndex -= 1; 
 				} else if (KeyboardInput.isKeyDown(GLFW_KEY_E)) {
 					destination.x = position.x + (apothem * sqrt3 / 2 * dis);
 					destination.y = position.y + (apothem / 2 * aspectScaler * dis);
-					if (xIndex % 2 == 0) {
-						yIndex += 1; 
-						xIndex += 1;
-					} else {
+					if(xIndex%2==0){
+						xIndex += 1; 
+						yIndex -= 1;
+					}else{
 						xIndex += 1;
 					}
 				} else if (KeyboardInput.isKeyDown(GLFW_KEY_A)) {
 					destination.x = position.x - (apothem * sqrt3 / 2 * dis);
 					destination.y = position.y - (apothem / 2 * aspectScaler * dis);
-					if (xIndex % 2 == 0) {
-						yIndex -= 1; 
+					if(xIndex%2==0){
 						xIndex -= 1;
-					} else {
+						yIndex += 1;
+					}else{
 						xIndex -= 1;
 					}
+					
 				} else if (KeyboardInput.isKeyDown(GLFW_KEY_S)) {
 					destination.y = position.y - (apothem * aspectScaler * dis);
-					yIndex -= 1;//good
+					yIndex += 1; 
 				} else if (KeyboardInput.isKeyDown(GLFW_KEY_D)) {
 					destination.x = position.x + (apothem * sqrt3 / 2 * dis);
-					destination.y = position.y - (apothem / 2 * aspectScaler * dis);
-					if (xIndex % 2 == 0) {
-						yIndex -= 1; 
+					destination.y = position.y - (apothem / 2 * aspectScaler * dis); 
+					if(xIndex%2==0){
 						xIndex += 1;
-					} else {
+						yIndex +=1;
+					}else{
 						xIndex += 1;
 					}
-
+					
 				} else if (KeyboardInput.isKeyDown(GLFW_KEY_R)) {
 
 					MonsterV1 monster = EntityManager.monster;
@@ -207,11 +208,11 @@ public class Player {
 		System.out.println(xIndex + " " + yIndex);
 		//System.out.println(map.land[xIndex][yIndex]);
 		if((xIndex>0) && (yIndex> 0) &&(xIndex<(Map.HEXESACROSS)) &&(yIndex<(Map.HEXESDOWN))){
-			//if (map.land[xIndex][yIndex] == Map.LAND) {
+			if (map.land[xIndex][yIndex] == Map.LAND|| map.land[xIndex][yIndex] == Map.SEED) {
 				return true;
-			//}else{
-			//	return false;
-			//}
+			}else{
+				return false;
+			}
 		}else{
 			return false;
 		}

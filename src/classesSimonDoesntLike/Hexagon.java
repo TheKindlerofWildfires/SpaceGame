@@ -6,8 +6,8 @@ import static org.lwjgl.opengl.GL11.glDrawElements;
 import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
-
 import maths.Vector3f;
+import gameEngine.EntityManager;
 import graphicEngine.VertexArrayObject;
 
 public class Hexagon {
