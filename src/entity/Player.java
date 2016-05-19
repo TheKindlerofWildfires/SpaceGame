@@ -126,25 +126,6 @@ public class Player {
 			if (time - lastMove > 1.8 * (6 - self.getEntitySpeed())) { //between 6.66 - 33 tiles per second
 				//only called once per tick
 				//System.out.println(time);
-				/*neighbors[0][0] = x;
-			neighbors[0][1] = y + 1;//w
-			neighbors[1][0] = x;
-			neighbors[1][1] = y - 1;//S
-			neighbors[2][0] = x + 1; 
-			neighbors[2][1] = y; //?
-			neighbors[3][0] = x - 1;
-			neighbors[3][1] = y; //? other side
-			if (x % 2 == 0) {
-				neighbors[4][0] = x - 1; 
-				neighbors[4][1] = y + 1; //Q
-				neighbors[5][0] = x + 1;
-				neighbors[5][1] = y + 1;//E
-			} else {
-				neighbors[4][0] = x - 1;//
-				neighbors[4][1] = y - 1;
-				neighbors[5][0] = x - 1;
-				neighbors[5][1] = y + 1;
-			}*/
 				float dis = (2.4f);
 				yOld = yIndex;
 				xOld = xIndex;
@@ -206,7 +187,6 @@ public class Player {
 
 	private boolean checkDestination() {
 		System.out.println(xIndex + " " + yIndex);
-		//System.out.println(map.land[xIndex][yIndex]);
 		if((xIndex>0) && (yIndex> 0) &&(xIndex<(Map.HEXESACROSS)) &&(yIndex<(Map.HEXESDOWN))){
 			if (map.land[xIndex][yIndex] == Map.LAND|| map.land[xIndex][yIndex] == Map.SEED) {
 				return true;
@@ -216,10 +196,6 @@ public class Player {
 		}else{
 			return false;
 		}
-		//else{
-		//	return false;
-		//this function ensures that is its land... or it would
-		//}
 	}
 
 	public Vector3f getPosition() {

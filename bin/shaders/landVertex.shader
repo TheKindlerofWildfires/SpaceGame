@@ -24,7 +24,7 @@ void main(void){
 	uint land = texelFetch(land,gl_InstanceID).x;
 	vec3 color;
 	if(land==100){
-		color = vec3(1,1,1);
+		color = vec3(0,1,0);
 	} else if(land ==50){
 		color = vec3(1,0,1);
 	} else{
