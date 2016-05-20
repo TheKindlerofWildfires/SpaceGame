@@ -18,8 +18,9 @@ import maths.Vector3f;
 //import classesSimonDoesntLike.Hexagon;
 
 public class Map {
-	public static final int HEXESACROSS = 100;
-	public static final int HEXESDOWN = 50;
+	public static final int HEXESACROSS = 320;
+	public static final int HEXESDOWN = 250;
+	public static final int AVG = ((HEXESACROSS+HEXESDOWN)/2);
 
 	public static final int MOISTURESCALER = 12;
 	public static final int ELEVATIONSCALER = 17;
@@ -40,7 +41,7 @@ public class Map {
 	public VertexArrayObject vao = new VertexArrayObject(EntityManager.vertices, EntityManager.indices);
 	public int vaoID = vao.getVaoID();
 
-	public static final String[] maps = { "fractal", "disk", "soft", "stand", "trig" };
+	public static final String[] maps = { "fractal", "disk", "soft", "stand", "trig", "quad"};
 
 	public int[][] land = new int[HEXESACROSS][HEXESDOWN];
 	public int[][] seeds;
@@ -129,8 +130,8 @@ public class Map {
 			} else {
 				neighbors[4][0] = x - 1;
 				neighbors[4][1] = y - 1;
-				neighbors[5][0] = x - 1;
-				neighbors[5][1] = y + 1;
+				neighbors[5][0] = x + 1;
+				neighbors[5][1] = y - 1;
 			}
 			return neighbors;
 		} else {
@@ -150,7 +151,7 @@ public class Map {
 
 	private void initializeMap() {
 		//INIT MAPTYPE ETC
-		//mapType = "fractal";
+		//mapType = "quad";
 		mapType = maps[rng.nextInt(maps.length)];
 		seedCount = 1;
 		seeds = new int[seedCount][2];
@@ -185,7 +186,7 @@ public class Map {
 		}*/
 
 		
-		double p = 1;
+		double p = 5;
 		while (outerLand.size() != 0 && p != 0) {
 			ArrayList<int[]> newLand = new ArrayList<int[]>();
 			for (int i = 0; i < outerLand.size(); i++) {
@@ -206,19 +207,26 @@ public class Map {
 		
 			switch (mapType) {
 			case "fractal":
-				p = 0.29 / (Math.log(p + 2));
+				p = .3 / (Math.log(p + 2));
 				break;
 			case "soft":
-				p = 0.18 / p;
-				break;
-			case "disk":
-				p = Math.pow(2.618, -2.47 * p);
+				p = 0.8 / p;
 				break;
 			case "stand":
-				p = 0.988 * p;
+				p = (p+1)/(p+3.4);
+				break;
+			case "disk":
+				p = 0.96 * p;
 				break;
 			case "trig":
 				p = Math.cos(1.443 * p);
+				break;
+			case "quad":
+				if (p>=1){
+					p = 0.15;
+				}else{
+					p = Math.pow(p,2)+2*p;
+				}
 				break;
 			default:
 				System.err.println("invalid map type");
