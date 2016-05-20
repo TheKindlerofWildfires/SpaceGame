@@ -133,10 +133,11 @@ public class Player {
 					destination.x = position.x - (apothem * sqrt3 / 2 * dis);
 					destination.y = position.y + (apothem / 2 * aspectScaler * dis);
 					if(xIndex%2==0){
-						yIndex -=1;
 						xIndex -= 1;
 					}else{
+						yIndex -=1;
 						xIndex -= 1;
+						
 					}
 					
 				} else if (KeyboardInput.isKeyDown(GLFW_KEY_W)) {
@@ -146,10 +147,11 @@ public class Player {
 					destination.x = position.x + (apothem * sqrt3 / 2 * dis);
 					destination.y = position.y + (apothem / 2 * aspectScaler * dis);
 					if(xIndex%2==0){
+						xIndex += 1;
+						
+					}else{
 						xIndex += 1; 
 						yIndex -= 1;
-					}else{
-						xIndex += 1;
 					}
 				} else if (KeyboardInput.isKeyDown(GLFW_KEY_A)) {
 					destination.x = position.x - (apothem * sqrt3 / 2 * dis);
