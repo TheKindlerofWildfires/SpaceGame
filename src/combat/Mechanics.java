@@ -42,7 +42,6 @@ public class Mechanics {
 	public void attackHit(Entity attacker, Entity target) {
 		ab.checkAbility("onHit", attacker, target);
 		double damage = attacker.getEntityWeaponDamage() * (10 / (10 + target.getEntityArmor()));
-		//System.out.println(target.getEntityArmor());
 		target.setEntityHealth(target.getEntityHealth() - damage);
 		System.out.println(target.getEntityTag() + " " + target.getEntityHealth());
 	}
@@ -55,8 +54,8 @@ public class Mechanics {
 		Distance d = new Distance();
 		
 		double disInHexes = d.euclidDis(attIndex, tarIndex)/(Math.sqrt(2));
-		System.out.println(disInHexes);
 		//System.out.println(disInHexes);
+		//System.out.println(attacker.getEntityRange());
 		if (attacker.getEntityRange() >= (disInHexes)) {
 			return true;
 		} else {
@@ -70,17 +69,17 @@ public class Mechanics {
 		//System.out.println("e");
 		this.attIndex = attIndex;
 		this.tarIndex = tarIndex;
-		if (inRange(attacker)) {
+		if (inRange(attacker)&&target.getEntityHealth()>0) {
 			
 			//consume animation time or action counter - just a delay in code
 			//Entity attacker = Entity.getEntity(attackerTag);
 			//Entity target = Entity.getEntity(targetTag);
 			if (tryAttack(attacker, target)) {
-				System.out.println("Hit");
+				//System.out.println("Hit");
 				//called 5 times
 				attackHit(attacker, target);
 			} else {
-				System.out.println("Miss");
+				//System.out.println("Miss");
 				attackMiss(attacker, target);
 			}
 		}

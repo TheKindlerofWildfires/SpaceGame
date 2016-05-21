@@ -105,7 +105,7 @@ public class Player {
 		
 		index[0] = xIndex;
 		index[1] = yIndex;
-		if (checkDestination()) {//thisisnevercalled
+		if (checkDestination()) {
 			if ((this.position.x - this.destination.x != 0) || (this.position.y - this.destination.y != 0)) {
 				lastMove = Tick.getUpdateTick();
 				this.position.x = this.destination.x;
@@ -121,12 +121,12 @@ public class Player {
 
 	public void getDestination() {
 
-		int time = Tick.getUpdateTick();
+		//Tick.getUpdateTick();
 		//why is only r called 5 times
 		//only called once per tick
 		if (!dead()) {
-			if (time - lastMove > 1.8 * (6 - self.getEntitySpeed())) { //between 6.66 - 33 tiles per second
-				//only called once per tick
+			if (Tick.getUpdateTick() - lastMove > (35.2/self.getEntitySpeed()-5.2)) { //between 6.66 - 33 tiles per second
+				//System.out.println(Tick.getUpdateTick() - lastMove +" "+ (35.2/self.getEntitySpeed()-5.2));
 				//System.out.println(time);
 				float dis = (2.4f);
 				yOld = yIndex;
@@ -179,7 +179,8 @@ public class Player {
 					}
 					
 				} else if (KeyboardInput.isKeyDown(GLFW_KEY_R)) {
-					
+					//System.out.println(Tick.getUpdateTick());
+					lastMove = Tick.getUpdateTick();
 					MonsterV1 monster = EntityManager.monster;
 					m.attackHandler(self, target, index, monster.getIndex());
 					//System.out.println("posx "+position.x+" posy" +position.y);

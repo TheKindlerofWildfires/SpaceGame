@@ -31,6 +31,7 @@ public class Map {
 
 	public String mapType;
 	public int seedCount;
+	public int landCount;
 
 	ShaderManager shaderManager;
 	//public static ArrayList<ArrayList<Hexagon>> hexes = new ArrayList<ArrayList<Hexagon>>();
@@ -237,6 +238,24 @@ public class Map {
 
 		System.out.println("Map init complete");
 		System.out.println(mapType);
+		//System.out.println((HEXESDOWN/2)*(HEXESACROSS/2));
+		//System.out.println((HEXESDOWN-10)*(HEXESACROSS-10));
+		for(int i = 0; i<HEXESACROSS;i++){
+			for(int j = 0;j<HEXESDOWN;j++){
+				if (land[i][j] == LAND){
+					landCount+=1;
+				}
+			}
+		}
+		//System.out.println(landCount);
+		if(landCount<(HEXESDOWN/2)*(HEXESACROSS/2) || landCount>(HEXESDOWN-10)*(HEXESACROSS-10)){
+			System.out.println(landCount);
+			System.out.println((HEXESDOWN/2)*(HEXESACROSS/2));
+			System.out.println((HEXESDOWN-10)*(HEXESACROSS-10));
+			System.out.println("Bad map gen");
+			//reload me here
+		}
+			
 	}
 	/*public int getSeeds(String type){
 		if (type == "x"){

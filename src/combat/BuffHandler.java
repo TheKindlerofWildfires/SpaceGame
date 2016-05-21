@@ -23,6 +23,9 @@ public class BuffHandler {
 				remove(buffTagL.get(i), entityL.get(i), powerL.get(i));
 			buffTagL.remove(i);
 			entityL.remove(i);
+			durationL.remove(i);
+			startTimeL.remove(i);
+			powerL.remove(i);
 			}
 		}
 		}
