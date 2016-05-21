@@ -18,7 +18,7 @@ public class Hexagon {
 	private VertexArrayObject vao;
 	public Vector3f position;
 	private boolean land;
-	private float moisture;
+	//private float moisture;
 	private float elevation;
 	public int xIndex;
 	public int yIndex;
@@ -35,7 +35,7 @@ public class Hexagon {
 	};
 
 	public Hexagon(int xIndex, int yIndex, float moisture, float elevation) {
-		this.moisture = moisture;
+		//this.moisture = moisture;
 		this.elevation = elevation;
 		this.xIndex = xIndex;
 		this.yIndex = yIndex;

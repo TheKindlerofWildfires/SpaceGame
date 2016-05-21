@@ -11,7 +11,7 @@ import static org.lwjgl.glfw.GLFW.glfwDestroyWindow;
 import static org.lwjgl.glfw.GLFW.glfwInit;
 import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
-import static org.lwjgl.glfw.GLFW.glfwSetCursorPosCallback;
+//import static org.lwjgl.glfw.GLFW.glfwSetCursorPosCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowPos;
 import static org.lwjgl.glfw.GLFW.glfwShowWindow;
@@ -26,13 +26,11 @@ import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.system.MemoryUtil.NULL;
-
-import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.opengl.GL;
 
 import classesSimonDoesntLike.KeyboardInput;
-import classesSimonDoesntLike.MouseInput;
+//import classesSimonDoesntLike.MouseInput;
 import gameEngine.EntityManager;
 import gameEngine.TickManager;
 import gameEngine.Tick;
@@ -41,7 +39,7 @@ public class Window implements Runnable {
 	private Thread thread;
 	public boolean running = true;
 	private GLFWKeyCallback keyCallback;
-	private GLFWCursorPosCallback cursorCallback;
+	//private GLFWCursorPosCallback cursorCallback;
 
 	public Long window;
 
@@ -82,7 +80,7 @@ public class Window implements Runnable {
 		}
 
 		glfwSetKeyCallback(window, keyCallback = new KeyboardInput());
-		glfwSetCursorPosCallback(window, cursorCallback = (GLFWCursorPosCallback) new MouseInput());
+		//glfwSetCursorPosCallback(window, cursorCallback = (GLFWCursorPosCallback) new MouseInput());
 
 		//GLFWVidMode vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 		glfwSetWindowPos(window, 0, 20);
@@ -135,8 +133,8 @@ public class Window implements Runnable {
 		double delta = 0.0;
 		double ns = 1000000000.0 / 60.0;
 		long timer = System.currentTimeMillis();
-		int updates = 0;
-		int frames = 0;
+		//int updates = 0;
+		//int frames = 0;
 		while (running) {
 			long now = System.nanoTime();
 			delta += (now - lastTime) / ns;
@@ -144,16 +142,16 @@ public class Window implements Runnable {
 			if (delta >= 1.0) {
 				Tick.updateTick();
 				update();
-				updates++;
+				//updates++;
 				delta--;
 			}
 			render();
-			frames++;
+			//frames++;
 			if (System.currentTimeMillis() - timer > 1000) {
 				timer += 1000;
 				//System.out.println(updates + " UPS, " + frames + " FPS");
-				frames = 0;
-				updates = 0;
+				//frames = 0;
+				//updates = 0;
 			}
 
 			if (glfwWindowShouldClose(window) == GL_TRUE) {

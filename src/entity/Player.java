@@ -28,7 +28,7 @@ public class Player {
 	public int yOld;
 	int[] index = new int[2];
 	private int lastMove;
-	static Entity self = Entity.getEntity("Neo");
+	static Entity self = Entity.getEntity("Agent");
 	Entity target = MonsterV1.self; //rwff --Monsterv1.self
 	public static final float aspectScaler = 16 / 9f;
 	float apothem = gameEngine.EntityManager.APOTHEM;

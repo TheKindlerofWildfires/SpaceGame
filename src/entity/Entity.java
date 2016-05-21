@@ -133,6 +133,8 @@ public abstract class Entity {
 			return new Agent();
 		case "Oc":
 			return new Oc();
+		case "God":
+			return new God();
 		default:
 			System.err.println("Invalid entity Tag");
 			return new Neo();

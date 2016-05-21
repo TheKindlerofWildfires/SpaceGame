@@ -18,8 +18,8 @@ import maths.Vector3f;
 //import classesSimonDoesntLike.Hexagon;
 
 public class Map {
-	public static final int HEXESACROSS = 100;
-	public static final int HEXESDOWN = 50;
+	public static final int HEXESACROSS = 160;
+	public static final int HEXESDOWN = 104;
 	public static final int AVG = ((HEXESACROSS+HEXESDOWN)/2);
 
 	public static final int MOISTURESCALER = 12;
@@ -209,8 +209,8 @@ public class Map {
 			case "fractal":
 				p = .3 / (Math.log(p + 2));
 				break;
-			case "soft":
-				p = 0.8 / p;
+			case "soft": //
+				p = 0.81 / p;
 				break;
 			case "stand":
 				p = (p+1)/(p+3.4);
@@ -236,7 +236,7 @@ public class Map {
 		}
 
 		System.out.println("Map init complete");
-		System.out.println("Map Type");
+		System.out.println(mapType);
 	}
 	/*public int getSeeds(String type){
 		if (type == "x"){
