@@ -1,6 +1,5 @@
 package entity;
 
-import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
@@ -8,10 +7,10 @@ import static org.lwjgl.opengl.GL30.*;
 import java.util.Random;
 
 import combat.Mechanics;
-import GUI.Tick;
 import maths.Vector3f;
 import gameEngine.EntityManager;
 import gameEngine.Map;
+import gameEngine.Tick;
 import graphicEngine.ShaderManager;
 import graphicEngine.VertexArrayObject;
 
@@ -27,16 +26,20 @@ public class MonsterV1 {
 	private int lastMove;
 	public int xIndex;
 	public int yIndex;
+	public int dy;
+	public int dx;
+	Mechanics m = new Mechanics();
 	Entity target = Player.self;
-	float APOTHEM = EntityManager.APOTHEM;
+	float apothem = EntityManager.APOTHEM;
 	float ASPECTSCALER = EntityManager.aspectScaler;
-	private Random rng;
+	private Random rng = new Random();
+	private Map map;
 	static Entity self = Entity.getEntity("Leader");
 
-	public MonsterV1() {
-		rng = new Random();
-		xIndex = 14;
-		yIndex = 17;
+	public MonsterV1(Map map) {
+		this.map = map;
+		xIndex = Map.HEXESACROSS/3;
+		yIndex = Map.HEXESDOWN/3;
 		this.count = EntityManager.indices.length;
 		this.position = new Vector3f();
 		this.destination = new Vector3f();
@@ -45,13 +48,13 @@ public class MonsterV1 {
 
 		this.position.z = this.elevation;
 		if (xIndex % 2 == 0) {
-			this.position.y = -1.2f * (yIndex * APOTHEM * 2) * ASPECTSCALER + 1;
-			this.position.x = 1.2f * (xIndex * 3 * APOTHEM / sqrt3) - 1;
+			this.position.y = -1.2f * (yIndex * apothem * 2) * ASPECTSCALER + 1;
+			this.position.x = 1.2f * (xIndex * 3 * apothem / sqrt3) - 1;
 			this.destination.x = this.position.x;
 			this.destination.y = this.position.y;
 		} else {
-			this.position.y = -1.2f * (yIndex * APOTHEM * 2 + APOTHEM) * ASPECTSCALER + 1;
-			this.position.x = 1.2f * (xIndex * 3 * APOTHEM / sqrt3) - 1;
+			this.position.y = -1.2f * (yIndex * apothem * 2 + apothem) * ASPECTSCALER + 1;
+			this.position.x = 1.2f * (xIndex * 3 * apothem / sqrt3) - 1;
 			this.destination.x = this.position.x;
 			this.destination.y = this.position.y;
 		}
@@ -105,46 +108,85 @@ public class MonsterV1 {
 	}
 
 	public void getDestination() {
-		//20/3 = 5/2
-		//less than 2.5, more than 2
-		//welcome to rng
+
 		int time = Tick.getUpdateTick();
-		if (time - lastMove > 50 * (6 - self.getEntitySpeed())) { //5*(6-Entity.getSpeed())
-			float dis = (2.4f);
-			int r = rng.nextInt(6);
-			if (r == 0) {
-				this.destination.x = this.position.x - (APOTHEM * sqrt3 / 2 * dis);
-				this.destination.y = this.position.y + (APOTHEM / 2 * ASPECTSCALER * dis);
+		//why is only r called 5 times
+		//only called once per tick
+		if (!dead()) {
+			if (time - lastMove > 1.8 * (6 - self.getEntitySpeed())) { //between 6.66 - 33 tiles per second
+				//only called once per tick
+				//System.out.println(time);
+				float dis = (2.4f);
+				dy = yIndex;
+				dx = xIndex;
+				int  D= rng.nextInt(50);
+				if (D==0) {
+					destination.x = position.x - (apothem * sqrt3 / 2 * dis);
+					destination.y = position.y + (apothem / 2 * ASPECTSCALER * dis);
+					if(xIndex%2==0){
+						xIndex -= 1;
+					}else{
+						yIndex -=1;
+						xIndex -= 1;
+						
+					}
+					
+				} else if (D==1) {
+					destination.y = position.y + (apothem * ASPECTSCALER * dis);
+					yIndex -= 1; 
+				} else if (D==2) {
+					destination.x = position.x + (apothem * sqrt3 / 2 * dis);
+					destination.y = position.y + (apothem / 2 * ASPECTSCALER * dis);
+					if(xIndex%2==0){
+						xIndex += 1;
+						
+					}else{
+						xIndex += 1; 
+						yIndex -= 1;
+					}
+				} else if (D==3) {
+					destination.x = position.x - (apothem * sqrt3 / 2 * dis);
+					destination.y = position.y - (apothem / 2 * ASPECTSCALER * dis);
+					if(xIndex%2==0){
+						xIndex -= 1;
+						yIndex += 1;
+					}else{
+						xIndex -= 1;
+					}
+					
+				} else if (D==4) {
+					destination.y = position.y - (apothem * ASPECTSCALER * dis);
+					yIndex += 1; 
+				} else if (D==5) {
+					destination.x = position.x + (apothem * sqrt3 / 2 * dis);
+					destination.y = position.y - (apothem / 2 * ASPECTSCALER * dis); 
+					if(xIndex%2==0){
+						xIndex += 1;
+						yIndex +=1;
+					}else{
+						xIndex += 1;
+					}
+					
+				} else if (D==6) {
+					//System.out.println("attack");
+					Player player = EntityManager.player;
+					m.attackHandler(self, target, position, player.getPosition());
+				}
 			}
-			if (r == 1) {
-				this.destination.y = this.position.y + (APOTHEM * ASPECTSCALER * dis);
-			}
-			if (r == 2) {
-				this.destination.x = this.position.x + (APOTHEM * sqrt3 / 2 * dis);
-				this.destination.y = this.position.y + (APOTHEM / 2 * ASPECTSCALER * dis);
-			}
-			if (r == 3) {
-				this.destination.x = this.position.x - (APOTHEM * sqrt3 / 2 * dis);
-				this.destination.y = this.position.y - (APOTHEM / 2 * ASPECTSCALER * dis);
-			}
-			if (r == 4) {
-				this.destination.y = this.position.y - (APOTHEM * ASPECTSCALER * dis);
-			}
-			if (r == 5) {
-				this.destination.x = this.position.x + (APOTHEM * sqrt3 / 2 * dis);
-				this.destination.y = this.position.y - (APOTHEM / 2 * ASPECTSCALER * dis);
-			}
-			Mechanics ah = new Mechanics();
-			Player tarHex = EntityManager.player;
-			ah.attackHandler(self, target, position, tarHex.getPosition());
-			//System.out.println(target.getEntityHealth());
 		}
 	}
 
 	private boolean checkDestination() {
-		//System.out.println(Map.hexes.get(this.xIndex).get(this.yIndex).isLand());
-		//if(Map.hexes.get(this.xIndex).get(this.yIndex).isLand()){
-		return true;
+		//System.out.println(xIndex + " " + yIndex);
+		if((xIndex>0) && (yIndex> 0) &&(xIndex<(Map.HEXESACROSS)) &&(yIndex<(Map.HEXESDOWN))){
+			if (map.land[xIndex][yIndex] == Map.LAND|| map.land[xIndex][yIndex] == Map.SEED) {
+				return true;
+			}else{
+				return false;
+			}
+		}else{
+			return false;
+		}
 	}
 
 	//else{

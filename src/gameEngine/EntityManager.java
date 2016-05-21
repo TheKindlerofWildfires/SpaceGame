@@ -11,7 +11,7 @@ public class EntityManager {
 	public static Player player;
 	public static MonsterV1 monster;
 
-	public static final float APOTHEM = 0.0025f;
+	public static final float APOTHEM = 0.005f;
 
 	public static final float sqrt3 = 1.7320508075688772f;
 	public static final float aspectScaler = 16 / 9f;
@@ -34,7 +34,7 @@ public class EntityManager {
 		//ShaderManager.loadAll();
 		map = new Map();
 		player = new Player(map);
-		monster = new MonsterV1();
+		monster = new MonsterV1(map);
 		//	player.position.y = -0.01f;
 		//	player.position.x = 0.0f;
 	}

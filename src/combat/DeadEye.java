@@ -1,8 +1,8 @@
 package combat;
 import java.util.Random;
 
-import GUI.Tick;
 import entity.*;
+import gameEngine.Tick;
 
 public class DeadEye {
 	boolean can = true;

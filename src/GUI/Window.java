@@ -34,6 +34,8 @@ import org.lwjgl.opengl.GL;
 import classesSimonDoesntLike.KeyboardInput;
 import classesSimonDoesntLike.MouseInput;
 import gameEngine.EntityManager;
+import gameEngine.TickManager;
+import gameEngine.Tick;
 
 public class Window implements Runnable {
 	private Thread thread;
@@ -44,6 +46,7 @@ public class Window implements Runnable {
 	public Long window;
 
 	EntityManager entityManager;
+	TickManager tickManager;
 
 	public static void main(String args[]) {
 
@@ -93,13 +96,15 @@ public class Window implements Runnable {
 
 		glEnable(GL_DEPTH_TEST);
 
-		entityManager = new EntityManager(); //rwff
+		entityManager = new EntityManager();
+		tickManager = new TickManager();
 
 		//System.out.println(glGetString(GL_VERSION));
 	}
 
 	public void update() {
 		entityManager.update();
+		tickManager.update();
 
 		glfwPollEvents();
 		/*
@@ -119,8 +124,8 @@ public class Window implements Runnable {
 		glfwSwapBuffers(window);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 		entityManager.render();
+		tickManager.render();
 	}
 
 	@Override

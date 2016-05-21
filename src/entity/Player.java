@@ -4,12 +4,12 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
-import GUI.Tick;
 import combat.Mechanics;
 import maths.Vector3f;
 import classesSimonDoesntLike.KeyboardInput;
 import gameEngine.EntityManager;
 import gameEngine.Map;
+import gameEngine.Tick;
 import graphicEngine.ShaderManager;
 import graphicEngine.VertexArrayObject;
 
@@ -27,7 +27,7 @@ public class Player {
 	public int xOld;
 	public int yOld;
 	private int lastMove;
-	static Entity self = Entity.getEntity("Agent");
+	static Entity self = Entity.getEntity("Neo");
 	Entity target = MonsterV1.self; //rwff --Monsterv1.self
 	public static final float aspectScaler = 16 / 9f;
 	float apothem = gameEngine.EntityManager.APOTHEM;
@@ -40,13 +40,12 @@ public class Player {
 			side / 2, apothem * aspectScaler, 0, //upper right 5
 			0, 0, 0 //center 6
 	};
-	Mechanics ah = new Mechanics();
+	Mechanics m = new Mechanics();
 	byte[] indices = new byte[] { 0, 1, 2, 3, 4, 5, 0 };
 	Map map;
 	public Player(Map map) {
 		this.map = map;
 		lastMove = 0;
-		
 		xIndex = Map.HEXESACROSS/2;
 		yIndex = Map.HEXESDOWN/2;
 		this.count = indices.length;
@@ -100,7 +99,7 @@ public class Player {
 
 	public void update() {
 		//System.out.println(Tick.getUpdateTick());
-		//System.out.println(self.getEntitySpeed());
+		System.out.println(self.getEntitySpeed());
 		getDestination();
 
 		if (checkDestination()) {//thisisnevercalled
@@ -179,7 +178,7 @@ public class Player {
 				} else if (KeyboardInput.isKeyDown(GLFW_KEY_R)) {
 
 					MonsterV1 monster = EntityManager.monster;
-					ah.attackHandler(self, target, position, monster.getPosition());
+					m.attackHandler(self, target, position, monster.getPosition());
 					//System.out.println("posx "+position.x+" posy" +position.y);
 					//System.out.println("posx "+monster.getPosition().x+" posy" +monster.getPosition().y);
 				}
@@ -188,7 +187,7 @@ public class Player {
 	}
 
 	private boolean checkDestination() {
-		System.out.println(xIndex + " " + yIndex);
+		//System.out.println(xIndex + " " + yIndex);
 		if((xIndex>0) && (yIndex> 0) &&(xIndex<(Map.HEXESACROSS)) &&(yIndex<(Map.HEXESDOWN))){
 			if (map.land[xIndex][yIndex] == Map.LAND|| map.land[xIndex][yIndex] == Map.SEED) {
 				return true;

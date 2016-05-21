@@ -1,11 +1,15 @@
 package combat;
 
+import java.util.Random;
+
 import entity.*;
 
 
 public class AbilityHandler {
+	BuffHandler buffHandler;
+	Random rng = new Random();
 	public AbilityHandler() {
-
+		buffHandler = new BuffHandler();
 	}
 	//System.out.println(used);
 	public void checkAbility(String callType, Entity attacker, Entity target) {
@@ -18,7 +22,9 @@ public class AbilityHandler {
 				//System.out.println(attacker.getEntityAbility().get(x));
 				switch (attacker.getEntityAbility().get(x)) {
 				case "Knockdown":
-					new Knockdown(attacker, target);
+					if(rng.nextDouble()<0.5){
+						buffHandler.addDecayingBuff("speed",target , 60, -target.getEntitySpeed());
+					}
 					break;
 				case "Surge":
 					new Surge(attacker, target);
@@ -32,7 +38,9 @@ public class AbilityHandler {
 				case "Surprise":
 					break;
 				case "Net":
-					new Net(attacker, target);
+					if(rng.nextDouble()<0.5){
+						buffHandler.addDecayingBuff("speed",target , 60, -1);
+					}
 					break;
 				case "Stealth":
 					break;
@@ -43,7 +51,7 @@ public class AbilityHandler {
 				case "Pattern recognition":
 					break;
 				case "Combat Expertise":
-					new CombatExpertiseHit(attacker, target);
+					buffHandler.addDecayingBuff("speed",attacker , 60, 1);
 					break;
 				case "Alcolyte":
 					break;

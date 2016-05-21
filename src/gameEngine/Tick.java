@@ -1,4 +1,4 @@
-package GUI;
+package gameEngine;
 
 public abstract class Tick {
 	static int tickUpdate;

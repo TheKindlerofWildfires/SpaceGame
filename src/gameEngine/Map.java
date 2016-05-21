@@ -18,8 +18,8 @@ import maths.Vector3f;
 //import classesSimonDoesntLike.Hexagon;
 
 public class Map {
-	public static final int HEXESACROSS = 320;
-	public static final int HEXESDOWN = 250;
+	public static final int HEXESACROSS = 100;
+	public static final int HEXESDOWN = 50;
 	public static final int AVG = ((HEXESACROSS+HEXESDOWN)/2);
 
 	public static final int MOISTURESCALER = 12;
