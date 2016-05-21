@@ -23,6 +23,7 @@ public class MonsterV1 {
 	public Vector3f position;
 	public Vector3f destination;
 	private float elevation;
+	int[] index = new int[2];
 	private int lastMove;
 	public int xIndex;
 	public int yIndex;
@@ -91,6 +92,8 @@ public class MonsterV1 {
 	}
 
 	public void update() {
+		index[0] = xIndex;
+		index[1] = yIndex;
 		if (!dead()) {
 			getDestination();
 			if (checkDestination()) {//thisisnevercalled
@@ -119,7 +122,7 @@ public class MonsterV1 {
 				float dis = (2.4f);
 				dy = yIndex;
 				dx = xIndex;
-				int  D= rng.nextInt(50);
+				int  D= rng.nextInt(500);
 				if (D==0) {
 					destination.x = position.x - (apothem * sqrt3 / 2 * dis);
 					destination.y = position.y + (apothem / 2 * ASPECTSCALER * dis);
@@ -170,7 +173,7 @@ public class MonsterV1 {
 				} else if (D==6) {
 					//System.out.println("attack");
 					Player player = EntityManager.player;
-					m.attackHandler(self, target, position, player.getPosition());
+					m.attackHandler(self, target, index, player.getIndex());
 				}
 			}
 		}
@@ -194,8 +197,8 @@ public class MonsterV1 {
 	//this function ensures that is its land... or it would
 	//}
 	//}
-	public Vector3f getPosition() {
-		return this.position;
+	public int[] getIndex() {
+		return this.index;
 	}
 
 }

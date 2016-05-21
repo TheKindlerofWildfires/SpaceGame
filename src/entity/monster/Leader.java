@@ -14,6 +14,7 @@ public class Leader extends Entity{
 		entityArmorTag = "null"; //Reflect 1/10th of damage taken
 		entityNatAbility = "Rally";
 		entitySpeed = 3;
+		entityRange = 1;
 		addEntityAbility(entityNatAbility);
  }
 }

@@ -26,6 +26,7 @@ public class Player {
 	public int yIndex;
 	public int xOld;
 	public int yOld;
+	int[] index = new int[2];
 	private int lastMove;
 	static Entity self = Entity.getEntity("Neo");
 	Entity target = MonsterV1.self; //rwff --Monsterv1.self
@@ -99,9 +100,11 @@ public class Player {
 
 	public void update() {
 		//System.out.println(Tick.getUpdateTick());
-		System.out.println(self.getEntitySpeed());
+		//System.out.println(self.getEntitySpeed());
 		getDestination();
-
+		
+		index[0] = xIndex;
+		index[1] = yIndex;
 		if (checkDestination()) {//thisisnevercalled
 			if ((this.position.x - this.destination.x != 0) || (this.position.y - this.destination.y != 0)) {
 				lastMove = Tick.getUpdateTick();
@@ -176,9 +179,9 @@ public class Player {
 					}
 					
 				} else if (KeyboardInput.isKeyDown(GLFW_KEY_R)) {
-
+					
 					MonsterV1 monster = EntityManager.monster;
-					m.attackHandler(self, target, position, monster.getPosition());
+					m.attackHandler(self, target, index, monster.getIndex());
 					//System.out.println("posx "+position.x+" posy" +position.y);
 					//System.out.println("posx "+monster.getPosition().x+" posy" +monster.getPosition().y);
 				}
@@ -199,8 +202,8 @@ public class Player {
 		}
 	}
 
-	public Vector3f getPosition() {
-		return this.position;
+	public int[] getIndex() {
+		return this.index;
 	}
 
 }

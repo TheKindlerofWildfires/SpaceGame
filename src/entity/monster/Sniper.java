@@ -14,6 +14,7 @@ public class Sniper extends Entity{
 		entityArmorTag = "null"; 
 		entityNatAbility = "Dead Eye";
 		entitySpeed = 1;
+		entityRange = 5;
 		addEntityAbility(entityNatAbility);
  }
 }

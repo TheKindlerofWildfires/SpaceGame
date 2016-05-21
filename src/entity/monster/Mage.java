@@ -14,6 +14,7 @@ public class Mage extends Entity{
 		entityArmorTag = "null"; //Reflect 1/10th of damage taken
 		entityNatAbility = "Mage";
 		entitySpeed = 2;
+		entityRange = 3;
 		addEntityAbility(entityNatAbility);
  }
 }

@@ -14,6 +14,7 @@ public class Lurker extends Entity{
 		entityArmorTag = "null"; //Reflect 1/10th of damage taken
 		entityNatAbility = "Surprise";
 		entitySpeed = 1;
+		entityRange = 2;
 		addEntityAbility(entityNatAbility);
  }
 }

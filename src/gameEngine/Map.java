@@ -236,6 +236,7 @@ public class Map {
 		}
 
 		System.out.println("Map init complete");
+		System.out.println("Map Type");
 	}
 	/*public int getSeeds(String type){
 		if (type == "x"){
