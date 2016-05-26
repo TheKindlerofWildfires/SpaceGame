@@ -13,10 +13,36 @@ public class Distance {
 	}
 	public double manhattenDis(int[] attIndex, int[] tarIndex){
 		//doesnt work well on lowers
-		double disY = Math.abs(attIndex[1]-tarIndex[1]);
+		double disY = Math.abs(attIndex[1]-tarIndex[1]-1);
 		double disX = Math.abs(attIndex[0]-tarIndex[0]);
-		double disT = disY+disX;
-		//System.out.println(disT);
+		//System.out.println("y " +disY);
+		//System.out.println("x " +disX);
+		//double disT = disY+disX;
+		double disT = 0;
+		if (disY>disX){
+			disT = disY;
+			//System.out.println(disY + "outY");
+		}else if (disY<disX){
+			disT = disX;
+			//System.out.println(disX + "outX");
+		}else if (disY==disX){
+			disT = disX;
+			//System.out.println(disX);
+		}
+		//System.out.println(disT + " out");
 		return disT;
+	}
+	public double largeAxis(int[] attIndex, int[] tarIndex){
+		//
+		//why is y always o
+		double disX = Math.abs(attIndex[1]-tarIndex[1]-1);
+		double disY = Math.abs(attIndex[0]-tarIndex[0]-1);
+		System.out.println(disY +"x");
+		System.out.println(disX+"y");
+		if (disY<disX){
+			return disY;
+		}else{
+			return disX;
+		}
 	}
 }

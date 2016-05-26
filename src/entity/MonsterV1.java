@@ -39,8 +39,8 @@ public class MonsterV1 {
 
 	public MonsterV1(Map map) {
 		this.map = map;
-		xIndex = Map.HEXESACROSS/3;
-		yIndex = Map.HEXESDOWN/3;
+		xIndex = Map.HEXESACROSS/2+1;
+		yIndex = Map.HEXESDOWN/2;
 		this.count = EntityManager.indices.length;
 		this.position = new Vector3f();
 		this.destination = new Vector3f();
@@ -111,13 +111,8 @@ public class MonsterV1 {
 	}
 
 	public void getDestination() {
-
-		//why is only r called 5 times
-		//only called once per tick
 		if (!dead()) {
-			if (Tick.getUpdateTick() - lastMove > (35.2/self.getEntitySpeed()-5.2)) { //between 6.66 - 33 tiles per second
-				//only called once per tick
-				//System.out.println(time);
+			if (Tick.getUpdateTick() - lastMove > (45.2/self.getEntitySpeed()-5.2)) { //between 6.66 - 33 tiles per second
 				float dis = (2.4f);
 				dy = yIndex;
 				dx = xIndex;
@@ -169,7 +164,8 @@ public class MonsterV1 {
 						xIndex += 1;
 					}
 					
-				} else if (m.inRange(self)){
+				} 
+				if (m.inRange(self)){
 					
 					//System.out.println("attack");
 					lastMove = Tick.getUpdateTick();

@@ -125,7 +125,7 @@ public class Player {
 		//why is only r called 5 times
 		//only called once per tick
 		if (!dead()) {
-			if (Tick.getUpdateTick() - lastMove > (35.2/self.getEntitySpeed()-5.2)) { //between 6.66 - 33 tiles per second
+			if (Tick.getUpdateTick() - lastMove > (45.2/self.getEntitySpeed()-5.2)) { //between 6.66 - 33 tiles per second
 				//System.out.println(Tick.getUpdateTick() - lastMove +" "+ (35.2/self.getEntitySpeed()-5.2));
 				//System.out.println(time);
 				float dis = (2.4f);
@@ -182,6 +182,7 @@ public class Player {
 					//System.out.println(Tick.getUpdateTick());
 					lastMove = Tick.getUpdateTick();
 					MonsterV1 monster = EntityManager.monster;
+					//System.out.println(index[1] + "    " + monster.getIndex()[1]);
 					m.attackHandler(self, target, index, monster.getIndex());
 					//System.out.println("posx "+position.x+" posy" +position.y);
 					//System.out.println("posx "+monster.getPosition().x+" posy" +monster.getPosition().y);

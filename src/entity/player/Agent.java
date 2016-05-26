@@ -12,7 +12,7 @@ public class Agent extends Entity{
 		entitySanityResist = 9;
 		entityWeaponTag = "Handgun";
 		entityWeaponDamage = 20;
-		entityWeaponPriority = 1;
+		entityWeaponPriority = 2;
 		entityArmorTag = "Bullet Proof Vest";
 		entityNatAbility = "Combat Expertise"; 
 		entitySpeed = 4;

@@ -52,13 +52,15 @@ public class Mechanics {
 
 	public boolean inRange(Entity attacker) {
 		Distance d = new Distance();
-		
-		double disInHexes = d.euclidDis(attIndex, tarIndex)/(Math.sqrt(2));
-		//System.out.println(disInHexes);
+		double disInHexes = d.manhattenDis(attIndex, tarIndex);
+		//System.out.println(disInHexes + "dis");
 		//System.out.println(attacker.getEntityRange());
 		if (attacker.getEntityRange() >= (disInHexes)) {
+			//System.out.println("In Range");
 			return true;
 		} else {
+			System.out.println(disInHexes + "dis");
+			System.out.println(attacker.getEntityRange());
 			return false;
 		}
 
@@ -67,6 +69,7 @@ public class Mechanics {
 	public void attackHandler(Entity attacker, Entity target, int[] attIndex, int[] tarIndex) {
 		//find if in range
 		//System.out.println("e");
+		
 		this.attIndex = attIndex;
 		this.tarIndex = tarIndex;
 		if (inRange(attacker)&&target.getEntityHealth()>0) {
