@@ -59,8 +59,8 @@ public class Mechanics {
 			//System.out.println("In Range");
 			return true;
 		} else {
-			System.out.println(disInHexes + "dis");
-			System.out.println(attacker.getEntityRange());
+			//System.out.println(disInHexes + "dis");
+			//System.out.println(attacker.getEntityRange());
 			return false;
 		}
 

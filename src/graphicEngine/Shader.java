@@ -70,4 +70,5 @@ public class Shader {
 		glUniform1iv(getUniform(name),position);
 		
 	}
+
 }

@@ -5,6 +5,7 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 import combat.Mechanics;
+import maths.Distance;
 import maths.Vector3f;
 import classesSimonDoesntLike.KeyboardInput;
 import gameEngine.EntityManager;
@@ -28,6 +29,9 @@ public class Player {
 	public int yOld;
 	int[] index = new int[2];
 	private int lastMove;
+	
+	Distance distance = new Distance();
+	
 	static Entity self = Entity.getEntity("Agent");
 	Entity target = MonsterV1.self; //rwff --Monsterv1.self
 	public static final float aspectScaler = 16 / 9f;
@@ -120,14 +124,8 @@ public class Player {
 	}
 
 	public void getDestination() {
-
-		//Tick.getUpdateTick();
-		//why is only r called 5 times
-		//only called once per tick
 		if (!dead()) {
 			if (Tick.getUpdateTick() - lastMove > (45.2/self.getEntitySpeed()-5.2)) { //between 6.66 - 33 tiles per second
-				//System.out.println(Tick.getUpdateTick() - lastMove +" "+ (35.2/self.getEntitySpeed()-5.2));
-				//System.out.println(time);
 				float dis = (2.4f);
 				yOld = yIndex;
 				xOld = xIndex;
@@ -138,10 +136,8 @@ public class Player {
 						xIndex -= 1;
 					}else{
 						yIndex -=1;
-						xIndex -= 1;
-						
-					}
-					
+						xIndex -= 1;	
+					}	
 				} else if (KeyboardInput.isKeyDown(GLFW_KEY_W)) {
 					destination.y = position.y + (apothem * aspectScaler * dis);
 					yIndex -= 1; 
@@ -179,7 +175,7 @@ public class Player {
 					}
 					
 				} else if (KeyboardInput.isKeyDown(GLFW_KEY_R)) {
-					//System.out.println(Tick.getUpdateTick());
+					System.out.println(Map.elevation[xIndex][yIndex]);
 					lastMove = Tick.getUpdateTick();
 					MonsterV1 monster = EntityManager.monster;
 					//System.out.println(index[1] + "    " + monster.getIndex()[1]);
@@ -193,15 +189,24 @@ public class Player {
 
 	private boolean checkDestination() {
 		//System.out.println(xIndex + " " + yIndex);
+		
 		if((xIndex>0) && (yIndex> 0) &&(xIndex<(Map.HEXESACROSS)) &&(yIndex<(Map.HEXESDOWN))){
-			if (map.land[xIndex][yIndex] == Map.LAND|| map.land[xIndex][yIndex] == Map.SEED) {
-				return true;
-			}else{
-				return false;
+			if (map.land[xIndex][yIndex] == Map.LAND||map.land[xIndex][yIndex] == Map.SEED) {
+				if( map.land[xOld][yOld] == Map.SEED){
+					return true;
+					//seeds are bs
+				}else if(!(distance.eleDis(Map.elevation[xIndex][yIndex], Map.elevation[xOld][yOld])>20)){
+					return true;
+					//controls jump height
+				}else{
+					//the latest kill switch
+					return false;
+				}
 			}
 		}else{
 			return false;
 		}
+		return false;
 	}
 
 	public int[] getIndex() {

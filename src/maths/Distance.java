@@ -1,5 +1,7 @@
 package maths;
 
+import gameEngine.Map;
+
 
 public class Distance {
 	public Distance(){
@@ -29,7 +31,10 @@ public class Distance {
 			disT = disX;
 			//System.out.println(disX);
 		}
-		//System.out.println(disT + " out");
+		int i = Map.elevation[attIndex[0]][attIndex[1]];
+		int j = Map.elevation[attIndex[0]][attIndex[1]];
+		double q = eleDis(i,j);
+		disT = Math.sqrt((Math.pow(q,2)+Math.pow(disT,2)));
 		return disT;
 	}
 	public double largeAxis(int[] attIndex, int[] tarIndex){
@@ -37,12 +42,17 @@ public class Distance {
 		//why is y always o
 		double disX = Math.abs(attIndex[1]-tarIndex[1]-1);
 		double disY = Math.abs(attIndex[0]-tarIndex[0]-1);
-		System.out.println(disY +"x");
-		System.out.println(disX+"y");
+		//System.out.println(disY +"x");
+		//System.out.println(disX+"y");
 		if (disY<disX){
 			return disY;
 		}else{
 			return disX;
 		}
+	}
+	public double eleDis(int i, int j) {
+		double disT = Math.abs(i-j);
+		//System.out.println(disT);
+		return disT;
 	}
 }

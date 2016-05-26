@@ -46,7 +46,7 @@ public class Map {
 	public static final String[] maps = { "fractal", "disk", "soft", "stand", "trig", "quad", "it", "lin","grit","exp","ln","rng","arm","invE","inv","invT","invL"};
 
 	public int[][] land = new int[HEXESACROSS][HEXESDOWN];
-	public int[][] elevation = new int[HEXESACROSS][HEXESDOWN];
+	public static int[][] elevation = new int[HEXESACROSS][HEXESDOWN];
 	public int[][] seeds;
 	public int[] seed = new int[2];
 
@@ -75,7 +75,6 @@ public class Map {
 				counter++;
 			}
 		}
-		//land[2025] = SEED;
 		int bufferID = glGenBuffers();
 
 		glBindBuffer(GL_ARRAY_BUFFER, bufferID);
@@ -291,7 +290,17 @@ public class Map {
 				if (land[i][j] == LAND){
 					thisCord[0] = i;
 					thisCord[1] = j;
-					elevation[i][j] = (int) (255- distance.manhattenDis(seed, thisCord) - rng.nextInt(10));
+					double y = 255.0/((HEXESACROSS+HEXESDOWN)/4);
+					int q = (int) (255- distance.manhattenDis(seed, thisCord)*y - 10*rng.nextDouble());
+					if(q>255 || q<1){
+						q = (int) ((255-distance.manhattenDis(seed, thisCord))*y);
+						if(q<0){
+							q=0;
+							System.err.println("value was neg");
+						}
+					}
+					elevation[i][j] = q;
+					//System.out.println(q);
 					landCount+=1;
 				}
 			}
