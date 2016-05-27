@@ -8,6 +8,7 @@ import combat.Mechanics;
 import maths.Distance;
 import maths.Vector3f;
 import classesSimonDoesntLike.KeyboardInput;
+import gameEngine.Biome;
 import gameEngine.EntityManager;
 import gameEngine.Map;
 import gameEngine.Tick;
@@ -48,8 +49,10 @@ public class Player {
 	Mechanics m = new Mechanics();
 	byte[] indices = new byte[] { 0, 1, 2, 3, 4, 5, 0 };
 	Map map;
+	Biome biome;
 	public Player(Map map) {
 		this.map = map;
+		biome = new Biome(map);
 		lastMove = 0;
 		xIndex = Map.HEXESACROSS/2;
 		yIndex = Map.HEXESDOWN/2;
@@ -191,7 +194,7 @@ public class Player {
 		//System.out.println(xIndex + " " + yIndex);
 		
 		if((xIndex>0) && (yIndex> 0) &&(xIndex<(Map.HEXESACROSS)) &&(yIndex<(Map.HEXESDOWN))){
-			if (map.land[xIndex][yIndex] == Map.LAND||map.land[xIndex][yIndex] == Map.SEED) {
+			if (biome.destinationTraversable(xIndex, yIndex)) {
 				if( map.land[xOld][yOld] == Map.SEED){
 					return true;
 					//seeds are bs

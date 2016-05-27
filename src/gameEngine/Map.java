@@ -23,30 +23,29 @@ public class Map {
 	public static final int HEXESDOWN = 104;
 	public static final int MOISTURESCALER = 12;
 	public static final int ELEVATIONSCALER = 17;
-	
 
 	public static final int LAND = 100;
 	public static final int WATER = 0;
 	public static final int SEED = 50;
 
 	public String mapType;
+	public String worldType;
 	public int seedCount;
 	public int landCount;
 	
 	Distance distance;
 	ShaderManager shaderManager;
-	//public static ArrayList<ArrayList<Hexagon>> hexes = new ArrayList<ArrayList<Hexagon>>();
-	//private Hexagon[] seeds;
 
-	private Random rng = new Random();
+	public static Random rng = new Random();
 
 	public VertexArrayObject vao = new VertexArrayObject(EntityManager.vertices, EntityManager.indices);
 	public int vaoID = vao.getVaoID();
 
-	public static final String[] maps = { "fractal", "disk", "soft", "stand", "trig", "quad", "it", "lin","grit","exp","ln","rng","arm","invE","inv","invT","invL"};
-
+	public static final String[] maps = { "fractal", "disk", "soft", "stand", "trig", "quad","grit","exp","ln","rng","arm"};
+	public static final String[] worldTypes = {"telilic", "sapric", "worlic"};
 	public int[][] land = new int[HEXESACROSS][HEXESDOWN];
 	public static int[][] elevation = new int[HEXESACROSS][HEXESDOWN];
+	public static int[][] moisture = new int[HEXESACROSS][HEXESDOWN];
 	public int[][] seeds;
 	public int[] seed = new int[2];
 
@@ -157,6 +156,7 @@ public class Map {
 		//INIT MAPTYPE ETC
 		//mapType = "invT";
 		mapType = maps[rng.nextInt(maps.length)];
+		worldType = worldTypes[rng.nextInt(worldTypes.length)];
 		seedCount = 1;
 		seeds = new int[seedCount][2];
 
@@ -170,6 +170,7 @@ public class Map {
 			for (int y = 0; y < HEXESDOWN; y++) {
 				land[x][y] = WATER;
 				elevation[x][y] = 0;
+				moisture[x][y] = 0;
 			}
 		}
 
@@ -225,7 +226,7 @@ public class Map {
 				p = (p+1)/(p+3.4);
 				break;
 			case "disk":
-				p = 0.96 * p;
+				p = 0.97 * p;
 				break;
 			case "trig":
 				p = Math.cos(1.443 * p);
@@ -274,6 +275,8 @@ public class Map {
 				p = ((10/Math.log(iter))-(Math.abs(rng.nextDouble())));
 				break;
 			case "invT":
+				System.err.println("invalid map type");
+				System.exit(-1);
 				p = ((Math.pow(Math.cos(iter)*(1.9),2))-(1*Math.abs(rng.nextDouble()))+0.1);
 				break;
 			default:
@@ -290,17 +293,26 @@ public class Map {
 				if (land[i][j] == LAND){
 					thisCord[0] = i;
 					thisCord[1] = j;
-					double y = 255.0/((HEXESACROSS+HEXESDOWN)/4);
-					int q = (int) (255- distance.manhattenDis(seed, thisCord)*y - 10*rng.nextDouble());
-					if(q>255 || q<1){
-						q = (int) ((255-distance.manhattenDis(seed, thisCord))*y);
-						if(q<0){
-							q=0;
+					double y = (double)HEXESDOWN/((HEXESACROSS+HEXESDOWN)/3);
+					int elev = (int) (HEXESDOWN- distance.manhattenDis(seed, thisCord)*y - 10*rng.nextDouble());
+					if(elev>HEXESDOWN || elev<1){
+						elev = (int) ((HEXESDOWN-distance.manhattenDis(seed, thisCord))*y);
+						if(elev<0){
+							elev=0;
 							System.err.println("value was neg");
 						}
 					}
-					elevation[i][j] = q;
-					//System.out.println(q);
+					int moist = (int) (distance.manhattenDis(seed, thisCord)*y - 10*rng.nextDouble());
+					if(moist>HEXESDOWN || moist<1){
+						moist = (int) ((distance.manhattenDis(seed, thisCord))*y);
+						if(moist<0){
+							moist=0;
+							System.err.println("value was neg");
+						}
+					}
+					moisture[i][j] = moist;
+					elevation[i][j] = elev;
+					land[i][j] = Biome.getBiome(elevation[i][j], worldType, moisture[i][j]);
 					landCount+=1;
 				}
 			}
