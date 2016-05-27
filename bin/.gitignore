@@ -1,3 +1,6 @@
 /GUI/
-/gameEngine/
+/combat/
 /entity/
+/gameEngine/
+/graphicEngine/
+/shaders/
