@@ -3,6 +3,7 @@
 in vec3 position;
 
 out vec3 colour;
+out vec2 UV;
 
 uniform vec3 pos;
 uniform float side;
@@ -56,4 +57,5 @@ void main(void){
 	}
 	gl_Position = vec4(position.x+pos.x+xOfset,position.y+pos.y-yOfset,position.z+pos.z, 1.0);
 	colour = color;
+	UV = position.xy;
 }

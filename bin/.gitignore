@@ -1,5 +1,8 @@
-/entity/
-/gameEngine/
-/maths/
+/graphicEngine/
 /shaders/
+/GUI/
+/gameEngine/
 /classesSimonDoesntLike/
+/combat/
+/entity/
+/maths/
