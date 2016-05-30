@@ -1,4 +1,4 @@
-package classesSimonDoesntLike;
+package GUI;
 //I suspect this overrides userInput
 import org.lwjgl.glfw.GLFWKeyCallback;
 import static org.lwjgl.glfw.GLFW.*;

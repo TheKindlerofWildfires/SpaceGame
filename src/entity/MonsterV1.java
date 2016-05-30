@@ -92,6 +92,7 @@ public class MonsterV1 {
 	}
 
 	public void update() {
+		System.out.println(self.getEntityAbility());
 		index[0] = xIndex;
 		index[1] = yIndex;
 		if (!dead()) {

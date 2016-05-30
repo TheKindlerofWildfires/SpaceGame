@@ -4,10 +4,10 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
+import GUI.KeyboardInput;
 import combat.Mechanics;
 import maths.Distance;
 import maths.Vector3f;
-import classesSimonDoesntLike.KeyboardInput;
 import gameEngine.Biome;
 import gameEngine.EntityManager;
 import gameEngine.Map;
@@ -26,15 +26,16 @@ public class Player {
 	private float elevation;
 	public int xIndex;
 	public int yIndex;
-	public int xOld;
-	public int yOld;
+	public int dx;
+	public int dy;
 	int[] index = new int[2];
+	String[] inventory = new String[144]; //I suspect this will be objects soon
 	private int lastMove;
 	
 	Distance distance = new Distance();
 	
 	static Entity self = Entity.getEntity("Agent");
-	Entity target = MonsterV1.self; //rwff --Monsterv1.self
+	Entity target = MonsterV1.self; //rwff
 	public static final float aspectScaler = 16 / 9f;
 	float apothem = gameEngine.EntityManager.APOTHEM;
 	float side = (float) (apothem * 2 / sqrt3);
@@ -53,6 +54,8 @@ public class Player {
 	public Player(Map map) {
 		this.map = map;
 		biome = new Biome(map);
+		inventory[0]= self.getEntityWeaponTag();
+		inventory[1]= self.getEntityArmorTag();
 		lastMove = 0;
 		xIndex = Map.HEXESACROSS/2;
 		yIndex = Map.HEXESDOWN/2;
@@ -121,17 +124,17 @@ public class Player {
 		} else {
 			destination.x = position.x;
 			destination.y = position.y;
-			yIndex = yOld;
-			xIndex = xOld;
+			yIndex = dy;
+			xIndex = dx;
 		}
 	}
 
 	public void getDestination() {
 		if (!dead()) {
-			if (Tick.getUpdateTick() - lastMove > (45.2/self.getEntitySpeed()-5.2)) { //between 6.66 - 33 tiles per second
+			if (Tick.getUpdateTick() - lastMove > (45.2/self.getEntitySpeed()-5.2)) {
 				float dis = (2.4f);
-				yOld = yIndex;
-				xOld = xIndex;
+				dy = yIndex;
+				dx = xIndex;
 				if (KeyboardInput.isKeyDown(GLFW_KEY_Q)) {
 					destination.x = position.x - (apothem * sqrt3 / 2 * dis);
 					destination.y = position.y + (apothem / 2 * aspectScaler * dis);
@@ -181,10 +184,7 @@ public class Player {
 					System.out.println(Map.elevation[xIndex][yIndex]);
 					lastMove = Tick.getUpdateTick();
 					MonsterV1 monster = EntityManager.monster;
-					//System.out.println(index[1] + "    " + monster.getIndex()[1]);
 					m.attackHandler(self, target, index, monster.getIndex());
-					//System.out.println("posx "+position.x+" posy" +position.y);
-					//System.out.println("posx "+monster.getPosition().x+" posy" +monster.getPosition().y);
 				}
 			}
 		}
@@ -192,15 +192,14 @@ public class Player {
 
 	private boolean checkDestination() {
 		//System.out.println(xIndex + " " + yIndex);
-		
 		if((xIndex>0) && (yIndex> 0) &&(xIndex<(Map.HEXESACROSS)) &&(yIndex<(Map.HEXESDOWN))){
 			if (biome.destinationTraversable(xIndex, yIndex)) {
-				if( map.land[xOld][yOld] == Map.SEED){
+				if( map.land[dx][dy] == Map.SEED){
 					return true;
 					//seeds are bs
-				}else if(!(distance.eleDis(Map.elevation[xIndex][yIndex], Map.elevation[xOld][yOld])>20)){
+				}else if(!(distance.eleDis(Map.elevation[xIndex][yIndex], Map.elevation[dx][dy])>20)){
 					return true;
-					//controls jump height
+					//controls step up height
 				}else{
 					//the latest kill switch
 					return false;

@@ -64,10 +64,9 @@ public class AbilityHandler {
 					//System.err.println("onHit error--Ability Unlisted");
 					break;
 				}
-				if (target.getEntityAbility().get(x) == "Reflect") {
-					attacker.setEntityHealth(attacker.getEntityHealth() - (.1*attacker.getEntityWeaponDamage()));
-					break;
-				}
+			if (target.getEntityAbility().get(x) == "Reflect") {
+				attacker.setEntityHealth(attacker.getEntityHealth() - (.1*attacker.getEntityWeaponDamage()));
+			}
 			case "onMiss":
 				switch (attacker.getEntityAbility().get(x)) {
 					case "Stealth":

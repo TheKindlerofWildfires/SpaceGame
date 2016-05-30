@@ -330,12 +330,4 @@ public class Map {
 		}
 
 	}
-	/*public int getSeeds(String type){
-		if (type == "x"){
-			return seeds[0][0];
-		}else if (type =="y"){
-			return seeds[0][1];
-		}
-		return 15;
-	}*/
 }
