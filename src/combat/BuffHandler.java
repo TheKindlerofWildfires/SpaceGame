@@ -12,14 +12,17 @@ public class BuffHandler {
 	protected static List<Integer> durationL = new ArrayList<Integer>();
 	protected static List<Integer> startTimeL = new ArrayList<Integer>();
 	protected static List<Integer> powerL = new ArrayList<Integer>();
+	public String[] abilityList = {"poison", "treeClimb", "camo", "nightHunter", 
+			"burrow", "plateArmor", "fast", "flashSwarm", "guerilla", "rage", 
+			"tracker", "knockdown","surge","rally","surprise","mage","net","stealth",
+			"deadEye","reflect","patternRecognition","combatExpertise","alcolyte"};
 	public BuffHandler(){
+		
 	}
 	public void update() {
-		//System.out.println(buffTagL.size());
 		if(buffTagL.size()>0){
 		for(int i = 0; i<buffTagL.size();i++){
 			if(Tick.getUpdateTick() -startTimeL.get(i) >= durationL.get(i)){
-				//System.out.println(entity.get(i).getEntitySpeed());
 				remove(buffTagL.get(i), entityL.get(i), powerL.get(i));
 			buffTagL.remove(i);
 			entityL.remove(i);
@@ -33,7 +36,6 @@ public class BuffHandler {
 	}
 	public void addDecayingBuff(String buffTag, Entity entity, int duration, int power){
 		buffTagL.add(buffTag);
-		//System.out.println(buffTagL.size());
 		entityL.add(entity);
 		durationL.add(duration);
 		powerL.add(power);

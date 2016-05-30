@@ -12,7 +12,7 @@ public class Skirmisher extends Entity{
 		entityWeaponDamage = 10;
 		entityWeaponPriority = 2;
 		entityArmorTag = "null"; //Reflect 1/10th of damage taken
-		entityNatAbility = "Stealth";
+		entityNatAbility = "stealth";
 		entitySpeed = 3;
 		entityRange = 1;
 		addEntityAbility(entityNatAbility);

@@ -12,7 +12,7 @@ public class Hunter extends Entity{
 		entityWeaponDamage = 15;
 		entityWeaponPriority = 2;
 		entityArmorTag = "null"; //Reflect 1/10th of damage taken
-		entityNatAbility ="Knockdown";
+		entityNatAbility ="knockdown";
 		entitySpeed = 2;
 		entityRange = 1;
 		addEntityAbility(entityNatAbility);

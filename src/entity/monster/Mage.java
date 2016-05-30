@@ -12,7 +12,7 @@ public class Mage extends Entity{
 		entityWeaponDamage = 5;
 		entityWeaponPriority = 5;
 		entityArmorTag = "null"; //Reflect 1/10th of damage taken
-		entityNatAbility = "Mage";
+		entityNatAbility = "mage";
 		entitySpeed = 2;
 		entityRange = 3;
 		addEntityAbility(entityNatAbility);

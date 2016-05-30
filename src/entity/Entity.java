@@ -1,7 +1,6 @@
 package entity;
 
 import entity.monster.*;
-import gameEngine.WorldType.*;
 import entity.player.*;
 
 import java.util.*;

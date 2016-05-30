@@ -87,21 +87,8 @@ public class Window implements Runnable {
 
 	public void update() {
 		glfwPollEvents();
-
 		entityManager.update();
 		tickManager.update();
-
-		/*
-		if (KeyboardInput.keys[GLFW_KEY_A]) {
-			System.out.println("A");
-		}else if(KeyboardInput.keys[GLFW_KEY_W]) {
-			System.out.println("W");
-		}else if(KeyboardInput.keys[GLFW_KEY_S]) {
-			System.out.println("S");
-		}else if(KeyboardInput.keys[GLFW_KEY_D]) {
-			System.out.println("D");
-		}
-		*/
 	}
 
 	public void render() {

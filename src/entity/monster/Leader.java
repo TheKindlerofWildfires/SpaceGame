@@ -13,7 +13,7 @@ public class Leader extends Entity{
 		entityWeaponDamage = 15;
 		entityWeaponPriority = 4;
 		entityArmorTag = "null"; //Reflect 1/10th of damage taken
-		entityNatAbility = "Rally";
+		entityNatAbility = "rally";
 		entitySpeed = 3;
 		entityRange = 1;
 		addEntityAbility(entityNatAbility);

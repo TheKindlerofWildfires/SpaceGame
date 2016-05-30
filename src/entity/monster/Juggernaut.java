@@ -12,7 +12,7 @@ public class Juggernaut extends Entity{
 		entityWeaponDamage = 20;
 		entityWeaponPriority = 5;
 		entityArmorTag = "null"; 
-		entityNatAbility = "Surge";
+		entityNatAbility = "surge";
 		entitySpeed = 2;
 		entityRange = 1;
 		addEntityAbility(entityNatAbility);

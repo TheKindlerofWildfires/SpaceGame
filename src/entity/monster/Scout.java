@@ -12,7 +12,7 @@ public class Scout extends Entity{
 		entityWeaponDamage = 3;
 		entityWeaponPriority = 5;
 		entityArmorTag = "null"; //Reflect 1/10th of damage taken
-		entityNatAbility = "Net";
+		entityNatAbility = "net";
 		entitySpeed = 5;
 		entityRange = 1;
 		addEntityAbility(entityNatAbility);

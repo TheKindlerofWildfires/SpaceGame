@@ -3,83 +3,86 @@ package combat;
 import java.util.Random;
 
 import entity.*;
+import gameEngine.Map;
 
 
 public class AbilityHandler {
 	BuffHandler buffHandler;
-	Random rng = new Random();
+	Random rng = Map.rng;
 	public AbilityHandler() {
 		buffHandler = new BuffHandler();
 	}
-	//System.out.println(used);
 	public void checkAbility(String callType, Entity attacker, Entity target) {
 
 		for (int x = 0; x < attacker.getEntityAbility().size(); x++) {
+			//I HAVE NO IDEA WHY THIS DOES NOT WORK
+		//	System.out.println(target.getEntityAbility().get(x));
+		//	if (target.getEntityAbility().get(x) == "reflect") {
+		//		attacker.setEntityHealth(attacker.getEntityHealth() - (.1*attacker.getEntityWeaponDamage()));
+		//	}
 			switch (callType) {
-			case "onHit":
-				// looks like this should all be multi-threaded
-				//System.out.println(attacker.getEntityAbility().get(x));
-				//System.out.println(attacker.getEntityAbility().get(x));
+			case "onInit":
 				switch (attacker.getEntityAbility().get(x)) {
-				case "Knockdown":
+					case "fast":
+						attacker.setEntitySpeed(attacker.getEntitySpeed()+1);
+						break;
+				default:
+					break;
+				}
+			case "onHit":
+				switch (attacker.getEntityAbility().get(x)) {
+				case "knockdown":
 					if(rng.nextDouble()<0.5){
 						buffHandler.addDecayingBuff("speed",target , 60, -target.getEntitySpeed());
 					}
 					break;
-				case "Surge":
+				case "surge":
 					if (target.getEntityHealth() < 50){
 						buffHandler.addDecayingBuff("prio", attacker, 300, -2);
 						buffHandler.addDecayingBuff("speed",attacker , 300, 1);
-						attacker.setEntityAbility("Surged");
+						attacker.setEntityAbility("surged");
 						}
 					break;
-				case "Surged":
+				case "surged":
 					attacker.setEntityHealth(attacker.getEntityHealth()+5);
 					break;
-				case "Rally":
+				case "rally":
 					buffHandler.addDecayingBuff("prio", attacker, 60, -1);
 					buffHandler.addDecayingBuff("speed",attacker , 60, 1);
 					break;
-				case "Surprise":
+				case "surprise":
 					if (attacker.getEntitySpeed() > target.getEntitySpeed()){
 						target.setEntityHealth(target.getEntityHealth()-attacker.getEntityWeaponDamage()); 
 					}
 					break;
-				case "Net":
+				case "net":
 					if(rng.nextDouble()<0.5){
 						buffHandler.addDecayingBuff("speed",target , 60, -1);
 					}
 					break;
-				case "Dead Eye":
+				case "deadEye":
 					buffHandler.addDecayingBuff("armor", target, 60, -1);
 					buffHandler.addDecayingBuff("speed",target , 60, -1);
-				case "Pattern recognition":
+				case "patternRecognition":
 					break;
-				case "Combat Expertise":
+				case "combatExpertise":
 					buffHandler.addDecayingBuff("speed",attacker , 60, 1);
 					break;
-				case "Alcolyte":
+				case "alcolyte":
 					break;
 				default:
 					//System.err.println("onHit error--Ability Unlisted");
 					break;
 				}
-			if (target.getEntityAbility().get(x) == "Reflect") {
-				attacker.setEntityHealth(attacker.getEntityHealth() - (.1*attacker.getEntityWeaponDamage()));
-			}
 			case "onMiss":
 				switch (attacker.getEntityAbility().get(x)) {
-					case "Stealth":
+					case "stealth":
 						new Stealth(attacker, target);
 						break;
 					default:
 						break;
 				}
 			default:
-				//System.err.println("error on call type");
-				
-				//Suspect this is a big issue
-				//System.out.println(attacker.getEntityAbility());
 				break;
 			}
 		}

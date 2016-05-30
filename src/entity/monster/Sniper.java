@@ -12,7 +12,7 @@ public class Sniper extends Entity{
 		entityWeaponDamage = 20;
 		entityWeaponPriority = 2;
 		entityArmorTag = "null"; 
-		entityNatAbility = "Dead Eye";
+		entityNatAbility = "deadEye";
 		entitySpeed = 1;
 		entityRange = 5;
 		addEntityAbility(entityNatAbility);

@@ -12,7 +12,7 @@ public class Tank extends Entity{
 		entityWeaponDamage = 2;
 		entityWeaponPriority = 5;
 		entityArmorTag = "null"; //Reflect 1/10th of damage taken
-		entityNatAbility = "Reflect";
+		entityNatAbility = "reflect";
 		entitySpeed = 2;
 		entityRange = 1;
 		addEntityAbility(entityNatAbility);

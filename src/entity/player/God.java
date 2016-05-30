@@ -14,7 +14,7 @@ public class God extends Entity{
 		entityWeaponDamage = 100;
 		entityWeaponPriority = 1;
 		entityArmorTag = "Protagonist Armor";
-		entityNatAbility = "Combat Expertise"; 
+		entityNatAbility = "combatExpertise"; 
 		entitySpeed = 10;
 		entityRange = 10;
 		addEntityAbility(entityNatAbility);
