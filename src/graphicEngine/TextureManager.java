@@ -6,7 +6,7 @@ public class TextureManager {
 	
 	
 	public static void loadImages(){
-		texture.loadImage("/Users/Simon/Desktop/texture.png");
+		texture.loadImage("resources/colors.png");
 	}
 	
 	public static void glTheFools(){

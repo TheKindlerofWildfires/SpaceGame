@@ -10,6 +10,7 @@ public class EntityManager {
 	public Map map;
 	public static Player player;
 	public static MonsterV1 monster;
+	public WorldType world;
 
 	public static final float APOTHEM = 0.005f;
 
@@ -32,7 +33,9 @@ public class EntityManager {
 		ShaderManager.loadAll();
 		//shaderManager = new ShaderManager();
 		//ShaderManager.loadAll();
+		
 		map = new Map();
+		world = new WorldType();
 		player = new Player(map);
 		monster = new MonsterV1(map);
 		//	player.position.y = -0.01f;

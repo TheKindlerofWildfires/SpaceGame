@@ -29,8 +29,8 @@ public class Map {
 	public static final int WATER = 0;
 	public static final int SEED = 50;
 
-	public String mapType;
-	public String worldType;
+	public static String mapType;
+	public static String worldType;
 	public int seedCount;
 	public int landCount;
 

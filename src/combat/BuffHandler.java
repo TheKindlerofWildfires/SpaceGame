@@ -45,6 +45,12 @@ public class BuffHandler {
 		case "speed":
 			entity.setEntitySpeed(entity.getEntitySpeed()-power);
 			break;
+		case "prio":
+			entity.setEntityWeaponPriority(entity.getEntityWeaponPriority()-power);
+			break;
+		case "armor":
+			entity.setEntityArmor(entity.getEntityArmor()-power);
+			break;
 		default:
 			System.out.println("No such buff");
 		}
@@ -53,6 +59,12 @@ public class BuffHandler {
 		switch(buffTag){
 		case "speed":
 			entity.setEntitySpeed(entity.getEntitySpeed()+power);
+			break;
+		case "prio":
+			entity.setEntityWeaponPriority(entity.getEntityWeaponPriority()+power);
+			break;
+		case "armor":
+			entity.setEntityArmor(entity.getEntityArmor()+power);
 			break;
 		default:
 			System.out.println("No such buff");

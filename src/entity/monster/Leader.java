@@ -1,6 +1,7 @@
 package entity.monster;
 
 import entity.Entity;
+import gameEngine.WorldType;
 
 
 public class Leader extends Entity{
@@ -16,5 +17,6 @@ public class Leader extends Entity{
 		entitySpeed = 3;
 		entityRange = 1;
 		addEntityAbility(entityNatAbility);
+		addEntityAbility(WorldType.getRandomAdaptation());
  }
 }
