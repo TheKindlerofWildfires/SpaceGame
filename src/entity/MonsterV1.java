@@ -7,7 +7,9 @@ import static org.lwjgl.opengl.GL30.*;
 import java.util.Random;
 
 import combat.Mechanics;
+import maths.Distance;
 import maths.Vector3f;
+import gameEngine.Biome;
 import gameEngine.EntityManager;
 import gameEngine.Map;
 import gameEngine.Tick;
@@ -35,10 +37,13 @@ public class MonsterV1 {
 	float ASPECTSCALER = EntityManager.aspectScaler;
 	private Random rng = new Random();
 	private Map map;
+	Biome biome;
+	Distance distance = new Distance();
 	static Entity self = Entity.getEntity("Leader");
 
 	public MonsterV1(Map map) {
 		this.map = map;
+		biome = new Biome(map);
 		xIndex = Map.HEXESACROSS/2+1;
 		yIndex = Map.HEXESDOWN/2;
 		this.count = EntityManager.indices.length;
@@ -92,7 +97,8 @@ public class MonsterV1 {
 	}
 
 	public void update() {
-		System.out.println(self.getEntityAbility());
+
+		//System.out.println(self.getEntityAbility());
 		index[0] = xIndex;
 		index[1] = yIndex;
 		if (!dead()) {
@@ -117,7 +123,7 @@ public class MonsterV1 {
 				float dis = (2.4f);
 				dy = yIndex;
 				dx = xIndex;
-				int  D= rng.nextInt(500);
+				int  D= rng.nextInt(5);
 				if (D==0) {
 					destination.x = position.x - (apothem * sqrt3 / 2 * dis);
 					destination.y = position.y + (apothem / 2 * ASPECTSCALER * dis);
@@ -180,14 +186,22 @@ public class MonsterV1 {
 	private boolean checkDestination() {
 		//System.out.println(xIndex + " " + yIndex);
 		if((xIndex>0) && (yIndex> 0) &&(xIndex<(Map.HEXESACROSS)) &&(yIndex<(Map.HEXESDOWN))){
-			if (map.land[xIndex][yIndex] == Map.LAND|| map.land[xIndex][yIndex] == Map.SEED) {
-				return true;
-			}else{
-				return false;
+			if (biome.destinationTraversable(xIndex, yIndex)) {
+				if( map.land[dx][dy] == Map.SEED){
+					return true;
+					//seeds are bs
+				}else if(!(distance.eleDis(Map.elevation[xIndex][yIndex], Map.elevation[dx][dy])>20)){
+					return true;
+					//controls step up height
+				}else{
+					//the latest kill switch
+					return false;
+				}
 			}
 		}else{
 			return false;
 		}
+		return false;
 	}
 
 	//else{

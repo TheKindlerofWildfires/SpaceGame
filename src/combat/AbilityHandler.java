@@ -15,7 +15,7 @@ public class AbilityHandler {
 	public void checkAbility(String callType, Entity attacker, Entity target) {
 
 		for (int x = 0; x < attacker.getEntityAbility().size(); x++) {
-			//I HAVE NO IDEA WHY THIS DOES NOT WORK
+			//I HAVE NO IDEA WHY THIS DOES NOT WORK, index error
 		//	System.out.println(target.getEntityAbility().get(x));
 		//	if (target.getEntityAbility().get(x) == "reflect") {
 		//		attacker.setEntityHealth(attacker.getEntityHealth() - (.1*attacker.getEntityWeaponDamage()));
@@ -47,8 +47,10 @@ public class AbilityHandler {
 					attacker.setEntityHealth(attacker.getEntityHealth()+5);
 					break;
 				case "rally":
-					buffHandler.addDecayingBuff("prio", attacker, 60, -1);
-					buffHandler.addDecayingBuff("speed",attacker , 60, 1);
+					if(rng.nextDouble()<-0.7){
+						buffHandler.addDecayingBuff("prio", attacker, 30, -1);
+						buffHandler.addDecayingBuff("speed",attacker , 30, 1);
+					}
 					break;
 				case "surprise":
 					if (attacker.getEntitySpeed() > target.getEntitySpeed()){
@@ -77,7 +79,6 @@ public class AbilityHandler {
 			case "onMiss":
 				switch (attacker.getEntityAbility().get(x)) {
 					case "stealth":
-						new Stealth(attacker, target);
 						break;
 					default:
 						break;

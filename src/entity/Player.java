@@ -34,7 +34,7 @@ public class Player {
 	
 	Distance distance = new Distance();
 	
-	static Entity self = Entity.getEntity("Agent");
+	static Entity self = Entity.getEntity("Neo");
 	Entity target = MonsterV1.self; //rwff
 	public static final float aspectScaler = 16 / 9f;
 	float apothem = gameEngine.EntityManager.APOTHEM;
@@ -109,6 +109,7 @@ public class Player {
 	}
 
 	public void update() {
+		System.out.println(inventory[0]);
 		//System.out.println(Tick.getUpdateTick());
 		//System.out.println(self.getEntitySpeed());
 		getDestination();

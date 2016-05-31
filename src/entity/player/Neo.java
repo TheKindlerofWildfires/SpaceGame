@@ -11,7 +11,7 @@ public class Neo extends Entity{
 		entityArmor = 9;
 		entitySanityResist = 10;
 		entityWeaponTag = "Salvage";
-		entityWeaponDamage = 12;
+		entityWeaponDamage = 18;
 		entityWeaponPriority = 3;
 		entityArmorTag = "Leather Jacket";
 		entityNatAbility = "patternRecognition"; 

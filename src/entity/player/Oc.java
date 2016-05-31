@@ -11,7 +11,7 @@ public class Oc extends Entity{
 		entityArmor = 8;
 		entitySanityResist = 8;
 		entityWeaponTag = "Cultist's Blade";
-		entityWeaponDamage = 5;
+		entityWeaponDamage = 13;
 		entityWeaponPriority = 3;
 		entityArmorTag = "Robes";
 		entityNatAbility = "alcolyte"; 
