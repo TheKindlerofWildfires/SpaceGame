@@ -38,13 +38,8 @@ public class AbilityHandler {
 					break;
 				case "surge":
 					if (target.getEntityHealth() < 50){
-						buffHandler.addDecayingBuff("prio", attacker, 300, -2);
-						buffHandler.addDecayingBuff("speed",attacker , 300, 1);
-						attacker.setEntityAbility("surged");
+						buffHandler.addDecayingBuff("health", attacker, 60, 1);
 						}
-					break;
-				case "surged":
-					attacker.setEntityHealth(attacker.getEntityHealth()+5);
 					break;
 				case "rally":
 					if(rng.nextDouble()<-0.7){

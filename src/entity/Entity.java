@@ -20,6 +20,7 @@ public abstract class Entity {
 	protected int entitySpeed; // blocks per turn
 	protected String entityNatAbility;
 	protected double entityRange;
+	protected int entityLevel;
 	public Entity(){
 	}
 	public String getEntityTag() { 
@@ -64,7 +65,9 @@ public abstract class Entity {
 	public double getEntityRange() {
 		return entityRange;
 	}
-	
+	public int getEntityLevel() {
+		return entityLevel;
+	}
 	public void setEntityTag(String entityTag){
 		this.entityTag = entityTag;
 	}
@@ -105,6 +108,9 @@ public abstract class Entity {
 		}
 
 	}
+	public void setEntityLevel(int level){
+		this.entityLevel = level;
+	}
 	public static Entity getEntity(String entityTag){
 		switch(entityTag){
 		case "Grunt":
@@ -139,6 +145,14 @@ public abstract class Entity {
 			System.err.println("Invalid entity Tag");
 			return new Neo();
 		}
-
+	
 }
+	public static Entity getBlankEntity(String entityTag, int level, List<String> entityAbility){
+		Entity value = getEntity(entityTag);
+		value.setEntityLevel(level);
+		for(int i = 0; i>entityAbility.size();i++){
+			value.addEntityAbility(entityAbility.get(i));
+		}
+		return value;
+	}
 }

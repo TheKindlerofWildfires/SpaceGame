@@ -6,6 +6,7 @@ import entity.Entity;
 public class Agent extends Entity{
 	public Agent(){
 		entityTag = "Agent";
+		entityLevel = 1;
 		entityHealth = 120;
 		entitySanity = 80;
 		entityArmor = 10;

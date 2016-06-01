@@ -44,6 +44,8 @@ public class BuffHandler {
 	}
 	private void remove(String buffTag, Entity entity, int power){
 		switch(buffTag){
+		case "regen":
+			entity.setEntityHealth(entity.getEntityHealth()-power);
 		case "speed":
 			entity.setEntitySpeed(entity.getEntitySpeed()-power);
 			break;
@@ -59,6 +61,8 @@ public class BuffHandler {
 	}
 	private void add(String buffTag, Entity entity, int power){
 		switch(buffTag){
+		case "regen":
+			entity.setEntityHealth(entity.getEntityHealth()+power);
 		case "speed":
 			entity.setEntitySpeed(entity.getEntitySpeed()+power);
 			break;
