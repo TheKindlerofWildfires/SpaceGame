@@ -109,7 +109,7 @@ public class Player {
 	}
 
 	public void update() {
-		System.out.println(inventory[0]);
+		//System.out.println(inventory[0]);
 		//System.out.println(Tick.getUpdateTick());
 		//System.out.println(self.getEntitySpeed());
 		getDestination();

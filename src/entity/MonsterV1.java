@@ -40,8 +40,10 @@ public class MonsterV1 {
 	Biome biome;
 	Distance distance = new Distance();
 	static Entity self = Entity.getEntity("Leader");
+	Player player;
 
 	public MonsterV1(Map map) {
+		player = EntityManager.player;
 		this.map = map;
 		biome = new Biome(map);
 		xIndex = Map.HEXESACROSS/2+1;
@@ -119,11 +121,12 @@ public class MonsterV1 {
 
 	public void getDestination() {
 		if (!dead()) {
-			if (Tick.getUpdateTick() - lastMove > (45.2/self.getEntitySpeed()-5.2)) { //between 6.66 - 33 tiles per second
+			if (Tick.getUpdateTick() - lastMove > (45.2/self.getEntitySpeed()-5.2)) { 
+				int D = getProbableDirection();
 				float dis = (2.4f);
 				dy = yIndex;
 				dx = xIndex;
-				int  D= rng.nextInt(5);
+				//int  D= rng.nextInt(5);
 				if (D==0) {
 					destination.x = position.x - (apothem * sqrt3 / 2 * dis);
 					destination.y = position.y + (apothem / 2 * ASPECTSCALER * dis);
@@ -176,13 +179,32 @@ public class MonsterV1 {
 					
 					//System.out.println("attack");
 					lastMove = Tick.getUpdateTick();
-					Player player = EntityManager.player;
+
 					m.attackHandler(self, target, index, player.getIndex());
 				}
 			}
 		}
 	}
-
+	private int getProbableDirection(){
+		//the worst ai ever
+		int tX = player.getIndex()[0]-xIndex;
+		int tY = player.getIndex()[1]-yIndex;
+		//0a, 1s, 2d,3e,4w,5q
+		if((tY==0) && (tX >0)){
+			return 1;//s
+		} else if((tY==0) && (tX <0)){
+			return 4;//w
+		}else if((tY>0) && (tX >0)){
+			return 5;//d
+		}else if((tY>0) && (tX <0)){
+			return 3;//a
+		}else if((tY<0) && (tX <0)){
+			return 2;//q
+		}else if((tY<0) && (tX >0)){
+			return 0;//e
+		}
+		return 6;
+	}
 	private boolean checkDestination() {
 		//System.out.println(xIndex + " " + yIndex);
 		if((xIndex>0) && (yIndex> 0) &&(xIndex<(Map.HEXESACROSS)) &&(yIndex<(Map.HEXESDOWN))){

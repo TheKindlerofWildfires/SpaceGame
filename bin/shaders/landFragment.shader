@@ -9,5 +9,5 @@ uniform sampler2D myTextureSampler;
 
 void main(void){
 	vec3 color = vec3(1,1,1);
-	out_Color = vec4(color , 1.0);
+	out_Color = vec4(colour , 1.0);
 }
