@@ -5,13 +5,14 @@ import entity.Entity;
 
 public class Mage extends Entity{
 	public Mage(){
-		entityTag = "Mage"; //Not that dangerous
+		entityTag = "Mage"; //BIGGEST CLASS
+		entityLevel = 1;
 		entityHealth = 50;
 		entityArmor = 10;
 		entityWeaponTag = "null";
 		entityWeaponDamage = 5;
 		entityWeaponPriority = 5;
-		entityArmorTag = "null"; //Reflect 1/10th of damage taken
+		entityArmorTag = "null"; 
 		entityNatAbility = "mage";
 		entitySpeed = 2;
 		entityRange = 3;

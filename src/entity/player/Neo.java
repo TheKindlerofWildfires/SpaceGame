@@ -6,6 +6,7 @@ import entity.Entity;
 public class Neo extends Entity{
 	public Neo(){
 		entityTag = "Neo";
+		entityLevel = 1;
 		entityHealth = 100;
 		entitySanity = 100;
 		entityArmor = 9;

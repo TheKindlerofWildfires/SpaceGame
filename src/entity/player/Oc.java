@@ -6,6 +6,7 @@ import entity.Entity;
 public class Oc extends Entity{
 	public Oc(){
 		entityTag = "Neo";
+		entityLevel = 1;
 		entityHealth = 80;
 		entitySanity = 50;
 		entityArmor = 8;

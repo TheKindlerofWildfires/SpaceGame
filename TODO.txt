@@ -1,14 +1,11 @@
 TO DO:
-Shaders:
-Elevation:
-Climate:
+Textures:
 Select screen:
 Status bars:
-Inventory:
 Reseting land:
 Zoom function:
 Camera following:
 Contact alpha testers:
 
-
-Makes some enemies to fight --> looks like fires while held down;
+Shaders on monsters
+THE SIMPLEST AI EVER

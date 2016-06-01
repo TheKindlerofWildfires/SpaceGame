@@ -6,6 +6,7 @@ import entity.Entity;
 public class Tank extends Entity{
 	public Tank(){
 		entityTag = "Tank"; //Not that dangerous
+		entityLevel = 1;
 		entityHealth = 300;
 		entityArmor = 20;
 		entityWeaponTag = "null";

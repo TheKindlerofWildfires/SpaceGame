@@ -6,6 +6,7 @@ import entity.Entity;
 public class Sniper extends Entity{
 	public Sniper(){
 		entityTag = "Sniper"; 
+		entityLevel = 1;
 		entityHealth = 50;
 		entityArmor = 8;
 		entityWeaponTag = "null";

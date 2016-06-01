@@ -6,6 +6,7 @@ import entity.Entity;
 public class God extends Entity{
 	public God(){
 		entityTag = "God";
+		entityLevel = 1;
 		entityHealth = 10000;
 		entitySanity = 10000;
 		entityArmor = 1000;

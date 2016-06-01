@@ -6,6 +6,7 @@ import entity.Entity;
 public class Juggernaut extends Entity{
 	public Juggernaut(){
 		entityTag = "Juggernaut";
+		entityLevel = 1;
 		entityHealth = 200;
 		entityArmor = 9;
 		entityWeaponTag = "null";
