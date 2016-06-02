@@ -56,6 +56,6 @@ void main(void){
 	}else{
 		color = vec3(0,0,1);
 	}
-	gl_Position = vec4(position.x+pos.x+xOfset,position.y+pos.y-yOfset,position.z+pos.z, 1.0);
+	gl_Position = vec4(position.x*apothem+pos.x+xOfset,position.y*apothem+pos.y-yOfset,position.z*apothem+pos.z, 1.0);
 	colour = color;
 }

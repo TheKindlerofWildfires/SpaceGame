@@ -156,6 +156,14 @@ public class Map {
 		}
 	}
 
+	public void zoom(float zoomFactor){
+		ShaderManager.chunkShader.start();
+		ShaderManager.chunkShader.setUniform1f("side", EntityManager.side*zoomFactor);
+		ShaderManager.chunkShader.setUniform1f("apothem", EntityManager.APOTHEM*zoomFactor);
+		ShaderManager.chunkShader.setUniform3f("pos", new Vector3f(-zoomFactor, zoomFactor, 0));
+		ShaderManager.chunkShader.stop();
+	}
+	
 	public void render() {
 		//ShaderManager.landShader.start();
 		//glBindVertexArray(vaoID);
@@ -164,6 +172,8 @@ public class Map {
 		//glDisableVertexAttribArray(0);
 		//glBindVertexArray(0);
 		//ShaderManager.landShader.stop();
+		
+
 		for (int x = 0; x < chunks.length; x++) {
 			for (Chunk chunk : chunks[x]) {
 				chunk.setShaderUniforms();

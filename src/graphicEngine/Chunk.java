@@ -98,9 +98,7 @@ public class Chunk {
 		glBindBuffer(GL_ARRAY_BUFFER, bufferID);
 		glBindBuffer(GL_TEXTURE_BUFFER, bufferID);
 		IntBuffer data = Utilities.createIntBuffer(land);
-		for(int i=0;i<16*16;i++){
-			System.out.println(data.get(i));
-		}
+		
 		glBufferSubData(GL_ARRAY_BUFFER, 0, data);
 		glBindTexture(GL_TEXTURE_BUFFER, textureID);
 		glTexBuffer(GL_TEXTURE_BUFFER, GL_R32UI, bufferID);
