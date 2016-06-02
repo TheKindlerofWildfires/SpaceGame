@@ -37,19 +37,19 @@ public class EntityManager {
 		map = new Map();
 		world = new WorldType();
 		player = new Player(map);
-		monster = new MonsterV1(map);
+		//monster = new MonsterV1(map);
 		//	player.position.y = -0.01f;
 		//	player.position.x = 0.0f;
 	}
 
 	public void update() {
 		player.update();
-		monster.update();
+		//monster.update();
 		//map.update();
 	}
 
 	public void render() {
-		monster.render();
+	//	monster.render();
 		player.render();
 		map.render();
 	}

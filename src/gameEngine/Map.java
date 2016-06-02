@@ -1,18 +1,32 @@
 package gameEngine;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL13.*;
-import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.*;
-import static org.lwjgl.opengl.GL31.*;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_BORDER_COLOR;
+import static org.lwjgl.opengl.GL11.GL_TRIANGLE_FAN;
+import static org.lwjgl.opengl.GL11.glBindTexture;
+import static org.lwjgl.opengl.GL11.glGenTextures;
+import static org.lwjgl.opengl.GL11.glTexParameterfv;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE5;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
+import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
+import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
+import static org.lwjgl.opengl.GL15.glBindBuffer;
+import static org.lwjgl.opengl.GL15.glBufferData;
+import static org.lwjgl.opengl.GL15.glGenBuffers;
+import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
+import static org.lwjgl.opengl.GL30.GL_R32UI;
+import static org.lwjgl.opengl.GL30.glBindVertexArray;
+import static org.lwjgl.opengl.GL31.GL_TEXTURE_BUFFER;
+import static org.lwjgl.opengl.GL31.glDrawArraysInstanced;
+import static org.lwjgl.opengl.GL31.glTexBuffer;
 
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Random;
 
+import graphicEngine.Chunk;
 import graphicEngine.ShaderManager;
-import graphicEngine.TextureManager;
 import graphicEngine.VertexArrayObject;
 import maths.Distance;
 import maths.Utilities;
@@ -33,14 +47,14 @@ public class Map {
 	public static String worldType;
 	public int seedCount;
 	public int landCount;
-
+	
 	Distance distance;
 	ShaderManager shaderManager;
 
 	public static Random rng = new Random();
 
-	public VertexArrayObject vao = new VertexArrayObject(EntityManager.vertices, EntityManager.indices);
-	public int vaoID = vao.getVaoID();
+	public static VertexArrayObject vao = new VertexArrayObject(EntityManager.vertices, EntityManager.indices);
+	public static int vaoID = vao.getVaoID();
 
 	public static final String[] maps = { "fractal", "disk", "soft", "stand", "trig", "quad", "grit", "exp", "ln",
 			"rng", "arm" };
@@ -51,6 +65,8 @@ public class Map {
 	public int[][] seeds;
 	public int[] seed = new int[2];
 
+	private int zoomLevel = 1;
+	
 	public Map() {
 		distance = new Distance();
 		long seed = rng.nextLong();
@@ -59,7 +75,41 @@ public class Map {
 		initializeMap();
 		initShader();
 	}
+	
+	public void zoom(int newZoom){
+		zoomLevel=newZoom;
+		ShaderManager.landShader.start();
+		ShaderManager.landShader.setUniform1i("hexesAcross", HEXESACROSS/zoomLevel);
+		ShaderManager.landShader.setUniform1f("side", EntityManager.side*zoomLevel);
+		ShaderManager.landShader.setUniform1f("apothem", EntityManager.APOTHEM*zoomLevel);
+		ShaderManager.landShader.stop();
 
+	}
+
+	private void initChunkShader(){
+		ShaderManager.chunkShader.start();
+		ShaderManager.chunkShader.setUniform1f("side", EntityManager.side);
+		ShaderManager.chunkShader.setUniform1i("chunkSize", Chunk.CHUNKSIZE);
+		ShaderManager.chunkShader.setUniform1f("apothem", EntityManager.APOTHEM);
+		ShaderManager.chunkShader.setUniform1f("aspect", EntityManager.aspectScaler);
+		int[] land = new int[Chunk.CHUNKSIZE * Chunk.CHUNKSIZE];
+		int bufferID = glGenBuffers();
+
+		glBindBuffer(GL_ARRAY_BUFFER, bufferID);
+		glBindBuffer(GL_TEXTURE_BUFFER, bufferID);
+		IntBuffer data = Utilities.createIntBuffer(land);
+		glBufferData(GL_ARRAY_BUFFER, data, GL_STATIC_DRAW);
+
+		int textureID = glGenTextures();
+		glBindTexture(GL_TEXTURE_BUFFER, textureID);
+		glTexBuffer(GL_TEXTURE_BUFFER, GL_R32UI, bufferID);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+		glActiveTexture(GL_TEXTURE5);
+		glBindTexture(GL_TEXTURE_BUFFER, textureID);
+		ShaderManager.chunkShader.stop();
+	}
+	
 	private void initShader() {
 		ShaderManager.landShader.start();
 		ShaderManager.landShader.setUniform1f("side", EntityManager.side);
@@ -90,8 +140,7 @@ public class Map {
 
 		glActiveTexture(GL_TEXTURE5);
 		glBindTexture(GL_TEXTURE_BUFFER, textureID);
-		float color[] = { 1.0f, 0.0f, 0.0f, 1.0f };
-		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, Utilities.createFloatBuffer(color));
+		
 	}
 
 	/*@Deprecated
@@ -146,13 +195,11 @@ public class Map {
 
 	public void render() {
 		ShaderManager.landShader.start();
-		TextureManager.texture.start();
 		glBindVertexArray(vaoID);
 		glEnableVertexAttribArray(0);
 		glDrawArraysInstanced(GL_TRIANGLE_FAN, 0, 6, HEXESACROSS * HEXESDOWN);
 		glDisableVertexAttribArray(0);
 		glBindVertexArray(0);
-		TextureManager.texture.stop();
 		ShaderManager.landShader.stop();
 	}
 
@@ -328,6 +375,5 @@ public class Map {
 			System.out.println("Bad map gen");
 			//reload me here
 		}
-
 	}
 }

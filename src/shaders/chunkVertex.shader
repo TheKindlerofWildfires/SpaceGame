@@ -8,12 +8,14 @@ uniform vec3 pos;
 uniform float side;
 uniform float apothem;
 uniform float aspect;
-uniform int hexesAcross;
+uniform int chunkSize;
+uniform int chunkX;
+uniform int chunkY;
 uniform usamplerBuffer land;
 
 void main(void){
-	int yPos = gl_InstanceID/hexesAcross;
-	int xPos = gl_InstanceID%hexesAcross;
+	int yPos = gl_InstanceID/chunkSize + chunkY;
+	int xPos = gl_InstanceID%chunkSize + chunkX;
 	float xOfset = 1.2*(xPos*3*side/2);
 	float yOfset;
 	if(xPos%2==0){
