@@ -1,11 +1,7 @@
 package gameEngine;
 
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_BORDER_COLOR;
-import static org.lwjgl.opengl.GL11.GL_TRIANGLE_FAN;
 import static org.lwjgl.opengl.GL11.glBindTexture;
 import static org.lwjgl.opengl.GL11.glGenTextures;
-import static org.lwjgl.opengl.GL11.glTexParameterfv;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE5;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
@@ -13,12 +9,8 @@ import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
 import static org.lwjgl.opengl.GL15.glBindBuffer;
 import static org.lwjgl.opengl.GL15.glBufferData;
 import static org.lwjgl.opengl.GL15.glGenBuffers;
-import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
-import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL30.GL_R32UI;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL31.GL_TEXTURE_BUFFER;
-import static org.lwjgl.opengl.GL31.glDrawArraysInstanced;
 import static org.lwjgl.opengl.GL31.glTexBuffer;
 
 import java.nio.IntBuffer;
@@ -31,11 +23,10 @@ import graphicEngine.VertexArrayObject;
 import maths.Distance;
 import maths.Utilities;
 import maths.Vector3f;
-//import classesSimonDoesntLike.Hexagon;
 
 public class Map {
-	public static final int HEXESACROSS = 160;
-	public static final int HEXESDOWN = 104;
+	public static final int HEXESACROSS = 192; //192
+	public static final int HEXESDOWN = 96; //96
 	public static final int MOISTURESCALER = 12;
 	public static final int ELEVATIONSCALER = 17;
 
@@ -47,11 +38,13 @@ public class Map {
 	public static String worldType;
 	public int seedCount;
 	public int landCount;
-	
+
 	Distance distance;
 	ShaderManager shaderManager;
 
 	public static Random rng = new Random();
+
+	public Chunk[][] chunks = new Chunk[HEXESACROSS / Chunk.CHUNKSIZE][HEXESDOWN / Chunk.CHUNKSIZE];
 
 	public static VertexArrayObject vao = new VertexArrayObject(EntityManager.vertices, EntityManager.indices);
 	public static int vaoID = vao.getVaoID();
@@ -65,51 +58,21 @@ public class Map {
 	public int[][] seeds;
 	public int[] seed = new int[2];
 
-	private int zoomLevel = 1;
-	
 	public Map() {
 		distance = new Distance();
 		long seed = rng.nextLong();
 		rng.setSeed(seed);
 		System.out.println("Random Seed is " + seed);
 		initializeMap();
-		initShader();
-	}
-	
-	public void zoom(int newZoom){
-		zoomLevel=newZoom;
-		ShaderManager.landShader.start();
-		ShaderManager.landShader.setUniform1i("hexesAcross", HEXESACROSS/zoomLevel);
-		ShaderManager.landShader.setUniform1f("side", EntityManager.side*zoomLevel);
-		ShaderManager.landShader.setUniform1f("apothem", EntityManager.APOTHEM*zoomLevel);
-		ShaderManager.landShader.stop();
-
+		Chunk.initChunkShader();
+		for (int x = 0; x < chunks.length; x++) {
+			for (int y = 0; y < chunks[0].length; y++) {
+				chunks[x][y] = new Chunk(land, x * Chunk.CHUNKSIZE, y * Chunk.CHUNKSIZE);
+			}
+		}
 	}
 
-	private void initChunkShader(){
-		ShaderManager.chunkShader.start();
-		ShaderManager.chunkShader.setUniform1f("side", EntityManager.side);
-		ShaderManager.chunkShader.setUniform1i("chunkSize", Chunk.CHUNKSIZE);
-		ShaderManager.chunkShader.setUniform1f("apothem", EntityManager.APOTHEM);
-		ShaderManager.chunkShader.setUniform1f("aspect", EntityManager.aspectScaler);
-		int[] land = new int[Chunk.CHUNKSIZE * Chunk.CHUNKSIZE];
-		int bufferID = glGenBuffers();
-
-		glBindBuffer(GL_ARRAY_BUFFER, bufferID);
-		glBindBuffer(GL_TEXTURE_BUFFER, bufferID);
-		IntBuffer data = Utilities.createIntBuffer(land);
-		glBufferData(GL_ARRAY_BUFFER, data, GL_STATIC_DRAW);
-
-		int textureID = glGenTextures();
-		glBindTexture(GL_TEXTURE_BUFFER, textureID);
-		glTexBuffer(GL_TEXTURE_BUFFER, GL_R32UI, bufferID);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-		glActiveTexture(GL_TEXTURE5);
-		glBindTexture(GL_TEXTURE_BUFFER, textureID);
-		ShaderManager.chunkShader.stop();
-	}
-	
+	@Deprecated
 	private void initShader() {
 		ShaderManager.landShader.start();
 		ShaderManager.landShader.setUniform1f("side", EntityManager.side);
@@ -140,7 +103,7 @@ public class Map {
 
 		glActiveTexture(GL_TEXTURE5);
 		glBindTexture(GL_TEXTURE_BUFFER, textureID);
-		
+
 	}
 
 	/*@Deprecated
@@ -194,13 +157,20 @@ public class Map {
 	}
 
 	public void render() {
-		ShaderManager.landShader.start();
-		glBindVertexArray(vaoID);
-		glEnableVertexAttribArray(0);
-		glDrawArraysInstanced(GL_TRIANGLE_FAN, 0, 6, HEXESACROSS * HEXESDOWN);
-		glDisableVertexAttribArray(0);
-		glBindVertexArray(0);
-		ShaderManager.landShader.stop();
+		//ShaderManager.landShader.start();
+		//glBindVertexArray(vaoID);
+		//glEnableVertexAttribArray(0);
+		//glDrawArraysInstanced(GL_TRIANGLE_FAN, 0, 6, HEXESACROSS * HEXESDOWN);
+		//glDisableVertexAttribArray(0);
+		//glBindVertexArray(0);
+		//ShaderManager.landShader.stop();
+		for (int x = 0; x < chunks.length; x++) {
+			for (Chunk chunk : chunks[x]) {
+				chunk.setShaderUniforms();
+				chunk.render();
+			}
+		}
+
 	}
 
 	private void initializeMap() {

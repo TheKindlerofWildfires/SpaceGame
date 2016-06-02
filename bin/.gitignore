@@ -1,7 +1,5 @@
-/combat/
-/entity/
 /Ability list
-/shaders/
 /gameEngine/
-/GUI/
 /graphicEngine/
+/shaders/
+/entity/
