@@ -12,7 +12,7 @@ public class EntityManager {
 	public static MonsterV1 monster;
 	public WorldType world;
 
-	public static final float APOTHEM = 0.005f;
+	public static final float APOTHEM = 0.005f; //0.005
 
 	public static final float sqrt3 = 1.7320508075688772f;
 	public static final float aspectScaler = 16 / 9f;
