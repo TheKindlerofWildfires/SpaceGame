@@ -45,7 +45,7 @@ public class EntityManager {
 	public void update() {
 		player.update();
 		//monster.update();
-		//map.update();
+		map.update();
 	}
 
 	public void render() {
