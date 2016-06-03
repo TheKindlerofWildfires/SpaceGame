@@ -184,8 +184,15 @@ public class Player {
 				} else if (KeyboardInput.isKeyDown(GLFW_KEY_R)) {
 					System.out.println(Map.elevation[xIndex][yIndex]);
 					lastMove = Tick.getUpdateTick();
-					MonsterV1 monster = EntityManager.monster;
-					m.attackHandler(self, target, index, monster.getIndex());
+					//MonsterV1 monster = EntityManager.monster;
+					//m.attackHandler(self, target, index, monster.getIndex());
+				} else if(KeyboardInput.isKeyDown(GLFW_KEY_I)){
+					lastMove = Tick.getUpdateTick();
+					for(int i = 0; i<inventory.length;i++){
+						if (inventory[i]!= null){
+							System.out.print(inventory[i]);
+						}
+					}
 				}
 			}
 		}

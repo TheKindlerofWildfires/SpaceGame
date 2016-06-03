@@ -20,8 +20,8 @@ import maths.Vector3f;
 //import classesSimonDoesntLike.Hexagon;
 
 public class Map {
-	public static final int HEXESACROSS = 160;
-	public static final int HEXESDOWN = 104;
+	public static final int HEXESACROSS = 193;
+	public static final int HEXESDOWN = 94;
 	public static final int MOISTURESCALER = 12;
 	public static final int ELEVATIONSCALER = 17;
 
@@ -42,12 +42,12 @@ public class Map {
 	public VertexArrayObject vao = new VertexArrayObject(EntityManager.vertices, EntityManager.indices);
 	public int vaoID = vao.getVaoID();
 
-	public static final String[] maps = { "fractal", "disk", "soft", "stand", "trig", "quad", "grit", "exp", "ln",
-			"rng", "arm" };
+	public static final String[] maps = { "fractal", "soft", "stand", "trig", "quad"};
+	public static final String[] splots = {"grit", "exp", "ln", "rng", "arm", "disk"};//there are more
 	public static final String[] worldTypes = { "telilic", "sapric", "worlic" };
 	public int[][] land = new int[HEXESACROSS][HEXESDOWN];
-	public static int[][] elevation = new int[HEXESACROSS][HEXESDOWN];
-	public static int[][] moisture = new int[HEXESACROSS][HEXESDOWN];
+	public static int[][] elevation = new int[HEXESACROSS+1][HEXESDOWN+1];
+	public static int[][] moisture = new int[HEXESACROSS+1][HEXESDOWN+1];
 	public int[][] seeds;
 	public int[] seed = new int[2];
 
@@ -155,10 +155,119 @@ public class Map {
 		TextureManager.texture.stop();
 		ShaderManager.landShader.stop();
 	}
+	private double getP(String genType, double p, int iter){
+		//pro tip, these are not all to gen land, some could gen other effects	
+		switch (genType) {
+		case "fractal":
+			p = .3 / (Math.log(p + 2));
+			break;
+		case "soft": //
+			p = 0.21 / p;
+			break;
+		case "stand":
+			p = (p + 1) / (p + 3.4);
+			break;
+		case "disk":
+			p = 0.97 * p;
+			break;
+		case "trig":
+			p = Math.cos(1.443 * p);
+			break;
+		case "quad":
+			if (p >= 1) {
+				p = 0.15;
+			} else {
+				p = Math.pow(p, 2) + 2 * p;
+			}
+			break;
+		case "it":
+			p -= 0.02;
+			break;
+		case "lin":
+			p -= p * 0.02;
+			break;
+		case "atic":
+			p -= Math.pow(p, 2) * 0.05;
+			break;
+		case "grit":
+			p -= Math.sin(p / 4) / 9;
+			break;
+		case "exp":
+			p -= Math.pow(Math.E, p / 50) - Math.pow(Math.E, 1 / 49);
+			break;
+		case "ln":
+			p -= Math.log(p + 2) / 75;
+			break;
+		case "root":
+			p -= Math.sqrt(p) - 0.6;
+			break;
+		case "rng":
+			p -= (rng.nextDouble() + 1) / 100;
+			break;
+		case "arm":
+			p -= (p / (p + 50));
+			break;
+		case "invE":
+			p = (100 / (Math.pow(Math.E, iter / 400)) * (rng.nextDouble() + 1) / 2);
+			break;
+		case "inv":
+			p = ((5000 / iter) - +(Math.abs(rng.nextDouble())));
+			break;
+		case "invL":
+			p = ((10 / Math.log(iter)) - (Math.abs(rng.nextDouble())));
+			break;
+		case "invT":
+			System.err.println("invalid map type");
+			System.exit(-1);
+			p = ((Math.pow(Math.cos(iter) * (1.9), 2)) - (1 * Math.abs(rng.nextDouble())) + 0.1);
+			break;
+		default:
+			System.err.println("invalid map type");
+			System.exit(-1);
+			p = 0;
+		}
+		
+		return p;
+	}
+	private void scatter(String type, String genType, int[] seed){
+		
+		ArrayList<int[]> outerLand = new ArrayList<int[]>();
+		
+		for (int i = 0; i < seedCount; i++) {
+			outerLand.add(seed);
+			land[seed[0]][seed[1]] = SEED;
+		}
+		double p = 1;
+		int iter = 0;
+		while (outerLand.size() != 0 && p != 0) {
+			ArrayList<int[]> newLand = new ArrayList<int[]>();
+			for (int i = 0; i < outerLand.size(); i++) {
+				int[][] neighbors = getNeighborIndices(outerLand.get(i)[0], outerLand.get(i)[1]);
+				for (int j = 0; j < neighbors.length; j++) {
+					
+					if (land[neighbors[j][0]][neighbors[j][1]] != LAND
+							&& land[neighbors[j][0]][neighbors[j][1]] != SEED) {
+						if (rng.nextDouble() <= p) {
+							land[neighbors[j][0]][neighbors[j][1]] = LAND;	
+							moisture[neighbors[j][0]][neighbors[j][1]] = (int) (p*(20 + 5*rng.nextDouble()));
+							elevation[neighbors[j][0]][neighbors[j][1]] = (int) (p*(20+ 5*rng.nextDouble()));
+							iter++;
+							newLand.add(neighbors[j]);
+						}
+					}
+				}
+			}
+			outerLand.clear();
+			outerLand.addAll(newLand);
+			newLand.clear();
+			p = getP(genType, p, iter);	
 
+				
+			//System.out.println(p*100);
+		}
+	}
 	private void initializeMap() {
 		//INIT MAPTYPE ETC
-		//mapType = "invT";
 		mapType = maps[rng.nextInt(maps.length)];
 		worldType = worldTypes[rng.nextInt(worldTypes.length)];
 		seedCount = 1;
@@ -177,17 +286,14 @@ public class Map {
 				moisture[x][y] = 0;
 			}
 		}
-
+		
 		// GEN LAND
-		System.out.println("Genning Land");
-		ArrayList<int[]> outerLand = new ArrayList<int[]>();
 		for (int i = 0; i < seedCount; i++) {
 			seed[0] = seeds[i][0];
 			seed[1] = seeds[i][1];
-			outerLand.add(seed);
-			land[seed[0]][seed[1]] = SEED;
 		}
-
+		System.out.println("Genning Land");
+		scatter("land", mapType, seed);
 		//VALUE FOR TROUBLESHOOTING--DONT DELETE
 		/*int[][] neighbors = getNeighborIndices(seeds[0][0], seeds[0][1]);
 		for (int j = 0; j < neighbors.length; j++) {
@@ -196,100 +302,10 @@ public class Map {
 			}
 		}*/
 
-		double p = 1;
-		int iter = 0;
-		while (outerLand.size() != 0 && p != 0) {
-			ArrayList<int[]> newLand = new ArrayList<int[]>();
-			for (int i = 0; i < outerLand.size(); i++) {
-				int[][] neighbors = getNeighborIndices(outerLand.get(i)[0], outerLand.get(i)[1]);
-				for (int j = 0; j < neighbors.length; j++) {
-					if (land[neighbors[j][0]][neighbors[j][1]] != LAND
-							&& land[neighbors[j][0]][neighbors[j][1]] != SEED) {
-						if (rng.nextDouble() <= p) {
-							land[neighbors[j][0]][neighbors[j][1]] = LAND;
-							//System.out.println(iter);
-							iter++;
-							newLand.add(neighbors[j]);
-						}
-					}
-				}
-			}
-			outerLand.clear();
-			outerLand.addAll(newLand);
-			newLand.clear();
-			//pro tip, these are not all to gen land, some gen other effects
-			switch (mapType) {
-			case "fractal":
-				p = .3 / (Math.log(p + 2));
-				break;
-			case "soft": //
-				p = 0.21 / p;
-				break;
-			case "stand":
-				p = (p + 1) / (p + 3.4);
-				break;
-			case "disk":
-				p = 0.97 * p;
-				break;
-			case "trig":
-				p = Math.cos(1.443 * p);
-				break;
-			case "quad":
-				if (p >= 1) {
-					p = 0.15;
-				} else {
-					p = Math.pow(p, 2) + 2 * p;
-				}
-				break;
-			case "it":
-				p -= 0.02;
-				break;
-			case "lin":
-				p -= p * 0.02;
-				break;
-			case "atic":
-				p -= Math.pow(p, 2) * 0.05;
-				break;
-			case "grit":
-				p -= Math.sin(p / 4) / 9;
-				break;
-			case "exp":
-				p -= Math.pow(Math.E, p / 50) - Math.pow(Math.E, 1 / 49);
-				break;
-			case "ln":
-				p -= Math.log(p + 2) / 75;
-				break;
-			case "root":
-				p -= Math.sqrt(p) - 0.6;
-				break;
-			case "rng":
-				p -= (rng.nextDouble() + 1) / 100;
-				break;
-			case "arm":
-				p -= (p / (p + 50));
-				break;
-			case "invE":
-				p = (100 / (Math.pow(Math.E, iter / 400)) * (rng.nextDouble() + 1) / 2);
-				break;
-			case "inv":
-				p = ((5000 / iter) - +(Math.abs(rng.nextDouble())));
-				break;
-			case "invL":
-				p = ((10 / Math.log(iter)) - (Math.abs(rng.nextDouble())));
-				break;
-			case "invT":
-				System.err.println("invalid map type");
-				System.exit(-1);
-				p = ((Math.pow(Math.cos(iter) * (1.9), 2)) - (1 * Math.abs(rng.nextDouble())) + 0.1);
-				break;
-			default:
-				System.err.println("invalid map type");
-				System.exit(-1);
-				p = 0;
-			}
-		}
+
 		System.out.println("Map init complete");
 		System.out.println(mapType);
+		/*
 		int[] thisCord = new int[2];
 		for (int i = 0; i < HEXESACROSS; i++) {
 			for (int j = 0; j < HEXESDOWN; j++) {
@@ -320,7 +336,18 @@ public class Map {
 				}
 			}
 		}
+		*/
 		//System.out.println(landCount);
+		for (int i = 0; i < HEXESACROSS; i++) {
+			for (int j = 0; j < HEXESDOWN; j++) {
+				
+				if(land[i][j] == LAND){
+				land[i][j] = Biome.getBiome(elevation[i][j], worldType, moisture[i][j]);
+				//System.out.println(elevation[i][j]);
+				//System.out.println(moisture[i][j]);
+				}
+			}
+		}
 		if (landCount < (HEXESDOWN / 2) * (HEXESACROSS / 2) || landCount > (HEXESDOWN - 10) * (HEXESACROSS - 10)) {
 			System.out.println(landCount);
 			System.out.println((HEXESDOWN / 2) * (HEXESACROSS / 2));

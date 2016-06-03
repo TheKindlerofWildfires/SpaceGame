@@ -22,8 +22,8 @@ public class Biome {
 	}
 	public static int getBiome(int elevation, String worldType, int moisture){
 		int biome = 100;
-		double eP = elevation/(double)Map.HEXESACROSS;
-		double mP = 2*moisture/(double)Map.HEXESACROSS;
+		double eP = 5*elevation/(double)Map.HEXESACROSS;
+		double mP = 10*moisture/(double)Map.HEXESACROSS;
 		//System.out.println(mP);
 		double chance = Math.abs(rng.nextDouble());
 		while (chance >0.6 || chance <0.4){
