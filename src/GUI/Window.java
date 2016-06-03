@@ -43,7 +43,6 @@ public class Window implements Runnable {
 	private GLFWCursorPosCallback cursorCallback;
 
 	public Long window;
-
 	EntityManager entityManager;
 	TickManager tickManager;
 
