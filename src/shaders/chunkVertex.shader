@@ -8,12 +8,14 @@ uniform vec3 pos;
 uniform float side;
 uniform float apothem;
 uniform float aspect;
-uniform int hexesAcross;
+uniform int chunkSize;
+uniform int chunkX;
+uniform int chunkY;
 uniform usamplerBuffer land;
 
 void main(void){
-	int yPos = gl_InstanceID/hexesAcross;
-	int xPos = gl_InstanceID%hexesAcross;
+	int yPos = gl_InstanceID/chunkSize + chunkY;
+	int xPos = gl_InstanceID%chunkSize + chunkX;
 	float xOfset = 1.2*(xPos*3*side/2);
 	float yOfset;
 	if(xPos%2==0){
@@ -54,6 +56,6 @@ void main(void){
 	}else{
 		color = vec3(0,0,1);
 	}
-	gl_Position = vec4(position.x+pos.x+xOfset,position.y+pos.y-yOfset,position.z+pos.z, 1.0);
+	gl_Position = vec4(position.x*apothem+pos.x+xOfset,position.y*apothem+pos.y-yOfset,position.z*apothem+pos.z, 1.0);
 	colour = color;
 }

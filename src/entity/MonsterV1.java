@@ -70,14 +70,7 @@ public class MonsterV1 {
 
 	public void render() {
 		if (dead()) {
-			ShaderManager.deathShader.start();
-			ShaderManager.deathShader.setUniform3f("pos", this.position);
-			glBindVertexArray(this.vaoID);
-			glEnableVertexAttribArray(0);
-			glDrawElements(GL_TRIANGLE_FAN, 7, GL_UNSIGNED_BYTE, 0);
-			glDisableVertexAttribArray(0);
-			glBindVertexArray(0);
-			ShaderManager.deathShader.stop();
+			
 		} else {
 			ShaderManager.monsterShader.start();
 			ShaderManager.monsterShader.setUniform3f("pos", this.position);

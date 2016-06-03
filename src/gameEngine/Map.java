@@ -1,27 +1,35 @@
 package gameEngine;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL13.*;
-import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.*;
-import static org.lwjgl.opengl.GL31.*;
+import static org.lwjgl.opengl.GL11.glBindTexture;
+import static org.lwjgl.opengl.GL11.glGenTextures;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE5;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
+import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
+import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
+import static org.lwjgl.opengl.GL15.glBindBuffer;
+import static org.lwjgl.opengl.GL15.glBufferData;
+import static org.lwjgl.opengl.GL15.glGenBuffers;
+import static org.lwjgl.opengl.GL30.GL_R32UI;
+import static org.lwjgl.opengl.GL31.GL_TEXTURE_BUFFER;
+import static org.lwjgl.opengl.GL31.glTexBuffer;
+import static org.lwjgl.glfw.GLFW.*;
 
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Random;
 
+import GUI.KeyboardInput;
+import graphicEngine.Chunk;
 import graphicEngine.ShaderManager;
-import graphicEngine.TextureManager;
 import graphicEngine.VertexArrayObject;
 import maths.Distance;
 import maths.Utilities;
 import maths.Vector3f;
-//import classesSimonDoesntLike.Hexagon;
 
 public class Map {
 	public static final int HEXESACROSS = 193;
 	public static final int HEXESDOWN = 94;
+
 	public static final int MOISTURESCALER = 12;
 	public static final int ELEVATIONSCALER = 17;
 
@@ -39,8 +47,10 @@ public class Map {
 
 	public static Random rng = new Random();
 
-	public VertexArrayObject vao = new VertexArrayObject(EntityManager.vertices, EntityManager.indices);
-	public int vaoID = vao.getVaoID();
+	public Chunk[][] chunks = new Chunk[HEXESACROSS / Chunk.CHUNKSIZE][HEXESDOWN / Chunk.CHUNKSIZE];
+
+	public static VertexArrayObject vao = new VertexArrayObject(EntityManager.vertices, EntityManager.indices);
+	public static int vaoID = vao.getVaoID();
 
 	public static final String[] maps = { "fractal", "soft", "stand", "trig", "quad"};
 	public static final String[] splots = {"grit", "exp", "ln", "rng", "arm", "disk"};//there are more
@@ -51,15 +61,25 @@ public class Map {
 	public int[][] seeds;
 	public int[] seed = new int[2];
 
+	private float offsetX = 0;
+	private float offsetY = 0;
+	private float zoomFactor;
+
 	public Map() {
 		distance = new Distance();
 		long seed = rng.nextLong();
 		rng.setSeed(seed);
 		System.out.println("Random Seed is " + seed);
 		initializeMap();
-		initShader();
+		Chunk.initChunkShader();
+		for (int x = 0; x < chunks.length; x++) {
+			for (int y = 0; y < chunks[0].length; y++) {
+				chunks[x][y] = new Chunk(land, x * Chunk.CHUNKSIZE, y * Chunk.CHUNKSIZE);
+			}
+		}
 	}
 
+	@Deprecated
 	private void initShader() {
 		ShaderManager.landShader.start();
 		ShaderManager.landShader.setUniform1f("side", EntityManager.side);
@@ -90,8 +110,7 @@ public class Map {
 
 		glActiveTexture(GL_TEXTURE5);
 		glBindTexture(GL_TEXTURE_BUFFER, textureID);
-		float color[] = { 1.0f, 0.0f, 0.0f, 1.0f };
-		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, Utilities.createFloatBuffer(color));
+
 	}
 
 	/*@Deprecated
@@ -144,16 +163,66 @@ public class Map {
 		}
 	}
 
+	public void zoom(float zoomFactor) {
+		this.zoomFactor = zoomFactor;
+		ShaderManager.chunkShader.start();
+		ShaderManager.chunkShader.setUniform1f("side", EntityManager.side * zoomFactor);
+		ShaderManager.chunkShader.setUniform1f("apothem", EntityManager.APOTHEM * zoomFactor);
+		ShaderManager.chunkShader.setUniform3f("pos", new Vector3f(-zoomFactor + offsetX, zoomFactor + offsetY, 0));
+		ShaderManager.chunkShader.stop();
+	}
+
+	public void offset(float x, float y) {
+		if (offsetX + x > -zoomFactor + 1 && offsetX + x < zoomFactor - 1) {
+			offsetX += x;
+		} else {
+			//System.out.println("toofar");
+		}
+		if (offsetY + y > -zoomFactor + 1 && offsetY + y < zoomFactor - 1) {
+			offsetY += y;
+		} else {
+			//	System.out.println("toofar");
+		}
+		ShaderManager.chunkShader.start();
+		ShaderManager.chunkShader.setUniform3f("pos", new Vector3f(-zoomFactor + offsetX, zoomFactor + offsetY, 0));
+		ShaderManager.chunkShader.stop();
+	}
+
 	public void render() {
-		ShaderManager.landShader.start();
-		TextureManager.texture.start();
-		glBindVertexArray(vaoID);
-		glEnableVertexAttribArray(0);
-		glDrawArraysInstanced(GL_TRIANGLE_FAN, 0, 6, HEXESACROSS * HEXESDOWN);
-		glDisableVertexAttribArray(0);
-		glBindVertexArray(0);
-		TextureManager.texture.stop();
-		ShaderManager.landShader.stop();
+		//ShaderManager.landShader.start();
+		//glBindVertexArray(vaoID);
+		//glEnableVertexAttribArray(0);
+		//glDrawArraysInstanced(GL_TRIANGLE_FAN, 0, 6, HEXESACROSS * HEXESDOWN);
+		//glDisableVertexAttribArray(0);
+		//glBindVertexArray(0);
+		//ShaderManager.landShader.stop();
+
+		for (int x = 0; x < chunks.length; x++) {
+			for (Chunk chunk : chunks[x]) {
+				chunk.setShaderUniforms();
+				chunk.render();
+			}
+		}
+
+	}
+
+	public void update() {
+		if (KeyboardInput.isKeyDown(GLFW_KEY_RIGHT)) {
+			//	System.out.println("right");
+			offset(-.01f, 0);
+		}
+		if (KeyboardInput.isKeyDown(GLFW_KEY_LEFT)) {
+			//	System.out.println("left");
+			offset(+.01f, 0);
+		}
+		if (KeyboardInput.isKeyDown(GLFW_KEY_UP)) {
+			//	System.out.println("up");
+			offset(0, -0.01f);
+		}
+		if (KeyboardInput.isKeyDown(GLFW_KEY_DOWN)) {
+			//	System.out.println("down");
+			offset(0, +0.01f);
+		}
 	}
 	private double getP(String genType, double p, int iter){
 		//pro tip, these are not all to gen land, some could gen other effects	
@@ -355,6 +424,5 @@ public class Map {
 			System.out.println("Bad map gen");
 			//reload me here
 		}
-
 	}
 }
