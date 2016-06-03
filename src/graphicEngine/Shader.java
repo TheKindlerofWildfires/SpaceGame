@@ -10,6 +10,7 @@ import static org.lwjgl.opengl.GL20.glLinkProgram;
 import static org.lwjgl.opengl.GL20.glUniform1f;
 import static org.lwjgl.opengl.GL20.glUniform1i;
 import static org.lwjgl.opengl.GL20.glUniform1iv;
+import static org.lwjgl.opengl.GL20.glUniform2i;
 import static org.lwjgl.opengl.GL20.glUniform3f;
 import static org.lwjgl.opengl.GL20.glUseProgram;
 import static org.lwjgl.opengl.GL20.glValidateProgram;
@@ -48,6 +49,10 @@ public class Shader {
 
 	public void setUniform3f(String name, Vector3f position) {
 		glUniform3f(getUniform(name), position.x, position.y, position.z);
+	}
+	
+	public void setUniform2i(String name, int x, int y){
+		glUniform2i(getUniform(name),x,y);
 	}
 
 	public void setUniform1f(String name, float position) {

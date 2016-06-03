@@ -27,8 +27,8 @@ import maths.Utilities;
 import maths.Vector3f;
 
 public class Map {
-	public static final int HEXESACROSS = 192*3; //192
-	public static final int HEXESDOWN = 96*3; //96
+	public static final int HEXESACROSS = 192; //192
+	public static final int HEXESDOWN = 96; //96
 	public static final int MOISTURESCALER = 12;
 	public static final int ELEVATIONSCALER = 17;
 
@@ -76,7 +76,6 @@ public class Map {
 				chunks[x][y] = new Chunk(land, x * Chunk.CHUNKSIZE, y * Chunk.CHUNKSIZE);
 			}
 		}
-		zoom(1f);
 	}
 
 	@Deprecated
@@ -168,23 +167,23 @@ public class Map {
 		ShaderManager.chunkShader.start();
 		ShaderManager.chunkShader.setUniform1f("side", EntityManager.side * zoomFactor);
 		ShaderManager.chunkShader.setUniform1f("apothem", EntityManager.APOTHEM * zoomFactor);
-		ShaderManager.chunkShader.setUniform3f("pos", new Vector3f(-zoomFactor*3+offsetX, zoomFactor*3+offsetY, 0));
+		ShaderManager.chunkShader.setUniform3f("pos", new Vector3f(-zoomFactor + offsetX, zoomFactor + offsetY, 0));
 		ShaderManager.chunkShader.stop();
 	}
 
 	public void offset(float x, float y) {
-		if (offsetX + x > -zoomFactor*3+1 && offsetX + x < zoomFactor*3-1) {
+		if (offsetX + x > -zoomFactor + 1 && offsetX + x < zoomFactor - 1) {
 			offsetX += x;
 		} else {
 			//System.out.println("toofar");
 		}
-		if (offsetY + y > -zoomFactor*3+1 && offsetY + y < zoomFactor*3-1) {
+		if (offsetY + y > -zoomFactor + 1 && offsetY + y < zoomFactor - 1) {
 			offsetY += y;
 		} else {
-		//	System.out.println("toofar");
+			//	System.out.println("toofar");
 		}
 		ShaderManager.chunkShader.start();
-		ShaderManager.chunkShader.setUniform3f("pos", new Vector3f(-zoomFactor*3 + offsetX, zoomFactor*3 + offsetY, 0));
+		ShaderManager.chunkShader.setUniform3f("pos", new Vector3f(-zoomFactor + offsetX, zoomFactor + offsetY, 0));
 		ShaderManager.chunkShader.stop();
 	}
 
@@ -208,19 +207,19 @@ public class Map {
 
 	public void update() {
 		if (KeyboardInput.isKeyDown(GLFW_KEY_RIGHT)) {
-		//	System.out.println("right");
+			//	System.out.println("right");
 			offset(-.01f, 0);
 		}
 		if (KeyboardInput.isKeyDown(GLFW_KEY_LEFT)) {
-		//	System.out.println("left");
+			//	System.out.println("left");
 			offset(+.01f, 0);
 		}
 		if (KeyboardInput.isKeyDown(GLFW_KEY_UP)) {
-		//	System.out.println("up");
+			//	System.out.println("up");
 			offset(0, -0.01f);
 		}
 		if (KeyboardInput.isKeyDown(GLFW_KEY_DOWN)) {
-		//	System.out.println("down");
+			//	System.out.println("down");
 			offset(0, +0.01f);
 		}
 	}

@@ -1,5 +1,11 @@
 package gameEngine;
 
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_UP;
+
+import GUI.KeyboardInput;
 import entity.MonsterV1;
 import entity.Player;
 import graphicEngine.ShaderManager;
@@ -40,17 +46,41 @@ public class EntityManager {
 		//monster = new MonsterV1(map);
 		//	player.position.y = -0.01f;
 		//	player.position.x = 0.0f;
+		zoom(10f);
 	}
 
 	public void update() {
+		if (KeyboardInput.isKeyDown(GLFW_KEY_RIGHT)) {
+			//	System.out.println("right");
+			offset(-.01f, 0);
+		}
+		if (KeyboardInput.isKeyDown(GLFW_KEY_LEFT)) {
+			//	System.out.println("left");
+			offset(+.01f, 0);
+		}
+		if (KeyboardInput.isKeyDown(GLFW_KEY_UP)) {
+			//	System.out.println("up");
+			offset(0, -0.01f);
+		}
+		if (KeyboardInput.isKeyDown(GLFW_KEY_DOWN)) {
+			//	System.out.println("down");
+			offset(0, +0.01f);
+		}
 		player.update();
-		//monster.update();
-		map.update();
 	}
 
 	public void render() {
-	//	monster.render();
 		player.render();
 		map.render();
+	}
+	
+	public void offset(float x,float y){
+		map.offset(x, y);
+		player.offset(x,y);
+	}
+	
+	public void zoom(float zoom){
+		map.zoom(zoom);
+		player.zoom(zoom);
 	}
 }
