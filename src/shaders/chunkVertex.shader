@@ -53,6 +53,18 @@ void main(void){
 		color = vec3(0.5,1,0.1);
 	}else if(land == 12){
 		color = vec3(0.16,0.43,0.16);
+	}else if(land == 13){
+		color = vec3(0.5,1,0.25);
+	}else if(land == 14){
+		color = vec3(0.5,0.9,0.5);
+	}else if(land == 15){
+		color = vec3(0.2,1,0.5);
+	}else if(land == 16){
+		color = vec3(0.8,0.5,0.5);
+	}else if(land == 17){
+		color = vec3(1,0,0.4);
+	}else if(land == 18){
+		color = vec3(.9,0.9,0.7);
 	}else{
 		color = vec3(0,0,1);
 	}
