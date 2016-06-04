@@ -2,6 +2,8 @@ package gameEngine;
 
 import java.util.Random;
 
+import entity.Entity;
+
 public class Block {
 	public static final int UPPERFOREST = 1;
 	public static final int LOWERFOREST = 2;
@@ -126,8 +128,24 @@ public class Block {
 		case REEDS:
 			return true;
 		default:
-			System.err.println("NOT A BIOME");
+			System.err.println("NOT A BLOCK");
 			return false;
 		}
 	}
+	public static void steppedOn(int xIndex, int yIndex, Entity entity) {
+		switch(Map.land[xIndex][yIndex]){
+		case THORN_BUSH:
+			entity.setEntityHealth(entity.getEntityHealth()-(double)1/3);
+			break;
+		case FRUIT_BUSH:
+			entity.setEntityHunger(entity.getEntityHunger()+(double)1/6);
+			//drop fruit eventually
+			break;
+		case REEDS:
+			//make stealth
+			break;
+		default:
+		}
+	}
 }
+

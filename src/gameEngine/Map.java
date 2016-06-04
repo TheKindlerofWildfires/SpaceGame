@@ -58,7 +58,7 @@ public class Map {
 	public static int vaoID = vao.getVaoID();
 
 	public static final String[] maps = { "fractal", "soft", "stand", "trig",
-			"quad", "tan" };
+			"quad", "e2", "e" };
 	public static final String[] splots = { "grit", "exp", "ln", "rng", "arm",
 			"disk" };// there are more
 	public static final String[] worldTypes = { "telilic", "sapric", "worlic" };
@@ -301,8 +301,11 @@ public class Map {
 			p = ((Math.pow(Math.cos(iter) * (1.9), 2))
 					- (1 * Math.abs(rng.nextDouble())) + 0.1);
 			break;
-		case "tan":
-			p = Math.tan(p);
+		case "e":
+			p = Math.pow(Math.E,iter/-(HEXESACROSS*HEXESDOWN/2));
+			break;
+		case "e2":
+			p = 0.35*Math.pow(Math.E,iter/(HEXESACROSS*HEXESDOWN/2));
 			break;
 		default:
 			System.err.println("invalid map type");
@@ -355,7 +358,7 @@ public class Map {
 
 	private void initializeMap() {
 		// INIT MAPTYPE ETC
-		//mapType = "tan";
+		//mapType = "e2";
 		mapType = maps[rng.nextInt(maps.length)];
 		//worldType = "sapric"; //"telilic", "sapric", "worlic"
 		worldType = worldTypes[rng.nextInt(worldTypes.length)];
@@ -413,8 +416,8 @@ public class Map {
 						elev += elevation[neighbors[k][0]][neighbors[k][1]];
 						moist += moisture[neighbors[k][0]][neighbors[k][1]];
 					}
-					elev = (elev / 6 + (int) (20 * rng.nextDouble()));
-					moist = (elev / 6 + (int) (10 * rng.nextDouble()));
+					elev = (elev / 6 + (int) (4+4*rng.nextDouble()));//one day this will all be perlin
+					moist = (elev / 6 + (int) (4+4*rng.nextDouble()));
 					moisture[i][j] = moist;
 					elevation[i][j] = elev;
 					land[i][j] = Block.getBlock(elevation[i][j], worldType,
@@ -424,23 +427,20 @@ public class Map {
 			}
 		}
 
-		// System.out.println(landCount);
-		for (int i = 0; i < HEXESACROSS; i++) {
+		//does this do anything?
+		/*for (int i = 0; i < HEXESACROSS; i++) {
 			for (int j = 0; j < HEXESDOWN; j++) {
-
 				if (land[i][j] == LAND) {
 					land[i][j] = Block.getBlock(elevation[i][j], worldType,
 							moisture[i][j]);
-					// System.out.println(elevation[i][j]);
-					// System.out.println(moisture[i][j]);
 				}
 			}
-		}
+		}*/
 		if (landCount < (HEXESDOWN / 2) * (HEXESACROSS / 2)
-				|| landCount > (HEXESDOWN - 10) * (HEXESACROSS - 10)) {
+				|| landCount > (HEXESDOWN - 5) * (HEXESACROSS - 5)) {
 			System.out.println(landCount);
 			System.out.println((HEXESDOWN / 2) * (HEXESACROSS / 2));
-			System.out.println((HEXESDOWN - 10) * (HEXESACROSS - 10));
+			System.out.println((HEXESDOWN - 5) * (HEXESACROSS - 5));
 			System.out.println("Bad map gen");
 			// reload me here
 		}

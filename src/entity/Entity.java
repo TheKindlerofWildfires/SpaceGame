@@ -21,7 +21,7 @@ public abstract class Entity {
 	protected String entityNatAbility;
 	protected double entityRange;
 	protected int entityLevel;
-	protected int entityHunger;
+	protected double entityHunger;
 	public Entity(){
 		entityHunger = 100;
 	}
@@ -70,10 +70,27 @@ public abstract class Entity {
 	public int getEntityLevel() {
 		return entityLevel;
 	}
-	public int getEntityHunger() {
+	public double getEntityHunger() {
 		return entityHunger;
 	}
-	
+	/*public void initEntity(String entityTag) {
+		Entity buffer = getEntity(entityTag);
+		this.entityTag = buffer.getEntityTag();
+		this.entityCondition = getEntityCondition();
+		entityHealth;
+		entitySanity;
+		entityArmor;
+		entitySanityResist; 
+		entityWeaponTag; 
+		entityWeaponDamage;
+		entityWeaponPriority; 
+		entityArmorTag;
+		List<String> entityAbility = new ArrayList<String>(); 
+		entitySpeed; // blocks per turn
+		entityNatAbility;
+		entityRange;
+		entityLevel;
+	}*/
 	
 	public void setEntityTag(String entityTag){
 		this.entityTag = entityTag;
@@ -118,7 +135,7 @@ public abstract class Entity {
 	public void setEntityLevel(int level){
 		this.entityLevel = level;
 	}
-	public void setEntityHungar(int hunger){
+	public void setEntityHunger(double hunger){
 		this.entityHunger = hunger;
 	}
 	public static Entity getEntity(String entityTag){

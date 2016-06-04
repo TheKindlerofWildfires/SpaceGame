@@ -55,6 +55,9 @@ public class BuffHandler {
 		case "armor":
 			entity.setEntityArmor(entity.getEntityArmor()-power);
 			break;
+		case "hunger":
+			entity.setEntityHunger(entity.getEntityHunger()-power);
+			break;
 		default:
 			System.out.println("No such buff");
 		}
@@ -71,6 +74,9 @@ public class BuffHandler {
 			break;
 		case "armor":
 			entity.setEntityArmor(entity.getEntityArmor()+power);
+			break;
+		case "hunger":
+			entity.setEntityHunger(entity.getEntityHunger()+power);
 			break;
 		default:
 			System.out.println("No such buff");

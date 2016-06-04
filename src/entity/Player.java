@@ -5,6 +5,7 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 import GUI.KeyboardInput;
+import combat.BuffHandler;
 import combat.Mechanics;
 import maths.Distance;
 import maths.Vector3f;
@@ -26,6 +27,7 @@ public class Player extends Entity{
 	String[] inventory = new String[144]; //I suspect this will be objects soon 
 											//EWW STRINGS
 	private int lastMove;
+	private int hungerTime;
 
 	Distance distance = new Distance();
 
@@ -39,17 +41,16 @@ public class Player extends Entity{
 	Mechanics m = new Mechanics();
 
 	Map map;
-	Block block;
 
 	public Player(Map map, String entityTag) {
 		self = getEntity(entityTag); //really i should just find an easy way to set 
 		//all values from my txt files, but im lazy and that will change anyways
 		initPlayerShader();
 		this.map = map;
-		block = new Block();
 		inventory[0] = self.getEntityWeaponTag();
 		inventory[1] = self.getEntityArmorTag();
 		lastMove = 0;
+		hungerTime = 0;
 		xIndex = Map.HEXESACROSS / 2;
 		yIndex = Map.HEXESDOWN / 2;
 	}
@@ -84,12 +85,17 @@ public class Player extends Entity{
 			return false;
 		}
 	}
-
-	public void update() {
-
-		//System.out.println(inventory[0]);
+	public void hunger(){
 		//System.out.println(Tick.getUpdateTick());
-		//System.out.println(self.getEntitySpeed());
+		if(Tick.getSecTick()-hungerTime>50){
+			self.setEntityHunger(self.getEntityHunger()-1);
+			hungerTime = Tick.getSecTick();
+		}
+	}
+	public void update() {
+		hunger();
+		//System.out.println(self.getEntityHunger());
+		Block.steppedOn(xIndex, yIndex, self);
 		if (Tick.getUpdateTick() - lastMove > (35.2 / self.getEntitySpeed() - 5.2)) {
 			getDestination();
 
@@ -153,8 +159,8 @@ public class Player extends Entity{
 			} else if (KeyboardInput.isKeyDown(GLFW_KEY_R)) {
 				System.out.println(Map.elevation[xIndex][yIndex]);
 				lastMove = Tick.getUpdateTick();
-				Monster monster = EntityManager.monster;
-				int[] index = { xIndex, yIndex };
+				//Monster monster = EntityManager.monster;
+				//int[] index = { xIndex, yIndex };
 				//System.out.println(monster.getIndex() + "H");//thows null pointer cuz not init
 				//m.attackHandler(self, monster, index, monster.getIndex());
 			}
@@ -166,8 +172,8 @@ public class Player extends Entity{
 		//System.out.println(xIndex + " " + yIndex);
 		if ((destXIndex > 0) && (destYIndex > 0) && (destXIndex < (Map.HEXESACROSS))
 				&& (destYIndex < (Map.HEXESDOWN))) {
-			if (block.destinationTraversable(destXIndex, destYIndex)) {
-				if (Math.abs(Map.elevation[xIndex][yIndex] - Map.elevation[destXIndex][destYIndex]) < 20) {
+			if (Block.destinationTraversable(destXIndex, destYIndex)) {
+				if (Math.abs(Map.elevation[xIndex][yIndex] - Map.elevation[destXIndex][destYIndex]) < 10) {
 					return true;
 					//controls step up height
 				}

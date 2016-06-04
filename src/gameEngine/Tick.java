@@ -13,9 +13,9 @@ public abstract class Tick {
 	public static void updateTick(){
 		convertGameTime();
 		tickUpdate++;
-		if (tickUpdate == 60){
+		if (tickUpdate%60==0){
 			tickSec++; //1 second
-			if (tickSec == 60){
+			if (tickSec%60==0){
 				tickMin++; //1 minute
 			}
 		}
