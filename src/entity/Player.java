@@ -23,9 +23,6 @@ public class Player extends Entity{
 
 	private int xIndex = Map.HEXESACROSS / 2;
 	private int yIndex = Map.HEXESDOWN / 2;
-
-	String[] inventory = new String[144]; //I suspect this will be objects soon 
-											//EWW STRINGS
 	private int lastMove;
 	private int hungerTime;
 
@@ -43,12 +40,16 @@ public class Player extends Entity{
 	Map map;
 
 	public Player(Map map, String entityTag) {
-		self = getEntity(entityTag); //really i should just find an easy way to set 
+		initEntity("Neo"); //should do stuff
+		System.out.println(getEntityHealth());
+		//self and EntityManager.player are distinct?????
+		//simon is going to have to fix this mess
+		//self = getEntity(entityTag); //really i should just find an easy way to set 
 		//all values from my txt files, but im lazy and that will change anyways
 		initPlayerShader();
 		this.map = map;
-		inventory[0] = self.getEntityWeaponTag();
-		inventory[1] = self.getEntityArmorTag();
+		self.addEntityInventory(self.getEntityWeaponTag());
+		self.addEntityInventory(self.getEntityArmorTag());
 		lastMove = 0;
 		hungerTime = 0;
 		xIndex = Map.HEXESACROSS / 2;
@@ -86,11 +87,13 @@ public class Player extends Entity{
 		}
 	}
 	public void hunger(){
-		//System.out.println(Tick.getUpdateTick());
-		if(Tick.getSecTick()-hungerTime>50){
+		if(BuffHandler.gatedEvent(300)){
 			self.setEntityHunger(self.getEntityHunger()-1);
-			hungerTime = Tick.getSecTick();
 		}
+		//if(Tick.getSecTick()-hungerTime>50){
+			//self.setEntityHunger(self.getEntityHunger()-1);
+			//hungerTime = Tick.getSecTick();
+		//}
 	}
 	public void update() {
 		hunger();
@@ -163,6 +166,12 @@ public class Player extends Entity{
 				//int[] index = { xIndex, yIndex };
 				//System.out.println(monster.getIndex() + "H");//thows null pointer cuz not init
 				//m.attackHandler(self, monster, index, monster.getIndex());
+			}else if (KeyboardInput.isKeyDown(GLFW_KEY_I)) {
+				System.out.println(self.inventory.size());
+				for(int i = 0; i<self.inventory.size(); i++)
+				System.out.println(self.inventory.get(i));
+			}else if (KeyboardInput.isKeyDown(GLFW_MOUSE_BUTTON_3)) {
+				System.out.println("IM A MOUSE"); //need a mouse button handler case
 			}
 
 		}
@@ -173,7 +182,7 @@ public class Player extends Entity{
 		if ((destXIndex > 0) && (destYIndex > 0) && (destXIndex < (Map.HEXESACROSS))
 				&& (destYIndex < (Map.HEXESDOWN))) {
 			if (Block.destinationTraversable(destXIndex, destYIndex)) {
-				if (Math.abs(Map.elevation[xIndex][yIndex] - Map.elevation[destXIndex][destYIndex]) < 10) {
+				if (Math.abs(Map.elevation[xIndex][yIndex] - Map.elevation[destXIndex][destYIndex]) < 15) {
 					return true;
 					//controls step up height
 				}

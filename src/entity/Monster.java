@@ -34,13 +34,13 @@ public class Monster extends Entity{
 
 	Mechanics m = new Mechanics();
 
-	Map map;
+	//Map map;
 	Block block;
 
 	public Monster(Map map, String entityTag) {
 		self = getEntity(entityTag);
 		initPlayerShader();
-		this.map = map;
+		//this.map = map;
 		block = new Block();
 		lastMove = 0;
 		xIndex = Map.HEXESACROSS / 2;
@@ -159,8 +159,8 @@ public class Monster extends Entity{
 		//System.out.println(xIndex + " " + yIndex);
 		if ((destXIndex > 0) && (destYIndex > 0) && (destXIndex < (Map.HEXESACROSS))
 				&& (destYIndex < (Map.HEXESDOWN))) {
-			if (block.destinationTraversable(destXIndex, destYIndex)) {
-				if (map.land[destXIndex][destYIndex] == Map.SEED) {
+			if (Block.destinationTraversable(destXIndex, destYIndex)) {
+				if (Map.land[destXIndex][destYIndex] == Map.SEED) {
 					return true;
 					//seeds are bs
 				} else if (Math.abs(Map.elevation[xIndex][yIndex] - Map.elevation[destXIndex][destYIndex]) < 100) {

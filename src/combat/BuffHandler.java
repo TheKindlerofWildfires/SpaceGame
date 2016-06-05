@@ -22,6 +22,7 @@ public class BuffHandler {
 	public void update() {
 		if(buffTagL.size()>0){
 		for(int i = 0; i<buffTagL.size();i++){
+			if(durationL.get(i) != 0){ //an infinite event
 			if(Tick.getUpdateTick() -startTimeL.get(i) >= durationL.get(i)){
 				remove(buffTagL.get(i), entityL.get(i), powerL.get(i));
 			buffTagL.remove(i);
@@ -29,6 +30,7 @@ public class BuffHandler {
 			durationL.remove(i);
 			startTimeL.remove(i);
 			powerL.remove(i);
+			}
 			}
 		}
 		}
@@ -80,6 +82,13 @@ public class BuffHandler {
 			break;
 		default:
 			System.out.println("No such buff");
+		}
+	}
+	public static boolean gatedEvent(int delay){
+		if(Tick.getUpdateTick()%delay == 0){
+			return true;
+		}else{
+			return false;
 		}
 	}
 }

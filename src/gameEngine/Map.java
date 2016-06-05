@@ -102,7 +102,7 @@ public class Map {
 		int counter = 0;
 		for (int x = 0; x < HEXESDOWN; x++) {
 			for (int y = 0; y < HEXESACROSS; y++) {
-				land[counter] = this.land[y][x];
+				land[counter] = Map.land[y][x];
 				counter++;
 			}
 		}

@@ -2,6 +2,7 @@ package entity;
 
 import entity.monster.*;
 import entity.player.*;
+import inventory.Inventory;
 
 import java.util.*;
 
@@ -22,6 +23,7 @@ public abstract class Entity {
 	protected double entityRange;
 	protected int entityLevel;
 	protected double entityHunger;
+	protected Inventory inventory = new Inventory(144);
 	public Entity(){
 		entityHunger = 100;
 	}
@@ -73,24 +75,27 @@ public abstract class Entity {
 	public double getEntityHunger() {
 		return entityHunger;
 	}
-	/*public void initEntity(String entityTag) {
+	public Inventory getEntityInventory() {
+		return inventory;
+	}
+	public void initEntity(String entityTag) {
 		Entity buffer = getEntity(entityTag);
-		this.entityTag = buffer.getEntityTag();
-		this.entityCondition = getEntityCondition();
-		entityHealth;
-		entitySanity;
-		entityArmor;
-		entitySanityResist; 
-		entityWeaponTag; 
-		entityWeaponDamage;
-		entityWeaponPriority; 
-		entityArmorTag;
-		List<String> entityAbility = new ArrayList<String>(); 
-		entitySpeed; // blocks per turn
-		entityNatAbility;
-		entityRange;
-		entityLevel;
-	}*/
+		entityCondition = buffer.getEntityCondition();
+		entityHealth = buffer.getEntityHealth();
+		entitySanity = buffer.getEntitySanity();
+		entityArmor= buffer.getEntityArmor();
+		entitySanityResist= buffer.getEntitySanityResist();
+		entityWeaponTag = buffer.getEntityWeaponTag();
+		entityWeaponDamage = buffer.getEntityWeaponDamage();
+		entityWeaponPriority = buffer.getEntityWeaponPriority(); 
+		entityArmorTag = buffer.getEntityArmorTag();
+		entityAbility = buffer.getEntityAbility(); 
+		entitySpeed = buffer.getEntitySpeed();
+		entityNatAbility = buffer.getEntityNatAbility();
+		entityRange = buffer.getEntitySanity();
+		entityLevel = buffer.getEntityLevel();
+		entityHunger = buffer.getEntityHunger();
+	}
 	
 	public void setEntityTag(String entityTag){
 		this.entityTag = entityTag;
@@ -137,6 +142,10 @@ public abstract class Entity {
 	}
 	public void setEntityHunger(double hunger){
 		this.entityHunger = hunger;
+	}
+	public void addEntityInventory(String item){
+		//System.out.println("adding");
+		this.inventory.add(item);
 	}
 	public static Entity getEntity(String entityTag){
 		switch(entityTag){

@@ -30,6 +30,7 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
+import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.opengl.GL;
 
 import gameEngine.EntityManager;
@@ -61,7 +62,6 @@ public class Window implements Runnable {
 		thread.start();
 
 	}
-
 	public void init() {
 		if (glfwInit() != GL_TRUE) {
 			System.err.println("GLFW init fail");

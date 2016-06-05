@@ -2,6 +2,8 @@ package gameEngine;
 
 import java.util.Random;
 
+import combat.BuffHandler;
+
 import entity.Entity;
 
 public class Block {
@@ -136,9 +138,14 @@ public class Block {
 		switch(Map.land[xIndex][yIndex]){
 		case THORN_BUSH:
 			entity.setEntityHealth(entity.getEntityHealth()-(double)1/3);
+			//System.out.println(entity.getEntityHealth());
 			break;
 		case FRUIT_BUSH:
-			entity.setEntityHunger(entity.getEntityHunger()+(double)1/6);
+			if(BuffHandler.gatedEvent(30)){
+			entity.addEntityInventory("fruit");
+			}
+			//System.out.println(entity.getEntityInventory());
+			//entity.setEntityHunger(entity.getEntityHunger()+(double)1/6);
 			//drop fruit eventually
 			break;
 		case REEDS:
