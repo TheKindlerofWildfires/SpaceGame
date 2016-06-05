@@ -8,6 +8,7 @@ import GUI.KeyboardInput;
 import combat.BuffHandler;
 import combat.Mechanics;
 import maths.Distance;
+import maths.Utilities;
 import maths.Vector3f;
 import gameEngine.Block;
 import gameEngine.EntityManager;
@@ -149,7 +150,10 @@ public class Player extends Entity{
 					destXIndex += 1;
 				}
 			} else if (KeyboardInput.isKeyDown(GLFW_KEY_R)) {
-				System.out.println(Map.elevation[xIndex][yIndex]);
+				//System.out.println(Map.elevation[xIndex][yIndex]);
+				int[] i = Utilities.convertMouseIndex();
+				//System.out.println(i[0] + " " + i[1]);
+				System.out.println(xIndex + " " + yIndex);
 				lastMove = Tick.getUpdateTick();
 				//Monster monster = EntityManager.monster;
 				//int[] index = { xIndex, yIndex };
