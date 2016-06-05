@@ -80,6 +80,7 @@ public abstract class Entity {
 	}
 	public void initEntity(String entityTag) {
 		Entity buffer = getEntity(entityTag);
+		this.entityTag = entityTag;
 		entityCondition = buffer.getEntityCondition();
 		entityHealth = buffer.getEntityHealth();
 		entitySanity = buffer.getEntitySanity();

@@ -24,16 +24,12 @@ public class Player extends Entity{
 	private int xIndex = Map.HEXESACROSS / 2;
 	private int yIndex = Map.HEXESDOWN / 2;
 	private int lastMove;
-	private int hungerTime;
 
 	Distance distance = new Distance();
 
 	private float offsetX;
 	private float offsetY;
 	private float zoomFactor;
-
-	static Entity self; //this needs to go away but im lazy
-	//Entity target = Monster.self; //rwff
 
 	Mechanics m = new Mechanics();
 
@@ -42,16 +38,13 @@ public class Player extends Entity{
 	public Player(Map map, String entityTag) {
 		initEntity("Neo"); //should do stuff
 		System.out.println(getEntityHealth());
-		//self and EntityManager.player are distinct?????
-		//simon is going to have to fix this mess
-		//self = getEntity(entityTag); //really i should just find an easy way to set 
+
 		//all values from my txt files, but im lazy and that will change anyways
 		initPlayerShader();
 		this.map = map;
-		self.addEntityInventory(self.getEntityWeaponTag());
-		self.addEntityInventory(self.getEntityArmorTag());
+		addEntityInventory(getEntityWeaponTag());
+		addEntityInventory(getEntityArmorTag());
 		lastMove = 0;
-		hungerTime = 0;
 		xIndex = Map.HEXESACROSS / 2;
 		yIndex = Map.HEXESDOWN / 2;
 	}
@@ -59,7 +52,7 @@ public class Player extends Entity{
 	private void initPlayerShader() {
 		ShaderManager.entityShader.start();
 		ShaderManager.entityShader.setUniform1f("side", EntityManager.side);
-		ShaderManager.entityShader.setUniform1i("ID", getID(self.getEntityTag()));
+		ShaderManager.entityShader.setUniform1i("ID", getID(getEntityTag()));
 		ShaderManager.entityShader.setUniform1f("apothem", EntityManager.APOTHEM);
 		ShaderManager.entityShader.setUniform1f("aspect", EntityManager.aspectScaler);
 		ShaderManager.entityShader.setUniform3f("pos", new Vector3f(-1f, 1f, 0));
@@ -80,7 +73,7 @@ public class Player extends Entity{
 	}
 
 	public boolean dead() {
-		if (self.getEntityHealth() <= 0) {
+		if (getEntityHealth() <= 0) {
 			return true;
 		} else {
 			return false;
@@ -88,18 +81,14 @@ public class Player extends Entity{
 	}
 	public void hunger(){
 		if(BuffHandler.gatedEvent(300)){
-			self.setEntityHunger(self.getEntityHunger()-1);
+			setEntityHunger(getEntityHunger()-1);
 		}
-		//if(Tick.getSecTick()-hungerTime>50){
-			//self.setEntityHunger(self.getEntityHunger()-1);
-			//hungerTime = Tick.getSecTick();
-		//}
 	}
 	public void update() {
 		hunger();
 		//System.out.println(self.getEntityHunger());
-		Block.steppedOn(xIndex, yIndex, self);
-		if (Tick.getUpdateTick() - lastMove > (35.2 / self.getEntitySpeed() - 5.2)) {
+		Block.steppedOn(xIndex, yIndex, EntityManager.player); //yeah yeah ill fix it later
+		if (Tick.getUpdateTick() - lastMove > (35.2 / getEntitySpeed() - 5.2)) {
 			getDestination();
 
 			if (checkDestination()) {				
@@ -167,9 +156,9 @@ public class Player extends Entity{
 				//System.out.println(monster.getIndex() + "H");//thows null pointer cuz not init
 				//m.attackHandler(self, monster, index, monster.getIndex());
 			}else if (KeyboardInput.isKeyDown(GLFW_KEY_I)) {
-				System.out.println(self.inventory.size());
-				for(int i = 0; i<self.inventory.size(); i++)
-				System.out.println(self.inventory.get(i));
+				System.out.println(inventory.size());
+				for(int i = 0; i<inventory.size(); i++)
+				System.out.println(inventory.get(i));
 			}else if (KeyboardInput.isKeyDown(GLFW_MOUSE_BUTTON_3)) {
 				System.out.println("IM A MOUSE"); //need a mouse button handler case
 			}
