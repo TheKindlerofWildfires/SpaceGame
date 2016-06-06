@@ -8,7 +8,9 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_UP;
 import GUI.KeyboardInput;
 import entity.MonsterV1;
 import entity.Player;
+import graphicEngine.Chunk;
 import graphicEngine.ShaderManager;
+import maths.Vector3f;
 
 public class EntityManager {
 
@@ -18,6 +20,7 @@ public class EntityManager {
 	public static MonsterV1 monster;
 	public WorldType world;
 
+	@Deprecated
 	public static final float APOTHEM = 0.005f; //0.005
 
 	public static final float sqrt3 = 1.7320508075688772f;
@@ -33,10 +36,16 @@ public class EntityManager {
 	};
 	
 	public static byte[] indices = new byte[] { 0, 1, 2, 3, 4, 5, 0 };
-
+	
+	Vector3f cameraPos = new Vector3f(150,150,100);
+	Vector3f cameraTarget = new Vector3f(100,100,0);
+	Vector3f up = new Vector3f(0,0,1);
+	Vector3f lampPos = new Vector3f(150,150,100);
 	
 	public EntityManager() {
 		ShaderManager.loadAll();
+		ShaderManager.setMatrices(cameraPos, cameraTarget, up, lampPos);
+		Chunk.initShader();
 		//shaderManager = new ShaderManager();
 		//ShaderManager.loadAll();
 		
@@ -46,39 +55,41 @@ public class EntityManager {
 		//monster = new MonsterV1(map);
 		//	player.position.y = -0.01f;
 		//	player.position.x = 0.0f;
-		zoom(10f);
+	//	zoom(10f);
 	}
 
 	public void update() {
 		if (KeyboardInput.isKeyDown(GLFW_KEY_RIGHT)) {
 			//	System.out.println("right");
-			offset(-.01f, 0);
+			cameraPos = new Vector3f(cameraPos.x+1,cameraPos.y-0,cameraPos.z);
 		}
 		if (KeyboardInput.isKeyDown(GLFW_KEY_LEFT)) {
 			//	System.out.println("left");
-			offset(+.01f, 0);
+			cameraPos = new Vector3f(cameraPos.x-1,cameraPos.y-0,cameraPos.z);
 		}
 		if (KeyboardInput.isKeyDown(GLFW_KEY_UP)) {
 			//	System.out.println("up");
-			offset(0, -0.01f);
+			cameraPos = new Vector3f(cameraPos.x+0,cameraPos.y+1,cameraPos.z);
 		}
 		if (KeyboardInput.isKeyDown(GLFW_KEY_DOWN)) {
 			//	System.out.println("down");
-			offset(0, +0.01f);
+			cameraPos = new Vector3f(cameraPos.x+0,cameraPos.y-1,cameraPos.z);
 		}
-		player.update();
+		ShaderManager.setMatrices(cameraPos, cameraTarget, up, lampPos);
 	}
 
 	public void render() {
-		player.render();
+		//player.render();
 		map.render();
 	}
 	
+	@Deprecated
 	public void offset(float x,float y){
 		map.offset(x, y);
 		player.offset(x,y);
 	}
 	
+	@Deprecated
 	public void zoom(float zoom){
 		map.zoom(zoom);
 		player.zoom(zoom);

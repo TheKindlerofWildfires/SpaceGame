@@ -35,6 +35,7 @@ import org.lwjgl.opengl.GL;
 import gameEngine.EntityManager;
 import gameEngine.Tick;
 import gameEngine.TickManager;
+import maths.Matrix4f;
 
 public class Window implements Runnable {
 	private Thread thread;
@@ -49,6 +50,13 @@ public class Window implements Runnable {
 
 	public static void main(String args[]) {
 
+		Matrix4f toast = new Matrix4f(1,1,1,1,
+				1,1,1,1,
+				1,1,1,1,
+				1,1,1,1);
+		
+		System.out.println(Matrix4f.inverse(toast));
+		
 		Window game = new Window();
 
 		game.run();

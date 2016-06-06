@@ -32,9 +32,9 @@ public class Map {
 	public static final int MOISTURESCALER = 12;
 	public static final int ELEVATIONSCALER = 17;
 
-	public static final int LAND = 100;
-	public static final int WATER = 0;
-	public static final int SEED = 50;
+	public static final int LAND = 1;
+	public static final int WATER = 3;
+	public static final int SEED = 2;
 
 	public static String mapType;
 	public static String worldType;
@@ -51,9 +51,8 @@ public class Map {
 	public static VertexArrayObject vao = new VertexArrayObject(EntityManager.vertices, EntityManager.indices);
 	public static int vaoID = vao.getVaoID();
 
-	public static final String[] maps = { "fractal", "disk", "soft", "stand", "trig", "quad", "grit", "exp", "ln",
-			"rng", "arm" };
-	public static final String[] worldTypes = { "telilic", "sapric", "worlic" };
+	public static final String[] maps = { "fractal","disk","soft","stand","trig","quad","grit","exp","ln","rng","arm" };
+	public static final String[] worldTypes = { "telilic","sapric","worlic" };
 	public int[][] land = new int[HEXESACROSS][HEXESDOWN];
 	public static int[][] elevation = new int[HEXESACROSS][HEXESDOWN];
 	public static int[][] moisture = new int[HEXESACROSS][HEXESDOWN];
@@ -64,18 +63,94 @@ public class Map {
 	private float offsetY = 0;
 	private float zoomFactor;
 
+	float[] data = new float[Chunk.CHUNKSIZE * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE];
+
 	public Map() {
 		distance = new Distance();
 		long seed = rng.nextLong();
 		rng.setSeed(seed);
 		System.out.println("Random Seed is " + seed);
 		initializeMap();
-		Chunk.initChunkShader();
+
 		for (int x = 0; x < chunks.length; x++) {
 			for (int y = 0; y < chunks[0].length; y++) {
-				chunks[x][y] = new Chunk(land, x * Chunk.CHUNKSIZE, y * Chunk.CHUNKSIZE);
+
+				for (int i = 0; i < Chunk.CHUNKSIZE * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE; i++) {
+					data[i] = 0;
+				}
+
+				for (int i = 0; i < Chunk.CHUNKSIZE * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE; i++) {
+					if (i < Chunk.CHUNKSIZE * Chunk.CHUNKSIZE) {
+						int a = i / Chunk.CHUNKSIZE + x * Chunk.CHUNKSIZE;
+						int b = i % Chunk.CHUNKSIZE + y * Chunk.CHUNKSIZE;
+
+						data[i] = land[a][b];
+						if (elevation[a][b] > 0) {
+							data[i + Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
+						}
+						if (elevation[a][b] > 1) {
+							data[i + 2 * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
+						}
+						if (elevation[a][b] > 2) {
+							data[i + 3 * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
+						}
+						if (elevation[a][b] > 3) {
+							data[i + 4 * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
+						}
+						if (elevation[a][b] > 4) {
+							data[i + 5 * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
+						}
+						if (elevation[a][b] > 5) {
+							data[i + 6 * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
+						}
+						if (elevation[a][b] > 6) {
+							data[i + 7 * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
+						}
+						if (elevation[a][b] > 7) {
+							data[i + 8 * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
+						}
+						if (elevation[a][b] > 8) {
+							data[i + 9 * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
+						}
+						if (elevation[a][b] > 9) {
+							data[i + 10 * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
+						}
+						if (elevation[a][b] > 10) {
+							data[i + 11 * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
+						}
+						if (elevation[a][b] > 11) {
+							data[i + 12 * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
+						}
+						if (elevation[a][b] > 12) {
+							data[i + 13 * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
+						}
+						if (elevation[a][b] > 13) {
+							data[i + 14 * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
+						}
+						if (elevation[a][b] > 14) {
+							data[i + 15 * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
+						}
+						if (elevation[a][b] > 15) {
+							data[i + 16 * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
+						}
+					} else {
+						//data[i] = 0;
+					}
+				}
+
+				chunks[x][y] = new Chunk(data, x, y);
 			}
 		}
+	}
+
+	float[] segment(float[] data, int start, int end) {
+		float[] result = new float[end - start];
+		int c = 0;
+		for (int i = start; i < end; i++) {
+			result[c] = data[i];
+		}
+		c++;
+		return result;
 	}
 
 	@Deprecated
@@ -162,6 +237,7 @@ public class Map {
 		}
 	}
 
+	@Deprecated
 	public void zoom(float zoomFactor) {
 		this.zoomFactor = zoomFactor;
 		ShaderManager.chunkShader.start();
@@ -171,6 +247,7 @@ public class Map {
 		ShaderManager.chunkShader.stop();
 	}
 
+	@Deprecated
 	public void offset(float x, float y) {
 		if (offsetX + x > -zoomFactor + 1 && offsetX + x < zoomFactor - 1) {
 			offsetX += x;
@@ -196,32 +273,37 @@ public class Map {
 		//glBindVertexArray(0);
 		//ShaderManager.landShader.stop();
 
-		for (int x = 0; x < chunks.length; x++) {
-			for (Chunk chunk : chunks[x]) {
-				chunk.setShaderUniforms();
-				chunk.render();
+		//for (int x = 0; x < chunks.length; x++) {
+		//	for (Chunk chunk : chunks[x]) {
+		//				chunk.setShaderUniforms();
+		//				chunk.render();
+		//			}
+		//		}
+
+		for (int x = 0; x < HEXESACROSS / Chunk.CHUNKSIZE; x++) {
+			for (int y = 0; y < HEXESDOWN / Chunk.CHUNKSIZE; y++) {
+				chunks[x][y].render();
 			}
 		}
-
 	}
 
 	public void update() {
-		if (KeyboardInput.isKeyDown(GLFW_KEY_RIGHT)) {
-			//	System.out.println("right");
-			offset(-.01f, 0);
-		}
-		if (KeyboardInput.isKeyDown(GLFW_KEY_LEFT)) {
-			//	System.out.println("left");
-			offset(+.01f, 0);
-		}
-		if (KeyboardInput.isKeyDown(GLFW_KEY_UP)) {
-			//	System.out.println("up");
-			offset(0, -0.01f);
-		}
-		if (KeyboardInput.isKeyDown(GLFW_KEY_DOWN)) {
-			//	System.out.println("down");
-			offset(0, +0.01f);
-		}
+		/*	if (KeyboardInput.isKeyDown(GLFW_KEY_RIGHT)) {
+				//	System.out.println("right");
+				offset(-.01f, 0);
+			}
+			if (KeyboardInput.isKeyDown(GLFW_KEY_LEFT)) {
+				//	System.out.println("left");
+				offset(+.01f, 0);
+			}
+			if (KeyboardInput.isKeyDown(GLFW_KEY_UP)) {
+				//	System.out.println("up");
+				offset(0, -0.01f);
+			}
+			if (KeyboardInput.isKeyDown(GLFW_KEY_DOWN)) {
+				//	System.out.println("down");
+				offset(0, +0.01f);
+			}*/
 	}
 
 	private void initializeMap() {
@@ -382,8 +464,8 @@ public class Map {
 						}
 					}
 					moisture[i][j] = moist;
-					elevation[i][j] = elev;
-					land[i][j] = Biome.getBiome(elevation[i][j], worldType, moisture[i][j]);
+					elevation[i][j] = elev/20;
+					//land[i][j] = Biome.getBiome(elevation[i][j], worldType, moisture[i][j]);
 					landCount += 1;
 				}
 			}
