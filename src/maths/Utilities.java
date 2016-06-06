@@ -11,6 +11,7 @@ import gameEngine.EntityManager;
 import gameEngine.Map;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -91,6 +92,27 @@ public class Utilities {
 		System.out.println(index[0] + " " + index[1] + "g");
 		return index;
 		
+	}
+	public static void fileReader(String filePath){
+        String line = null;
+
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader(filePath));
+			while ((reader.readLine()) != null) {
+				System.out.println(reader.readLine());
+			}
+
+		}catch (IOException e) {
+			e.printStackTrace();
+
+		}finally {
+			try {
+				reader.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 }

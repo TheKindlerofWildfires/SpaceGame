@@ -150,10 +150,11 @@ public class Player extends Entity{
 					destXIndex += 1;
 				}
 			} else if (KeyboardInput.isKeyDown(GLFW_KEY_R)) {
+				Utilities.fileReader("Hunter.entity");
 				//System.out.println(Map.elevation[xIndex][yIndex]);
-				int[] i = Utilities.convertMouseIndex();
+				//int[] i = Utilities.convertMouseIndex();
 				//System.out.println(i[0] + " " + i[1]);
-				System.out.println(xIndex + " " + yIndex);
+				//System.out.println(xIndex + " " + yIndex);
 				lastMove = Tick.getUpdateTick();
 				//Monster monster = EntityManager.monster;
 				//int[] index = { xIndex, yIndex };

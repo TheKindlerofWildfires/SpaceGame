@@ -1,0 +1,11 @@
+		entityTag = "Hunter";
+		entityLevel = 1;
+		entityHealth = 100;
+		entityArmor = 10;
+		entityWeaponTag = "null";
+		entityWeaponDamage = 15;
+		entityWeaponPriority = 2;
+		entityArmorTag = "null";
+		entityNatAbility ="knockdown";
+		entitySpeed = 2;
+		entityRange = 1;

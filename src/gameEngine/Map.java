@@ -358,7 +358,7 @@ public class Map {
 
 	private void initializeMap() {
 		// INIT MAPTYPE ETC
-		//mapType = "e2";
+		//mapType = "fractal";
 		mapType = maps[rng.nextInt(maps.length)];
 		//worldType = "sapric"; //"telilic", "sapric", "worlic"
 		worldType = worldTypes[rng.nextInt(worldTypes.length)];
