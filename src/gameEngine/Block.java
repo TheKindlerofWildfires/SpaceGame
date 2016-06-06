@@ -87,16 +87,16 @@ public class Block {
 
 	public static boolean destinationTraversable(int xIndex, int yIndex) {
 		switch(Map.land[xIndex][yIndex]){
-		case Map.SEED:
-			return true;
-		case Map.LAND:
-			return true;
+		//case Map.SEED:
+			//return true;
+		//case Map.LAND:
+			//return true;
 		case UPPERFOREST:
 			return true;
 		case LOWERFOREST:
 			return true;
-		case MIDFOREST:
-			return true;
+		//case MIDFOREST:
+			//return true;
 		case SAND:
 			return true;
 		case MUD:

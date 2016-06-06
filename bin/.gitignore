@@ -1,8 +1,5 @@
-/Ability list
 /gameEngine/
-/graphicEngine/
-/shaders/
 /entity/
-/GUI/
-/classesSimonDoesntLike/
 /maths/
+/shaders/
+/graphicEngine/

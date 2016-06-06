@@ -50,29 +50,18 @@ public class Map {
 
 	public static Random rng = new Random();
 
-	public Chunk[][] chunks = new Chunk[HEXESACROSS / Chunk.CHUNKSIZE][HEXESDOWN
-			/ Chunk.CHUNKSIZE];
+	public Chunk[][] chunks = new Chunk[HEXESACROSS / Chunk.CHUNKSIZE][HEXESDOWN / Chunk.CHUNKSIZE];
 
-	public static VertexArrayObject vao = new VertexArrayObject(
-			EntityManager.vertices, EntityManager.indices);
+	public static VertexArrayObject vao = new VertexArrayObject(EntityManager.vertices, EntityManager.indices);
 	public static int vaoID = vao.getVaoID();
 
-<<<<<<< HEAD
-	public static final String[] maps = { "fractal","disk","soft","stand","trig","quad","grit","exp","ln","rng","arm" };
+	public static final String[] maps = { "fractal","soft","stand","trig","quad","e2","e" };
+	public static final String[] splots = { "grit","exp","ln","rng","arm","disk" };// there are more
 	public static final String[] worldTypes = { "telilic","sapric","worlic" };
-	public int[][] land = new int[HEXESACROSS][HEXESDOWN];
-	public static int[][] elevation = new int[HEXESACROSS][HEXESDOWN];
-	public static int[][] moisture = new int[HEXESACROSS][HEXESDOWN];
-=======
-	public static final String[] maps = { "fractal", "soft", "stand", "trig",
-			"quad", "e2", "e" };
-	public static final String[] splots = { "grit", "exp", "ln", "rng", "arm",
-			"disk" };// there are more
-	public static final String[] worldTypes = { "telilic", "sapric", "worlic" };
 	public static int[][] land = new int[HEXESACROSS][HEXESDOWN];
 	public static int[][] elevation = new int[HEXESACROSS + 1][HEXESDOWN + 1];
 	public static int[][] moisture = new int[HEXESACROSS + 1][HEXESDOWN + 1];
->>>>>>> playerRework
+
 	public int[][] seeds;
 	public int[] seed = new int[2];
 
@@ -88,7 +77,6 @@ public class Map {
 		rng.setSeed(seed);
 		System.out.println("Random Seed is " + seed);
 		initializeMap();
-<<<<<<< HEAD
 
 		for (int x = 0; x < chunks.length; x++) {
 			for (int y = 0; y < chunks[0].length; y++) {
@@ -148,35 +136,18 @@ public class Map {
 						if (elevation[a][b] > 14) {
 							data[i + 15 * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
 						}
-						if (elevation[a][b] > 15) {
-							data[i + 16 * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
-						}
+					//	if (elevation[a][b] > 15) {
+						//	data[i + 16 * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
+						//}
 					} else {
 						//data[i] = 0;
 					}
 				}
 
 				chunks[x][y] = new Chunk(data, x, y);
-=======
-		generateFoliage();
-		Chunk.initChunkShader();
-		for (int x = 0; x < chunks.length; x++) {
-			for (int y = 0; y < chunks[0].length; y++) {
-				chunks[x][y] = new Chunk(land, x * Chunk.CHUNKSIZE, y
-						* Chunk.CHUNKSIZE);
->>>>>>> playerRework
 			}
 		}
-	}
-
-	float[] segment(float[] data, int start, int end) {
-		float[] result = new float[end - start];
-		int c = 0;
-		for (int i = start; i < end; i++) {
-			result[c] = data[i];
-		}
-		c++;
-		return result;
+		generateFoliage();
 	}
 
 	@Deprecated
@@ -185,8 +156,7 @@ public class Map {
 		ShaderManager.landShader.setUniform1f("side", EntityManager.side);
 		ShaderManager.landShader.setUniform1i("hexesAcross", HEXESACROSS);
 		ShaderManager.landShader.setUniform1f("apothem", EntityManager.APOTHEM);
-		ShaderManager.landShader.setUniform1f("aspect",
-				EntityManager.aspectScaler);
+		ShaderManager.landShader.setUniform1f("aspect", EntityManager.aspectScaler);
 		ShaderManager.landShader.setUniform3f("pos", new Vector3f(-1f, 1f, 0));
 
 		int[] land = new int[HEXESACROSS * HEXESDOWN];
@@ -262,12 +232,9 @@ public class Map {
 	public void zoom(float zoomFactor) {
 		this.zoomFactor = zoomFactor;
 		ShaderManager.chunkShader.start();
-		ShaderManager.chunkShader.setUniform1f("side", EntityManager.side
-				* zoomFactor);
-		ShaderManager.chunkShader.setUniform1f("apothem", EntityManager.APOTHEM
-				* zoomFactor);
-		ShaderManager.chunkShader.setUniform3f("pos", new Vector3f(-zoomFactor
-				+ offsetX, zoomFactor + offsetY, 0));
+		ShaderManager.chunkShader.setUniform1f("side", EntityManager.side * zoomFactor);
+		ShaderManager.chunkShader.setUniform1f("apothem", EntityManager.APOTHEM * zoomFactor);
+		ShaderManager.chunkShader.setUniform3f("pos", new Vector3f(-zoomFactor + offsetX, zoomFactor + offsetY, 0));
 		ShaderManager.chunkShader.stop();
 	}
 
@@ -284,8 +251,7 @@ public class Map {
 			// System.out.println("toofar");
 		}
 		ShaderManager.chunkShader.start();
-		ShaderManager.chunkShader.setUniform3f("pos", new Vector3f(-zoomFactor
-				+ offsetX, zoomFactor + offsetY, 0));
+		ShaderManager.chunkShader.setUniform3f("pos", new Vector3f(-zoomFactor + offsetX, zoomFactor + offsetY, 0));
 		ShaderManager.chunkShader.stop();
 	}
 
@@ -314,41 +280,7 @@ public class Map {
 	}
 
 	public void update() {
-<<<<<<< HEAD
-		/*	if (KeyboardInput.isKeyDown(GLFW_KEY_RIGHT)) {
-				//	System.out.println("right");
-				offset(-.01f, 0);
-			}
-			if (KeyboardInput.isKeyDown(GLFW_KEY_LEFT)) {
-				//	System.out.println("left");
-				offset(+.01f, 0);
-			}
-			if (KeyboardInput.isKeyDown(GLFW_KEY_UP)) {
-				//	System.out.println("up");
-				offset(0, -0.01f);
-			}
-			if (KeyboardInput.isKeyDown(GLFW_KEY_DOWN)) {
-				//	System.out.println("down");
-				offset(0, +0.01f);
-			}*/
-=======
-		if (KeyboardInput.isKeyDown(GLFW_KEY_RIGHT)) {
-			// System.out.println("right");
-			offset(-.01f, 0);
-		}
-		if (KeyboardInput.isKeyDown(GLFW_KEY_LEFT)) {
-			// System.out.println("left");
-			offset(+.01f, 0);
-		}
-		if (KeyboardInput.isKeyDown(GLFW_KEY_UP)) {
-			// System.out.println("up");
-			offset(0, -0.01f);
-		}
-		if (KeyboardInput.isKeyDown(GLFW_KEY_DOWN)) {
-			// System.out.println("down");
-			offset(0, +0.01f);
-		}
->>>>>>> playerRework
+
 	}
 
 	private double getP(String genType, double p, int iter) {
@@ -415,14 +347,13 @@ public class Map {
 		case "invT":
 			System.err.println("invalid map type");
 			System.exit(-1);
-			p = ((Math.pow(Math.cos(iter) * (1.9), 2))
-					- (1 * Math.abs(rng.nextDouble())) + 0.1);
+			p = ((Math.pow(Math.cos(iter) * (1.9), 2)) - (1 * Math.abs(rng.nextDouble())) + 0.1);
 			break;
 		case "e":
-			p = Math.pow(Math.E,iter/-(HEXESACROSS*HEXESDOWN/2));
+			p = Math.pow(Math.E, iter / -(HEXESACROSS * HEXESDOWN / 2));
 			break;
 		case "e2":
-			p = 0.35*Math.pow(Math.E,iter/(HEXESACROSS*HEXESDOWN/2));
+			p = 0.35 * Math.pow(Math.E, iter / (HEXESACROSS * HEXESDOWN / 2));
 			break;
 		default:
 			System.err.println("invalid map type");
@@ -446,8 +377,7 @@ public class Map {
 		while (outerLand.size() != 0 && p != 0) {
 			ArrayList<int[]> newLand = new ArrayList<int[]>();
 			for (int i = 0; i < outerLand.size(); i++) {
-				int[][] neighbors = getNeighborIndices(outerLand.get(i)[0],
-						outerLand.get(i)[1]);
+				int[][] neighbors = getNeighborIndices(outerLand.get(i)[0], outerLand.get(i)[1]);
 				for (int j = 0; j < neighbors.length; j++) {
 
 					if (land[neighbors[j][0]][neighbors[j][1]] != LAND
@@ -536,14 +466,10 @@ public class Map {
 					elev = (elev / 6 + (int) (4+4*rng.nextDouble()));//one day this will all be perlin
 					moist = (elev / 6 + (int) (4+4*rng.nextDouble()));
 					moisture[i][j] = moist;
-<<<<<<< HEAD
-					elevation[i][j] = elev/20;
-					//land[i][j] = Biome.getBiome(elevation[i][j], worldType, moisture[i][j]);
-=======
-					elevation[i][j] = elev;
+
+					elevation[i][j] = elev/3;
 					land[i][j] = Block.getBlock(elevation[i][j], worldType,
 							moisture[i][j]);
->>>>>>> playerRework
 					landCount += 1;
 				}
 			}

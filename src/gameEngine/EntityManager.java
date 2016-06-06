@@ -54,11 +54,7 @@ public class EntityManager {
 		//monster = new MonsterV1(map);
 		//	player.position.y = -0.01f;
 		//	player.position.x = 0.0f;
-<<<<<<< HEAD
-	//	zoom(10f);
-=======
-		zoom(1f);
->>>>>>> playerRework
+		//	zoom(10f);
 	}
 
 	public void update() {
