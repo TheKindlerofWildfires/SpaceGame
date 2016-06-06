@@ -24,6 +24,7 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Random;
 
+import noiseLibrary.module.source.Perlin;
 import maths.Distance;
 import maths.Utilities;
 import maths.Vector3f;
@@ -68,13 +69,18 @@ public class Map {
 	private float offsetX = 0;
 	private float offsetY = 0;
 	private float zoomFactor;
+	Perlin perlin = new Perlin();
 
 	float[] data = new float[Chunk.CHUNKSIZE * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE];
 
 	public Map() {
+		
 		distance = new Distance();
 		long seed = rng.nextLong();
 		rng.setSeed(seed);
+		perlin.setSeed((int) seed);
+		double d = 0;
+		System.out.println(d + "@");
 		System.out.println("Random Seed is " + seed);
 		initializeMap();
 
@@ -447,14 +453,14 @@ public class Map {
 		for (int i = 0; i < HEXESACROSS; i++) {
 			for (int j = 0; j < HEXESDOWN; j++) {
 				int[][] neighbors = getNeighborIndices(i, j);
-				if (land[i][j] == SEED) {
-					elevation[i][j] = 20;
-					moisture[i][j] = 20;
+				/*if (land[i][j] == SEED) {
+					elevation[i][j] = 4;
+					moisture[i][j] = 4;
 					for (int k = 0; k < neighbors.length; k++) {
 						elevation[neighbors[k][0]][neighbors[k][1]] = 20;
 						moisture[neighbors[k][0]][neighbors[k][1]] = 20;
 					}
-				}
+				}*/
 				if (land[i][j] == LAND) {
 
 					int elev = 0;
@@ -463,11 +469,11 @@ public class Map {
 						elev += elevation[neighbors[k][0]][neighbors[k][1]];
 						moist += moisture[neighbors[k][0]][neighbors[k][1]];
 					}
-					elev = (elev / 6 + (int) (4+4*rng.nextDouble()));//one day this will all be perlin
-					moist = (elev / 6 + (int) (4+4*rng.nextDouble()));
+					elev = (elev / 5 + (int) (4+4*rng.nextDouble()));//one day this will all be perlin
+					moist = (elev / 5 + (int) (4+4*rng.nextDouble()));
 					moisture[i][j] = moist;
 
-					elevation[i][j] = elev/3;
+					elevation[i][j] = elev/2;
 					land[i][j] = Block.getBlock(elevation[i][j], worldType,
 							moisture[i][j]);
 					landCount += 1;
