@@ -11,6 +11,7 @@ uniform float aspect;
 uniform int death;
 uniform int xcoord;
 uniform int ycoord;
+uniform int ID;
 
 void main(void){
 	int xPos = xcoord;
@@ -25,7 +26,9 @@ void main(void){
 	vec3 color;
 	if(death==1){
 		color = vec3(0.2,.2f,.2f);
-	} else{
+	} else if(ID ==3){
+		color = vec3(1,1,0);
+	}else if(ID ==10){
 		color = vec3(1,0,0);
 	}
 	gl_Position = vec4(position.x*apothem+pos.x+xOfset,position.y*apothem+pos.y-yOfset,position.z+pos.z, 1.0);

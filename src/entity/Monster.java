@@ -1,14 +1,10 @@
 package entity;
 
-import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
-import GUI.KeyboardInput;
-import combat.BuffHandler;
 import combat.Mechanics;
 import maths.Distance;
-import maths.Utilities;
 import maths.Vector3f;
 import gameEngine.Block;
 import gameEngine.EntityManager;
@@ -16,7 +12,7 @@ import gameEngine.Map;
 import gameEngine.Tick;
 import graphicEngine.ShaderManager;
 
-public class Player extends Entity{
+public class Monster extends Entity{
 
 	private int destXIndex = 0;
 	private int destYIndex = 0;
@@ -24,6 +20,7 @@ public class Player extends Entity{
 
 	private int xIndex = Map.HEXESACROSS / 2;
 	private int yIndex = Map.HEXESDOWN / 2;
+
 	private int lastMove;
 
 	Distance distance = new Distance();
@@ -32,19 +29,19 @@ public class Player extends Entity{
 	private float offsetY;
 	private float zoomFactor;
 
+	static Entity self; //this needs to go away but im lazy
+	//Entity target = Player.self; //rwff
+
 	Mechanics m = new Mechanics();
 
-	Map map;
+	//Map map;
+	Block block;
 
-	public Player(Map map, String entityTag) {
-		initEntity("Neo"); //should do stuff
-		System.out.println(getEntityHealth());
-
-		//all values from my txt files, but im lazy and that will change anyways
+	public Monster(Map map, String entityTag) {
+		self = getEntity(entityTag);
 		initPlayerShader();
-		this.map = map;
-		addEntityInventory(getEntityWeaponTag());
-		addEntityInventory(getEntityArmorTag());
+		//this.map = map;
+		block = new Block();
 		lastMove = 0;
 		xIndex = Map.HEXESACROSS / 2;
 		yIndex = Map.HEXESDOWN / 2;
@@ -53,7 +50,7 @@ public class Player extends Entity{
 	private void initPlayerShader() {
 		ShaderManager.entityShader.start();
 		ShaderManager.entityShader.setUniform1f("side", EntityManager.side);
-		ShaderManager.entityShader.setUniform1i("ID", getID(getEntityTag()));
+		ShaderManager.entityShader.setUniform1i("ID", getID(self.getEntityTag()));
 		ShaderManager.entityShader.setUniform1f("apothem", EntityManager.APOTHEM);
 		ShaderManager.entityShader.setUniform1f("aspect", EntityManager.aspectScaler);
 		ShaderManager.entityShader.setUniform3f("pos", new Vector3f(-1f, 1f, 0));
@@ -74,22 +71,19 @@ public class Player extends Entity{
 	}
 
 	public boolean dead() {
-		if (getEntityHealth() <= 0) {
+		if (self.getEntityHealth() <= 0) {
 			return true;
 		} else {
 			return false;
 		}
 	}
-	public void hunger(){
-		if(BuffHandler.gatedEvent(300)){
-			setEntityHunger(getEntityHunger()-1);
-		}
-	}
+
 	public void update() {
-		hunger();
-		//System.out.println(self.getEntityHunger());
-		Block.steppedOn(xIndex, yIndex, EntityManager.player); //yeah yeah ill fix it later
-		if (Tick.getUpdateTick() - lastMove > (35.2 / getEntitySpeed() - 5.2)) {
+
+		//System.out.println(inventory[0]);
+		//System.out.println(Tick.getUpdateTick());
+		//System.out.println(self.getEntitySpeed());
+		if (Tick.getUpdateTick() - lastMove > (45.2 / self.getEntitySpeed() - 5.2)) {
 			getDestination();
 
 			if (checkDestination()) {				
@@ -114,17 +108,18 @@ public class Player extends Entity{
 
 			destXIndex = xIndex;
 			destYIndex = yIndex;
+			int r = Map.rng.nextInt(5);
 
-			if (KeyboardInput.isKeyDown(GLFW_KEY_Q)) {
+			if (r==0) {
 				if (xIndex % 2 == 0) {
 					destXIndex -= 1;
 				} else {
 					destYIndex -= 1;
 					destXIndex -= 1;
 				}
-			} else if (KeyboardInput.isKeyDown(GLFW_KEY_W)) {
+			} else if (r==1) {
 				destYIndex -= 1;
-			} else if (KeyboardInput.isKeyDown(GLFW_KEY_E)) {
+			} else if (r==2) {
 				if (xIndex % 2 == 0) {
 					destXIndex += 1;
 
@@ -132,7 +127,7 @@ public class Player extends Entity{
 					destXIndex += 1;
 					destYIndex -= 1;
 				}
-			} else if (KeyboardInput.isKeyDown(GLFW_KEY_A)) {
+			} else if (r==3) {
 				if (xIndex % 2 == 0) {
 					destXIndex -= 1;
 					destYIndex += 1;
@@ -140,31 +135,21 @@ public class Player extends Entity{
 					destXIndex -= 1;
 				}
 
-			} else if (KeyboardInput.isKeyDown(GLFW_KEY_S)) {
+			} else if (r==4) {
 				destYIndex += 1;
-			} else if (KeyboardInput.isKeyDown(GLFW_KEY_D)) {
+			} else if (r==5) {
 				if (xIndex % 2 == 0) {
 					destXIndex += 1;
 					destYIndex += 1;
 				} else {
 					destXIndex += 1;
 				}
-			} else if (KeyboardInput.isKeyDown(GLFW_KEY_R)) {
+			} else if (r==6) {
 				//System.out.println(Map.elevation[xIndex][yIndex]);
-				int[] i = Utilities.convertMouseIndex();
-				//System.out.println(i[0] + " " + i[1]);
-				System.out.println(xIndex + " " + yIndex);
 				lastMove = Tick.getUpdateTick();
-				//Monster monster = EntityManager.monster;
-				//int[] index = { xIndex, yIndex };
-				//System.out.println(monster.getIndex() + "H");//thows null pointer cuz not init
-				//m.attackHandler(self, monster, index, monster.getIndex());
-			}else if (KeyboardInput.isKeyDown(GLFW_KEY_I)) {
-				System.out.println(inventory.size());
-				for(int i = 0; i<inventory.size(); i++)
-				System.out.println(inventory.get(i));
-			}else if (KeyboardInput.isKeyDown(GLFW_MOUSE_BUTTON_3)) {
-				System.out.println("IM A MOUSE"); //need a mouse button handler case
+				Player player = EntityManager.player;
+				int[] index = { xIndex, yIndex };
+				m.attackHandler(self, player, index, player.getIndex());
 			}
 
 		}
@@ -175,7 +160,10 @@ public class Player extends Entity{
 		if ((destXIndex > 0) && (destYIndex > 0) && (destXIndex < (Map.HEXESACROSS))
 				&& (destYIndex < (Map.HEXESDOWN))) {
 			if (Block.destinationTraversable(destXIndex, destYIndex)) {
-				if (Math.abs(Map.elevation[xIndex][yIndex] - Map.elevation[destXIndex][destYIndex]) < 15) {
+				if (Map.land[destXIndex][destYIndex] == Map.SEED) {
+					return true;
+					//seeds are bs
+				} else if (Math.abs(Map.elevation[xIndex][yIndex] - Map.elevation[destXIndex][destYIndex]) < 100) {
 					return true;
 					//controls step up height
 				}
@@ -197,10 +185,12 @@ public class Player extends Entity{
 		if (offsetX + x > -zoomFactor + 1 && offsetX + x < zoomFactor - 1) {
 			offsetX += x;
 		} else {
+			//System.out.println("toofar");
 		}
 		if (offsetY + y > -zoomFactor + 1 && offsetY + y < zoomFactor - 1) {
 			offsetY += y;
 		} else {
+			//	System.out.println("toofar");
 		}
 		ShaderManager.entityShader.start();
 		ShaderManager.entityShader.setUniform3f("pos", new Vector3f(-zoomFactor + offsetX, zoomFactor + offsetY, 0));

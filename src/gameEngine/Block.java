@@ -2,7 +2,11 @@ package gameEngine;
 
 import java.util.Random;
 
-public class Biome {
+import combat.BuffHandler;
+
+import entity.Entity;
+
+public class Block {
 	public static final int UPPERFOREST = 1;
 	public static final int LOWERFOREST = 2;
 	public static final int MIDFOREST = 3;
@@ -15,15 +19,20 @@ public class Biome {
 	public static final int DEEPFOREST = 10;
 	public static final int THORNS = 11;
 	public static final int UNDERBRUSH = 12;
+	public static final int JG_TREE = 13;
+	public static final int ASH_TREE = 14;
+	public static final int PALM_TREE = 15;
+	public static final int FRUIT_BUSH = 16;
+	public static final int THORN_BUSH = 17;
+	public static final int REEDS = 18;
+	
 	static Random rng = Map.rng;
-	Map map;
-	public Biome(Map map){
-		this.map = map;
+	public Block(){
 	}
-	public static int getBiome(int elevation, String worldType, int moisture){
+	public static int getBlock(int elevation, String worldType, int moisture){
 		int biome = 100;
-		double eP = elevation/(double)Map.HEXESACROSS;
-		double mP = 2*moisture/(double)Map.HEXESACROSS;
+		double eP = 10*elevation/(double)Map.HEXESACROSS;
+		double mP = 10*moisture/(double)Map.HEXESACROSS;
 		//System.out.println(mP);
 		double chance = Math.abs(rng.nextDouble());
 		while (chance >0.6 || chance <0.4){
@@ -76,8 +85,8 @@ public class Biome {
 		return biome;
 	}
 
-	public boolean destinationTraversable(int xIndex, int yIndex) {
-		switch(map.land[xIndex][yIndex]){
+	public static boolean destinationTraversable(int xIndex, int yIndex) {
+		switch(Map.land[xIndex][yIndex]){
 		case Map.SEED:
 			return true;
 		case Map.LAND:
@@ -108,9 +117,42 @@ public class Biome {
 			return true;
 		case Map.WATER:
 			return false;
+		case JG_TREE:
+			return true;
+		case ASH_TREE:
+			return true;
+		case PALM_TREE:
+			return true;
+		case FRUIT_BUSH:
+			return true;
+		case THORN_BUSH:
+			return true;
+		case REEDS:
+			return true;
 		default:
-			System.err.println("NOT A BIOME");
+			System.err.println("NOT A BLOCK");
 			return false;
 		}
 	}
+	public static void steppedOn(int xIndex, int yIndex, Entity entity) {
+		switch(Map.land[xIndex][yIndex]){
+		case THORN_BUSH:
+			entity.setEntityHealth(entity.getEntityHealth()-(double)1/3);
+			//System.out.println(entity.getEntityHealth());
+			break;
+		case FRUIT_BUSH:
+			if(BuffHandler.gatedEvent(30)){
+			entity.addEntityInventory("fruit");
+			}
+			//System.out.println(entity.getEntityInventory());
+			//entity.setEntityHunger(entity.getEntityHunger()+(double)1/6);
+			//drop fruit eventually
+			break;
+		case REEDS:
+			//make stealth
+			break;
+		default:
+		}
+	}
 }
+

@@ -30,6 +30,7 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
+import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.opengl.GL;
 
 import gameEngine.EntityManager;
@@ -44,7 +45,6 @@ public class Window implements Runnable {
 	private GLFWCursorPosCallback cursorCallback;
 
 	public Long window;
-
 	EntityManager entityManager;
 	TickManager tickManager;
 
@@ -70,7 +70,6 @@ public class Window implements Runnable {
 		thread.start();
 
 	}
-
 	public void init() {
 		if (glfwInit() != GL_TRUE) {
 			System.err.println("GLFW init fail");
@@ -146,7 +145,7 @@ public class Window implements Runnable {
 			frames++;
 			if (System.currentTimeMillis() - timer > 1000) {
 				timer += 1000;
-				System.out.println(updates + " UPS, " + frames + " FPS");
+				//System.out.println(updates + " UPS, " + frames + " FPS");
 				frames = 0;
 				updates = 0;
 			}

@@ -11,7 +11,12 @@ import static org.lwjgl.opengl.GL20.glCreateShader;
 import static org.lwjgl.opengl.GL20.glGetShaderInfoLog;
 import static org.lwjgl.opengl.GL20.glGetShaderi;
 import static org.lwjgl.opengl.GL20.glShaderSource;
+<<<<<<< HEAD
 import static org.lwjgl.opengl.GL31.GL_UNIFORM_BUFFER;
+=======
+import gameEngine.EntityManager;
+import gameEngine.Map;
+>>>>>>> playerRework
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -25,6 +30,8 @@ import java.nio.IntBuffer;
 import java.nio.channels.FileChannel;
 
 import org.lwjgl.BufferUtils;
+
+import GUI.MouseInput;
 
 public class Utilities {
 	public static FloatBuffer createFloatBuffer(float[] data) {
@@ -90,6 +97,25 @@ public class Utilities {
 			System.err.println(-1);
 		}
 		return shaderID;
+	}
+	public static int[] convertMouseIndex(){
+		double[] mousePos = MouseInput.pos();
+		int [] index = new int[2];
+		double xC = 1920.0/Map.HEXESACROSS;
+		double yC = 1080.0/Map.HEXESDOWN;
+		
+		mousePos[0] = mousePos[0]/xC;
+		mousePos[1] = mousePos[1]/yC;
+		index[0] = (int)mousePos[0];
+		index[1] = (int)mousePos[1];
+		if(index[0] % 2 == 0){
+			index[1] +=1;
+		}
+		//this function "almost" works, the modulo is sad
+		
+		System.out.println(index[0] + " " + index[1] + "g");
+		return index;
+		
 	}
 
 	/** 

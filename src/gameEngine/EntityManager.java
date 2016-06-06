@@ -4,9 +4,8 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_UP;
-
 import GUI.KeyboardInput;
-import entity.MonsterV1;
+import entity.Monster;
 import entity.Player;
 import graphicEngine.Chunk;
 import graphicEngine.ShaderManager;
@@ -15,9 +14,9 @@ import maths.Vector3f;
 public class EntityManager {
 
 	//Player player;
-	public Map map;
+	public static Map map;
 	public static Player player;
-	public static MonsterV1 monster;
+	public static Monster monster;
 	public WorldType world;
 
 	@Deprecated
@@ -51,11 +50,15 @@ public class EntityManager {
 		
 		map = new Map();
 		world = new WorldType();
-		player = new Player(map);
+		player = new Player(map, "Neo");
 		//monster = new MonsterV1(map);
 		//	player.position.y = -0.01f;
 		//	player.position.x = 0.0f;
+<<<<<<< HEAD
 	//	zoom(10f);
+=======
+		zoom(1f);
+>>>>>>> playerRework
 	}
 
 	public void update() {

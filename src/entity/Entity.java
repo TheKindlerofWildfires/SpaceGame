@@ -2,6 +2,7 @@ package entity;
 
 import entity.monster.*;
 import entity.player.*;
+import inventory.Inventory;
 
 import java.util.*;
 
@@ -21,7 +22,10 @@ public abstract class Entity {
 	protected String entityNatAbility;
 	protected double entityRange;
 	protected int entityLevel;
+	protected double entityHunger;
+	protected Inventory inventory = new Inventory(144);
 	public Entity(){
+		entityHunger = 100;
 	}
 	public String getEntityTag() { 
 		return entityTag;
@@ -68,6 +72,32 @@ public abstract class Entity {
 	public int getEntityLevel() {
 		return entityLevel;
 	}
+	public double getEntityHunger() {
+		return entityHunger;
+	}
+	public Inventory getEntityInventory() {
+		return inventory;
+	}
+	public void initEntity(String entityTag) {
+		Entity buffer = getEntity(entityTag);
+		this.entityTag = entityTag;
+		entityCondition = buffer.getEntityCondition();
+		entityHealth = buffer.getEntityHealth();
+		entitySanity = buffer.getEntitySanity();
+		entityArmor= buffer.getEntityArmor();
+		entitySanityResist= buffer.getEntitySanityResist();
+		entityWeaponTag = buffer.getEntityWeaponTag();
+		entityWeaponDamage = buffer.getEntityWeaponDamage();
+		entityWeaponPriority = buffer.getEntityWeaponPriority(); 
+		entityArmorTag = buffer.getEntityArmorTag();
+		entityAbility = buffer.getEntityAbility(); 
+		entitySpeed = buffer.getEntitySpeed();
+		entityNatAbility = buffer.getEntityNatAbility();
+		entityRange = buffer.getEntitySanity();
+		entityLevel = buffer.getEntityLevel();
+		entityHunger = buffer.getEntityHunger();
+	}
+	
 	public void setEntityTag(String entityTag){
 		this.entityTag = entityTag;
 	}
@@ -111,6 +141,13 @@ public abstract class Entity {
 	public void setEntityLevel(int level){
 		this.entityLevel = level;
 	}
+	public void setEntityHunger(double hunger){
+		this.entityHunger = hunger;
+	}
+	public void addEntityInventory(String item){
+		//System.out.println("adding");
+		this.inventory.add(item);
+	}
 	public static Entity getEntity(String entityTag){
 		switch(entityTag){
 		case "Grunt":
@@ -147,6 +184,41 @@ public abstract class Entity {
 		}
 	
 }
+	public static int getID(String entityTag){
+		switch(entityTag){
+		case "Grunt":
+			return 0;
+		case "Hunter":
+			return 1;
+		case "Juggernaut":
+			return 2;
+		case "Leader":
+			return 3;
+		case "Lurker":
+			return 4;
+		case "Mage":
+			return 5;
+		case "Scout":
+			return 6;
+		case "Skirmisher":
+			return 7;
+		case "Sniper":
+			return 8;
+		case "Tank":
+			return 9;
+		case "Neo":
+			return 10;
+		case "Agent":
+			return 11;
+		case "Oc":
+			return 12;
+		case "God":
+			return 13;
+		default:
+			System.err.println("Invalid entity Tag");
+			return -1;
+		}
+	}
 	public static Entity getBlankEntity(String entityTag, int level, List<String> entityAbility){
 		Entity value = getEntity(entityTag);
 		value.setEntityLevel(level);
