@@ -77,11 +77,12 @@ public class Chunk {
 	public static VertexArrayObject hexagon = new VertexArrayObject(vertices, indices);
 
 	public static final int CHUNKSIZE = 16;
+	public static final int CHUNKHEIGHT = 16;
 
 	private int x;
 	private int y;
 
-	private float[] properties = new float[CHUNKSIZE * CHUNKSIZE * CHUNKSIZE];
+	private float[] properties = new float[CHUNKSIZE * CHUNKSIZE * CHUNKHEIGHT];
 	private int ubo;
 
 	private Matrix4f model;
@@ -104,14 +105,14 @@ public class Chunk {
 		///	ShaderManager.chunkShader.setUniform3f("objectColor", new Vector3f(1f, .5f, .31f));
 		ShaderManager.chunkShader.setUniform1f("ambientStrength", .1f);
 		ShaderManager.chunkShader.setUniform1f("specularStrength", .4f);
-		ShaderManager.chunkShader.setUniform1f("shininess", 64);
+		ShaderManager.chunkShader.setUniform1f("shininess", 256);
 
 		ShaderManager.chunkShader.setUniform1f("apothem", (float) Math.sqrt(3) / 2);
 		ShaderManager.chunkShader.setUniform1f("side", 1f);
 		ShaderManager.chunkShader.setUniform1i("chunkSize", CHUNKSIZE);
 
 		ShaderManager.chunkShader.setUniformBlockf("Properties", Utilities.createUniformBuffer(
-				Utilities.createUniformFloatBuffer(new float[CHUNKSIZE * CHUNKSIZE * CHUNKSIZE])), 0);
+				Utilities.createUniformFloatBuffer(new float[CHUNKSIZE * CHUNKSIZE * CHUNKHEIGHT])), 0);
 
 		ShaderManager.chunkShader.stop();
 	}
@@ -127,7 +128,7 @@ public class Chunk {
 		glBindVertexArray(hexagon.getVaoID());
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
-		glDrawElementsInstanced(GL_TRIANGLES, indices.length, GL_UNSIGNED_BYTE, 0, CHUNKSIZE * CHUNKSIZE * CHUNKSIZE);
+		glDrawElementsInstanced(GL_TRIANGLES, indices.length, GL_UNSIGNED_BYTE, 0, CHUNKSIZE * CHUNKSIZE * CHUNKHEIGHT);
 		glDisableVertexAttribArray(0);
 		glBindVertexArray(0);
 		ShaderManager.chunkShader.stop();

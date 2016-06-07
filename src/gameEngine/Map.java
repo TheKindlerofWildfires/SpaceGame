@@ -26,7 +26,7 @@ import maths.Utilities;
 import maths.Vector3f;
 
 public class Map {
-	public static final int HEXESACROSS = 193;
+	public static final int HEXESACROSS = 192;
 	public static final int HEXESDOWN = 96;
 
 	public static final int MOISTURESCALER = 3;
@@ -66,10 +66,10 @@ public class Map {
 	private float zoomFactor;
 	Perlin noise = new Perlin();
 
-	float[] data = new float[Chunk.CHUNKSIZE * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE];
+	float[] data = new float[Chunk.CHUNKSIZE * Chunk.CHUNKSIZE * Chunk.CHUNKHEIGHT];
 
 	public Map() {
-		
+
 		distance = new Distance();
 		long seed = rng.nextLong();
 		rng.setSeed(seed);
@@ -83,11 +83,11 @@ public class Map {
 		for (int x = 0; x < chunks.length; x++) {
 			for (int y = 0; y < chunks[0].length; y++) {
 
-				for (int i = 0; i < Chunk.CHUNKSIZE * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE; i++) {
+				for (int i = 0; i < Chunk.CHUNKSIZE * Chunk.CHUNKSIZE * Chunk.CHUNKHEIGHT; i++) {
 					data[i] = 0;
 				}
 
-				for (int i = 0; i < Chunk.CHUNKSIZE * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE; i++) {
+				for (int i = 0; i < Chunk.CHUNKSIZE * Chunk.CHUNKSIZE * Chunk.CHUNKHEIGHT; i++) {
 					if (i < Chunk.CHUNKSIZE * Chunk.CHUNKSIZE) {
 						int a = i / Chunk.CHUNKSIZE + x * Chunk.CHUNKSIZE;
 						int b = i % Chunk.CHUNKSIZE + y * Chunk.CHUNKSIZE;
@@ -138,9 +138,9 @@ public class Map {
 						if (elevation[a][b] > 14) {
 							data[i + 15 * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
 						}
-					//	if (elevation[a][b] > 15) {
+						//	if (elevation[a][b] > 15) {
 						//	data[i + 16 * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
-						//}
+						//}*/
 					} else {
 						//data[i] = 0;
 					}
@@ -274,6 +274,28 @@ public class Map {
 		//			}
 		//		}
 
+		/*int x = (int) (EntityManager.cameraPos.x / 32);
+		int y = (int) (EntityManager.cameraPos.y / 32);
+		chunks[x][y].render();
+		if (x > 0 && y > 0) {
+			chunks[x - 1][y].render();
+			chunks[x + 1][y].render();
+			chunks[x][y - 1].render();
+			chunks[x - 1][y - 1].render();
+			chunks[x + 1][y - 1].render();
+			chunks[x][y + 1].render();
+			chunks[x - 1][y + 1].render();
+			chunks[x + 1][y + 1].render();
+		}*/
+
+		//	chunks[4][3].render();
+		//	chunks[5][3].render();
+		//	chunks[3][4].render();
+		//	chunks[4][4].render();
+		//	chunks[5][4].render();
+		//	chunks[3][5].render();
+		//	chunks[4][5].render();
+		//	chunks[5][5].render();
 		for (int x = 0; x < HEXESACROSS / Chunk.CHUNKSIZE; x++) {
 			for (int y = 0; y < HEXESDOWN / Chunk.CHUNKSIZE; y++) {
 				chunks[x][y].render();
@@ -458,15 +480,15 @@ public class Map {
 					}
 				}*/
 				if (land[i][j] == LAND) {
-					
-					int elev = (int) (Math.abs(noise.getValue(i / ELEVATIONSCALER, j / ELEVATIONSCALER, .1))*16);
-					int moist = (int) (Math.abs(noise.getValue(i / MOISTURESCALER, j / MOISTURESCALER, .1))*16);
+
+					int elev = (int) (Math.abs(noise.getValue(i / ELEVATIONSCALER, j / ELEVATIONSCALER, .1)) * 16);
+					int moist = (int) (Math.abs(noise.getValue(i / MOISTURESCALER, j / MOISTURESCALER, .1)) * 16);
 					for (int k = 0; k < neighbors.length; k++) {
 						elev += elevation[neighbors[k][0]][neighbors[k][1]];
 						moist += moisture[neighbors[k][0]][neighbors[k][1]];
 					}
-					elev = elev/3-rng.nextInt(2);
-					moist = moist/3-rng.nextInt(3);
+					elev = elev / 3 - rng.nextInt(2);
+					moist = moist / 3 - rng.nextInt(3);
 					//elev = (elev / 5 + (int) (4+4*rng.nextDouble()));//one day this will all be perlin
 					//moist = (elev / 5 + (int) (4+4*rng.nextDouble()));
 					moisture[i][j] = moist;
@@ -487,8 +509,7 @@ public class Map {
 				}
 			}
 		}*/
-		if (landCount < (HEXESDOWN / 2) * (HEXESACROSS / 2)
-				|| landCount > (HEXESDOWN - 5) * (HEXESACROSS - 5)) {
+		if (landCount < (HEXESDOWN / 2) * (HEXESACROSS / 2) || landCount > (HEXESDOWN - 5) * (HEXESACROSS - 5)) {
 			System.out.println(landCount);
 			System.out.println((HEXESDOWN / 2) * (HEXESACROSS / 2));
 			System.out.println((HEXESDOWN - 5) * (HEXESACROSS - 5));

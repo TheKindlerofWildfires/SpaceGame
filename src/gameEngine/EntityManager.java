@@ -1,6 +1,6 @@
 package gameEngine;
 
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN;
+import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_UP;
@@ -36,10 +36,10 @@ public class EntityManager {
 	
 	public static byte[] indices = new byte[] { 0, 1, 2, 3, 4, 5, 0 };
 	
-	Vector3f cameraPos = new Vector3f(150,150,100);
-	Vector3f cameraTarget = new Vector3f(100,100,0);
-	Vector3f up = new Vector3f(0,0,1);
-	Vector3f lampPos = new Vector3f(150,150,100);
+	public static Vector3f cameraPos = new Vector3f(30,30,100);
+	public static Vector3f cameraTarget = new Vector3f(40,40,0);
+	public static Vector3f up = new Vector3f(0,0,1);
+	public static Vector3f lampPos = new Vector3f(150,150,100);
 	
 	public EntityManager() {
 		ShaderManager.loadAll();
@@ -61,19 +61,40 @@ public class EntityManager {
 		if (KeyboardInput.isKeyDown(GLFW_KEY_RIGHT)) {
 			//	System.out.println("right");
 			cameraPos = new Vector3f(cameraPos.x+1,cameraPos.y-0,cameraPos.z);
+			cameraTarget = new Vector3f(cameraTarget.x+1,cameraTarget.y-0,cameraTarget.z);
+
 		}
 		if (KeyboardInput.isKeyDown(GLFW_KEY_LEFT)) {
 			//	System.out.println("left");
 			cameraPos = new Vector3f(cameraPos.x-1,cameraPos.y-0,cameraPos.z);
+			cameraTarget = new Vector3f(cameraTarget.x-1,cameraTarget.y-0,cameraTarget.z);
+
 		}
 		if (KeyboardInput.isKeyDown(GLFW_KEY_UP)) {
 			//	System.out.println("up");
 			cameraPos = new Vector3f(cameraPos.x+0,cameraPos.y+1,cameraPos.z);
+			cameraTarget = new Vector3f(cameraTarget.x+0,cameraTarget.y+1,cameraTarget.z);
+
 		}
 		if (KeyboardInput.isKeyDown(GLFW_KEY_DOWN)) {
 			//	System.out.println("down");
 			cameraPos = new Vector3f(cameraPos.x+0,cameraPos.y-1,cameraPos.z);
+			cameraTarget = new Vector3f(cameraTarget.x+0,cameraTarget.y-1,cameraTarget.z);
+
+			
 		}
+	/*	if (KeyboardInput.isKeyDown(GLFW_KEY_D)) {
+			//	System.out.println("right");
+		}
+		if (KeyboardInput.isKeyDown(GLFW_KEY_A)) {
+			//	System.out.println("left");
+		}
+		if (KeyboardInput.isKeyDown(GLFW_KEY_W)) {
+			//	System.out.println("up");
+		}
+		if (KeyboardInput.isKeyDown(GLFW_KEY_S)) {
+			//	System.out.println("down");
+		}*/
 		ShaderManager.setMatrices(cameraPos, cameraTarget, up, lampPos);
 	}
 
