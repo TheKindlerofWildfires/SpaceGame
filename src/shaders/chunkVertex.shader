@@ -43,14 +43,50 @@ void main(void){
 		yOfset = 1.2*((yPos*2*apothem-apothem));
 	}
 	float zOfset=zPos*1.0f;
-	if(prop == 1){
-		VColor = vec3(.4,.6,.2);
-	} else if(prop == 2){
-		VColor = vec3(.6,.6,.4);
-	} else if(prop == 3){
-		VColor= vec3(.2,.4,.6);
-	} else{
-		VColor = vec3(.4,.6,.2);
+	if(prop==100){
+		VColor = vec3(0,1,0);
+	}else if(prop == 20){
+		VColor = vec3(0,0,1);
+	}else if(prop ==50){
+		VColor = vec3(1,0,1);
+	} else if(prop == 1){
+		VColor = vec3(0.18,0.75,0.38);
+	}else if(prop == 2){
+		VColor = vec3(0.3,0.3,0.12);
+	}else if(prop == 3){
+		VColor = vec3(0.21,0.6,0.34);
+	}else if(prop == 4){
+		VColor = vec3(0,0.3,0.12);
+	}else if(prop == 5){
+		VColor = vec3(0.92,0.78,0.68);
+	}else if(prop == 6){
+		VColor = vec3(0.98,0.70,0.60);
+	}else if(prop == 7){
+		VColor = vec3(0.5,0.5,0.4);
+	}else if(prop == 8){
+		VColor = vec3(0.3,0.3,0.3);
+	}else if(prop == 9){
+		VColor = vec3(0.15,0.56,0.36);
+	}else if(prop == 10){
+		VColor = vec3(0,0.16,0.1);
+	}else if(prop == 11){
+		VColor = vec3(0.5,1,0.1);
+	}else if(prop == 12){
+		VColor = vec3(0.16,0.43,0.16);
+	}else if(prop == 13){
+		VColor = vec3(0.1,0.43,0.16);
+	}else if(prop == 14){
+		VColor = vec3(0.43,0.43,0.66);
+	}else if(prop == 15){
+		VColor = vec3(0.21,0.73,0.26);
+	}else if(prop == 16){
+		VColor = vec3(0.8,0.43,0.46);
+	}else if(prop == 17){
+		VColor = vec3(0.5,0.1,0.5);
+	}else if(prop == 18){
+		VColor = vec3(0.6,0.63,0.46);
+	}else{
+		VColor = vec3(1,1,1);
 	}	
     gl_Position = projection * view * model * vec4(position.x+xOfset,position.y+yOfset,position.z+zOfset, 1.0f);
 	FragPos = vec3(model*vec4(position.x+xOfset,position.y+yOfset,position.z+zOfset, 1.0f));

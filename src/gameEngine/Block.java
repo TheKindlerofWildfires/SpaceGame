@@ -32,7 +32,7 @@ public class Block {
 	public static int getBlock(int elevation, String worldType, int moisture){
 		int biome = 100;
 		double eP = 10*elevation/(double)Map.HEXESACROSS;
-		double mP = 10*moisture/(double)Map.HEXESACROSS;
+		double mP = 15*moisture/(double)Map.HEXESACROSS;
 		//System.out.println(mP);
 		double chance = Math.abs(rng.nextDouble());
 		while (chance >0.6 || chance <0.4){
@@ -87,16 +87,16 @@ public class Block {
 
 	public static boolean destinationTraversable(int xIndex, int yIndex) {
 		switch(Map.land[xIndex][yIndex]){
-		//case Map.SEED:
-			//return true;
-		//case Map.LAND:
-			//return true;
+		case Map.SEED:
+			return true;
+		case Map.LAND:
+			return true;
 		case UPPERFOREST:
 			return true;
 		case LOWERFOREST:
 			return true;
-		//case MIDFOREST:
-			//return true;
+		case MIDFOREST:
+			return true;
 		case SAND:
 			return true;
 		case MUD:
