@@ -13,19 +13,14 @@ import static org.lwjgl.opengl.GL20.glGetShaderi;
 import static org.lwjgl.opengl.GL20.glShaderSource;
 
 import static org.lwjgl.opengl.GL31.GL_UNIFORM_BUFFER;
-import gameEngine.EntityManager;
 import gameEngine.Map;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.nio.channels.FileChannel;
 
 import org.lwjgl.BufferUtils;
 
