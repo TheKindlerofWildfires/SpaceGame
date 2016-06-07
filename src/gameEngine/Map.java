@@ -1,9 +1,5 @@
 package gameEngine;
 
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_UP;
 import static org.lwjgl.opengl.GL11.glBindTexture;
 import static org.lwjgl.opengl.GL11.glGenTextures;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE5;
@@ -28,18 +24,17 @@ import noiseLibrary.module.source.Perlin;
 import maths.Distance;
 import maths.Utilities;
 import maths.Vector3f;
-import GUI.KeyboardInput;
 
 public class Map {
 	public static final int HEXESACROSS = 193;
 	public static final int HEXESDOWN = 96;
 
-	public static final int MOISTURESCALER = 12;
-	public static final int ELEVATIONSCALER = 17;
+	public static final int MOISTURESCALER = 3;
+	public static final int ELEVATIONSCALER = 1;
 
-	public static final int LAND = 1;
-	public static final int WATER = 3;
-	public static final int SEED = 2;
+	public static final int LAND = 100;
+	public static final int WATER = 20;
+	public static final int SEED = 50;
 
 	public static String mapType;
 	public static String worldType;
@@ -69,7 +64,7 @@ public class Map {
 	private float offsetX = 0;
 	private float offsetY = 0;
 	private float zoomFactor;
-	Perlin perlin = new Perlin();
+	Perlin noise = new Perlin();
 
 	float[] data = new float[Chunk.CHUNKSIZE * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE];
 
@@ -78,11 +73,12 @@ public class Map {
 		distance = new Distance();
 		long seed = rng.nextLong();
 		rng.setSeed(seed);
-		perlin.setSeed((int) seed);
-		double d = 0;
-		System.out.println(d + "@");
+		noise.setSeed((int) seed);
+		noise.setFrequency(2);
+		noise.setLacunarity(2);
 		System.out.println("Random Seed is " + seed);
 		initializeMap();
+		generateFoliage();
 
 		for (int x = 0; x < chunks.length; x++) {
 			for (int y = 0; y < chunks[0].length; y++) {
@@ -153,7 +149,7 @@ public class Map {
 				chunks[x][y] = new Chunk(data, x, y);
 			}
 		}
-		generateFoliage();
+
 	}
 
 	@Deprecated
@@ -462,20 +458,21 @@ public class Map {
 					}
 				}*/
 				if (land[i][j] == LAND) {
-
-					int elev = 0;
-					int moist = 0;
+					
+					int elev = (int) (Math.abs(noise.getValue(i / ELEVATIONSCALER, j / ELEVATIONSCALER, .1))*16);
+					int moist = (int) (Math.abs(noise.getValue(i / MOISTURESCALER, j / MOISTURESCALER, .1))*16);
 					for (int k = 0; k < neighbors.length; k++) {
 						elev += elevation[neighbors[k][0]][neighbors[k][1]];
 						moist += moisture[neighbors[k][0]][neighbors[k][1]];
 					}
-					elev = (elev / 5 + (int) (4+4*rng.nextDouble()));//one day this will all be perlin
-					moist = (elev / 5 + (int) (4+4*rng.nextDouble()));
+					elev = elev/3-rng.nextInt(2);
+					moist = moist/3-rng.nextInt(3);
+					//elev = (elev / 5 + (int) (4+4*rng.nextDouble()));//one day this will all be perlin
+					//moist = (elev / 5 + (int) (4+4*rng.nextDouble()));
 					moisture[i][j] = moist;
 
-					elevation[i][j] = elev/2;
-					land[i][j] = Block.getBlock(elevation[i][j], worldType,
-							moisture[i][j]);
+					elevation[i][j] = elev;
+					land[i][j] = Block.getBlock(elevation[i][j], worldType, moisture[i][j]);
 					landCount += 1;
 				}
 			}
@@ -496,7 +493,7 @@ public class Map {
 			System.out.println((HEXESDOWN / 2) * (HEXESACROSS / 2));
 			System.out.println((HEXESDOWN - 5) * (HEXESACROSS - 5));
 			System.out.println("Bad map gen");
-			// reload me here
+			//System.exit(-1);
 		}
 	}
 
