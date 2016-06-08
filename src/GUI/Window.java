@@ -11,21 +11,26 @@ import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
 import static org.lwjgl.glfw.GLFW.glfwDestroyWindow;
 import static org.lwjgl.glfw.GLFW.glfwInit;
 import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
+import static org.lwjgl.glfw.GLFW.glfwPollEvents;
 import static org.lwjgl.glfw.GLFW.glfwSetCursorPosCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowPos;
 import static org.lwjgl.glfw.GLFW.glfwShowWindow;
 import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
-import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.glfwWindowHint;
 import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
+import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.GL_TRUE;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
+import static org.lwjgl.opengl.GL30.glBindVertexArray;
+import static org.lwjgl.opengl.GL31.glDrawArraysInstanced;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 import org.lwjgl.glfw.GLFWCursorPosCallback;
@@ -35,6 +40,8 @@ import org.lwjgl.opengl.GL;
 import gameEngine.EntityManager;
 import gameEngine.Tick;
 import gameEngine.TickManager;
+import graphicEngine.ShaderManager;
+import graphicEngine.VertexArrayObject;
 import maths.Matrix4f;
 
 public class Window implements Runnable {
@@ -49,13 +56,10 @@ public class Window implements Runnable {
 
 	public static void main(String args[]) {
 
-		Matrix4f toast = new Matrix4f(1,1,1,1,
-				1,1,1,1,
-				1,1,1,1,
-				1,1,1,1);
-		
+		Matrix4f toast = new Matrix4f(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+
 		System.out.println(Matrix4f.inverse(toast));
-		
+
 		Window game = new Window();
 
 		game.run();
@@ -69,6 +73,7 @@ public class Window implements Runnable {
 		thread.start();
 
 	}
+
 	public void init() {
 		if (glfwInit() != GL_TRUE) {
 			System.err.println("GLFW init fail");
@@ -104,21 +109,50 @@ public class Window implements Runnable {
 		entityManager = new EntityManager();
 		tickManager = new TickManager();
 
+		
+		for(int i=0;i<NUMBEROFTRIS*3;i++){
+			colours[i] = (float)(2*Math.random()-1);
+		}
+		
+		VAO = new VertexArrayObject(vertices, colours);
+		VAO2 = new VertexArrayObject(vertices, true);
 		//System.out.println(glGetString(GL_VERSION));
 	}
 
 	public void update() {
 		glfwPollEvents();
-		entityManager.update();
-		tickManager.update();
+		//entityManager.update();
+		//tickManager.update();
 	}
+	
+	VertexArrayObject VAO;
+	VertexArrayObject VAO2;
+	int NUMBEROFTRIS = 10000000; //38FPS
+
+	float[] vertices = {
+		0,0,0,
+		0,.001f,0,
+		.001f,0,0
+	};
+
+	float[] colours = new float[NUMBEROFTRIS*3];
+
 
 	public void render() {
 		glfwSwapBuffers(window);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		entityManager.render();
-		tickManager.render();
+		//entityManager.render();
+		//tickManager.render();
+
+		
+		ShaderManager.testShader.start();
+		glBindVertexArray(VAO.getVaoID());
+		glEnableVertexAttribArray(0);
+		glDrawArraysInstanced(GL_TRIANGLES, 0, 3, NUMBEROFTRIS); //26
+		glDisableVertexAttribArray(0);
+		glBindVertexArray(0);
+		ShaderManager.testShader.stop();
 	}
 
 	@Override
