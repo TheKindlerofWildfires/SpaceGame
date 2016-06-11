@@ -110,49 +110,24 @@ public class Window implements Runnable {
 		tickManager = new TickManager();
 
 		
-		for(int i=0;i<NUMBEROFTRIS*3;i++){
-			colours[i] = (float)(2*Math.random()-1);
-		}
-		
-		VAO = new VertexArrayObject(vertices, colours);
-		VAO2 = new VertexArrayObject(vertices, true);
 		//System.out.println(glGetString(GL_VERSION));
 	}
 
 	public void update() {
 		glfwPollEvents();
-		//entityManager.update();
-		//tickManager.update();
+		entityManager.update();
+		tickManager.update();
 	}
-	
-	VertexArrayObject VAO;
-	VertexArrayObject VAO2;
-	int NUMBEROFTRIS = 10000000; //38FPS
-
-	float[] vertices = {
-		0,0,0,
-		0,.001f,0,
-		.001f,0,0
-	};
-
-	float[] colours = new float[NUMBEROFTRIS*3];
 
 
 	public void render() {
 		glfwSwapBuffers(window);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		//entityManager.render();
-		//tickManager.render();
+		entityManager.render();
+		tickManager.render();
 
 		
-		ShaderManager.testShader.start();
-		glBindVertexArray(VAO.getVaoID());
-		glEnableVertexAttribArray(0);
-		glDrawArraysInstanced(GL_TRIANGLES, 0, 3, NUMBEROFTRIS); //26
-		glDisableVertexAttribArray(0);
-		glBindVertexArray(0);
-		ShaderManager.testShader.stop();
 	}
 
 	@Override

@@ -1,11 +1,10 @@
 package graphicEngine;
 
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
-import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
+import static org.lwjgl.opengl.GL11.glDrawArrays;
 import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL31.glDrawElementsInstanced;
 
 import maths.Matrix4f;
 import maths.Utilities;
@@ -14,8 +13,9 @@ import maths.Vector3f;
 public class Chunk {
 
 	//@formatter:off
-	public static float sqrt3 = (float)Math.sqrt(3);
-	public static float[] vertices = {
+	private static final float sqrt3 = (float)Math.sqrt(3);
+	
+	private static final float[] vertices = {
 			//TOP
 			2/sqrt3,   0, 1,   1,0,0,  0,0,1,//right 0
 			1/sqrt3,  -1, 1,   0,0,1,  0,0,1,// lower right 1
@@ -62,7 +62,7 @@ public class Chunk {
 			-2/sqrt3,  0, 0,   0,1,1,  -1/2,sqrt3/2,0//left 3
 	};
 	
-	public static byte[] indices = new byte[] {
+	private static final byte[] indices = new byte[] {
 			0,1,2,0,2,3,0,3,4,0,4,5, 
 			6,7,8,6,8,9,6,9,10,6,10,11, 
 			12,13,14,12,14,15,
@@ -72,9 +72,46 @@ public class Chunk {
 			28,29,30,28,30,31,
 			32,33,34,32,34,35 
 	};
+	
+	private final float[] top = { //NORMAL 0,0,1
+			2/sqrt3,   0, 1,  1,1,1,//right 0
+			1/sqrt3,  -1, 1,  1,1,1,// lower right 1
+			-1/sqrt3, -1, 1,  1,1,1,//lower left 2
+			
+			2/sqrt3,   0, 1,  1,1,1,//right 0
+			-1/sqrt3, -1, 1,  1,1,1,//lower left 2
+			-2/sqrt3,  0, 1,  1,1,1,//left 3
+
+			2/sqrt3,   0, 1,  1,1,1,//right 0
+			-2/sqrt3,  0, 1,  1,1,1,//left 3
+			-1/sqrt3,  1, 1,  1,1,1,//upper left 4
+
+			2/sqrt3,   0, 1,  1,1,1,//right 0
+			-1/sqrt3,  1, 1,  1,1,1,//upper left 4
+			1/sqrt3,   1, 1,  1,1,1,//upper right 5
+
+			
+			
+			2/sqrt3,   0, 3,  1,1,1,//right 0
+			1/sqrt3,  -1, 3,  1,1,1,// lower right 1
+			-1/sqrt3, -1, 3,  1,1,1,//lower left 2
+			
+			2/sqrt3,   0, 3,  1,1,1,//right 0
+			-1/sqrt3, -1, 3,  1,1,1,//lower left 2
+			-2/sqrt3,  0, 3,  1,1,1,//left 3
+
+			2/sqrt3,   0, 3,  1,1,1,//right 0
+			-2/sqrt3,  0, 3,  1,1,1,//left 3
+			-1/sqrt3,  1, 3,  1,1,1,//upper left 4
+
+			2/sqrt3,   0, 3,  1,1,1,//right 0
+			-1/sqrt3,  1, 3,  1,1,1,//upper left 4
+			1/sqrt3,   1, 3,  1,1,1//upper right 5			
+	};
+	
 	//@formatter:on
 
-	public static VertexArrayObject hexagon = new VertexArrayObject(vertices, indices);
+	private final VertexArrayObject hexagon = new VertexArrayObject(top, 2);
 
 	public static final int CHUNKSIZE = 16;
 	public static final int CHUNKHEIGHT = 16;
@@ -82,18 +119,17 @@ public class Chunk {
 	private int x;
 	private int y;
 
-	private float[] properties = new float[CHUNKSIZE * CHUNKSIZE * CHUNKHEIGHT];
-	private int ubo;
+	private float[][][] properties = new float[CHUNKSIZE][CHUNKSIZE][CHUNKHEIGHT];
 
 	private Matrix4f model;
 	private Matrix4f normal;
 
-	public Chunk(float[] properties, int x, int y) {
-		model = Matrix4f.translate(6 * 1.2f * x / 4 * CHUNKSIZE - 10, 2 * CHUNKSIZE * (float) Math.sqrt(3) / 2 * 1.2f * y - 10, 0)
-				.multiply(Matrix4f.scale(1, 1, .5f));
+	public Chunk(float[][][] properties, int x, int y) {
+		model = Matrix4f.translate(6 * 1.2f * x / 4 * CHUNKSIZE - 10,
+				2 * CHUNKSIZE * (float) Math.sqrt(3) / 2 * 1.2f * y - 10, 0).multiply(Matrix4f.scale(1, 1, .5f));
+		
 		normal = Matrix4f.inverse(model).transpose();
 		this.properties = properties;
-		ubo = Utilities.createUniformBuffer(Utilities.createUniformFloatBuffer(properties));
 		this.x = x;
 		this.y = y;
 	}
@@ -103,7 +139,7 @@ public class Chunk {
 
 		ShaderManager.chunkShader.setUniform3f("lightColor", new Vector3f(1f, 1, 1));
 		///	ShaderManager.chunkShader.setUniform3f("objectColor", new Vector3f(1f, .5f, .31f));
-		ShaderManager.chunkShader.setUniform1f("ambientStrength", .1f);
+		ShaderManager.chunkShader.setUniform1f("ambientStrength", 1f);
 		ShaderManager.chunkShader.setUniform1f("specularStrength", .4f);
 		ShaderManager.chunkShader.setUniform1f("shininess", 256);
 
@@ -119,16 +155,16 @@ public class Chunk {
 
 	public void render() {
 		ShaderManager.chunkShader.start();
-		ShaderManager.chunkShader.setUniformBlockf("Properties", ubo, 0);
 
 		//	mat3(transpose(inverse(model)))
 		ShaderManager.chunkShader.setUniformMatrix4f("model", model);
 		ShaderManager.chunkShader.setUniformMatrix4f("norm", normal);
+		
+		ShaderManager.chunkShader.setUniform3f("normal", new Vector3f(0,0,1));
 
 		glBindVertexArray(hexagon.getVaoID());
 		glEnableVertexAttribArray(0);
-		glEnableVertexAttribArray(1);
-		glDrawElementsInstanced(GL_TRIANGLES, indices.length, GL_UNSIGNED_BYTE, 0, CHUNKSIZE * CHUNKSIZE * CHUNKHEIGHT);
+		glDrawArrays(GL_TRIANGLES, 0, indices.length);
 		glDisableVertexAttribArray(0);
 		glBindVertexArray(0);
 		ShaderManager.chunkShader.stop();

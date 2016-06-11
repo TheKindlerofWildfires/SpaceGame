@@ -146,7 +146,7 @@ public class Map {
 					}
 				}
 
-				chunks[x][y] = new Chunk(data, x, y);
+				//	chunks[x][y] = new Chunk(data, x, y);
 			}
 		}
 
@@ -296,11 +296,29 @@ public class Map {
 		//	chunks[3][5].render();
 		//	chunks[4][5].render();
 		//	chunks[5][5].render();
-		for (int x = 0; x < HEXESACROSS / Chunk.CHUNKSIZE; x++) {
-			for (int y = 0; y < HEXESDOWN / Chunk.CHUNKSIZE; y++) {
-				chunks[x][y].render();
+		//
+
+		//int x = (int)(EntityManager.cameraPos.x/32/1.2);
+		//int y = (int)(EntityManager.cameraPos.y/32/1.2);
+		//System.out.println(x);
+		//chunks[x][y].render();
+
+		//		for (int x = 0; x < HEXESACROSS / Chunk.CHUNKSIZE; x++) {
+		//			for (int y = 0; y < HEXESDOWN / Chunk.CHUNKSIZE; y++) {
+		//				chunks[x][y].render();
+		//			}
+		//		}
+
+		float[][][] data = new float[Chunk.CHUNKSIZE][Chunk.CHUNKSIZE][Chunk.CHUNKHEIGHT];
+		for (int x = 0; x < data.length; x++) {
+			for (int y = 0; y < data[0].length; y++) {
+				for (int z = 0; z < data[0][0].length; z++) {
+					data[x][y][z] = 1;
+				}
 			}
 		}
+
+		new Chunk(data, 1, 1).render();
 	}
 
 	public void update() {

@@ -21,29 +21,57 @@ public class VertexArrayObject {
 
 	private int vaoID;
 
+	@Deprecated
 	public VertexArrayObject(float[] vertices, byte[] indices) {
 		createArrayObject(vertices, indices);
 	}
 
+	@Deprecated
 	public VertexArrayObject(float[] vertices) {
 		createArrayObject(vertices);
 	}
 
+	@Deprecated
 	public VertexArrayObject(float[] vertices, boolean isOnlyCoords) {
 		createArrayObject(vertices, isOnlyCoords);
 	}
-	
-	public VertexArrayObject(float[] positions, float[] colours){
+
+	@Deprecated
+	public VertexArrayObject(float[] positions, float[] colours) {
 		createArrayObject(positions, colours);
 	}
-	
+
+	public VertexArrayObject(float[] positions, int numberOfVec3s) {
+		createArrayObject(positions, numberOfVec3s);
+	}
+
+	public void createArrayObject(float[] positions, int numberOfVec3s) {
+		vaoID = glGenVertexArrays();
+		glBindVertexArray(vaoID);
+		createVerticesBuffer(positions, numberOfVec3s);
+		glBindVertexArray(0);
+	}
+
+	@Deprecated
 	public void createArrayObject(float[] positions, float[] colours) {
 		vaoID = glGenVertexArrays();
 		glBindVertexArray(vaoID);
 		createVerticesBuffer(positions, colours);
 		glBindVertexArray(0);
 	}
-	
+
+	private void createVerticesBuffer(float[] positions, int numberOfVec3s) {
+		int vboID = glGenBuffers();
+		glBindBuffer(GL_ARRAY_BUFFER, vboID);
+		glBufferData(GL_ARRAY_BUFFER, Utilities.createFloatBuffer(positions), GL_STATIC_DRAW);
+		for (int i = 0; i < numberOfVec3s; i++) {
+			glEnableVertexAttribArray(i);
+			glVertexAttribPointer(i, 3, GL_FLOAT, false, 4 * 3 * numberOfVec3s, i * 3 * 4); //send positions on pipe 0
+		}
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
+
+	@Deprecated
 	private void createVerticesBuffer(float[] positions, float[] colours) {
 		int positionsBuffer = glGenBuffers();
 		glBindBuffer(GL_ARRAY_BUFFER, positionsBuffer);
@@ -51,14 +79,15 @@ public class VertexArrayObject {
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0); //send positions on pipe 0
 		int colorsBuffer = glGenBuffers();
-		glBindBuffer(GL_ARRAY_BUFFER,colorsBuffer);
+		glBindBuffer(GL_ARRAY_BUFFER, colorsBuffer);
 		glBufferData(GL_ARRAY_BUFFER, Utilities.createFloatBuffer(colours), GL_STATIC_DRAW);
 		glEnableVertexAttribArray(1);
 		glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0); //send positions on pipe 0
-		glBindBuffer(GL_ARRAY_BUFFER,0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glVertexAttribDivisor(1, 1);
 	}
 
+	@Deprecated
 	public void createArrayObject(float[] vertices, byte[] indices) {
 		vaoID = glGenVertexArrays();
 		glBindVertexArray(vaoID);
@@ -69,6 +98,7 @@ public class VertexArrayObject {
 		glBindVertexArray(0);
 	}
 
+	@Deprecated
 	public void createArrayObject(float[] vertices) {
 		vaoID = glGenVertexArrays();
 		glBindVertexArray(vaoID);
@@ -76,6 +106,7 @@ public class VertexArrayObject {
 		glBindVertexArray(0);
 	}
 
+	@Deprecated
 	public void createArrayObject(float[] vertices, boolean isOnlyCoords) {
 		vaoID = glGenVertexArrays();
 		glBindVertexArray(vaoID);
@@ -83,6 +114,7 @@ public class VertexArrayObject {
 		glBindVertexArray(0);
 	}
 
+	@Deprecated
 	private void createVerticesBuffer(float[] vertices) {
 		int vboID = glGenBuffers();
 		glBindBuffer(GL_ARRAY_BUFFER, vboID);
@@ -96,6 +128,7 @@ public class VertexArrayObject {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
+	@Deprecated
 	private void createVerticesBuffer(float[] vertices, boolean isOnlyCoords) {
 		int vboID = glGenBuffers();
 		glBindBuffer(GL_ARRAY_BUFFER, vboID);
@@ -107,12 +140,15 @@ public class VertexArrayObject {
 			glVertexAttribPointer(1, 3, GL_FLOAT, false, 4 * 9, 3 * 4); //send colors on pipe 1
 			glEnableVertexAttribArray(2);
 			glVertexAttribPointer(2, 3, GL_FLOAT, false, 4 * 9, 6 * 4); //send normals on pipe 2
+		} else {
+			glEnableVertexAttribArray(0);
+			System.out.println("ello");
+			glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0); //send positions on pipe 0
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
 		}
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0); //send positions on pipe 0
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
+	@Deprecated
 	private void createIndicesBuffer(byte[] indices) {
 		int ibo = glGenBuffers();
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);

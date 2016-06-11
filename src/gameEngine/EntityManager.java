@@ -36,8 +36,8 @@ public class EntityManager {
 	
 	public static byte[] indices = new byte[] { 0, 1, 2, 3, 4, 5, 0 };
 	
-	public static Vector3f cameraPos = new Vector3f(30,30,100);
-	public static Vector3f cameraTarget = new Vector3f(40,40,0);
+	public static Vector3f cameraPos = new Vector3f(0,0,30);
+	public static Vector3f cameraTarget = new Vector3f(0,20,0);
 	public static Vector3f up = new Vector3f(0,0,1);
 	public static Vector3f lampPos = new Vector3f(150,150,100);
 	
