@@ -7,6 +7,10 @@ import combat.BuffHandler;
 import entity.Entity;
 
 public class Block {
+	public static final int AIR = 0;
+	public static final int LAND = 100;
+	public static final int WATER = 20;
+	public static final int SEED = 50;
 	public static final int UPPERFOREST = 1;
 	public static final int LOWERFOREST = 2;
 	public static final int MIDFOREST = 3;
