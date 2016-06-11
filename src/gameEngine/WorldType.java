@@ -13,7 +13,8 @@ public class WorldType {
 	
 	public WorldType(){
 		//PLEASE PLEASE INIT ME
-		worldType = Map.worldType; 
+//		worldType = Map.worldType; 
+	    worldType = "sapric";
 		switch(worldType){
 		case "telilic":
 			difficulty = 1;

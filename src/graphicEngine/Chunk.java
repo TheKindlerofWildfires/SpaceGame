@@ -104,7 +104,7 @@ public class Chunk {
 		///	ShaderManager.chunkShader.setUniform3f("objectColor", new Vector3f(1f, .5f, .31f));
 		ShaderManager.chunkShader.setUniform1f("ambientStrength", .1f);
 		ShaderManager.chunkShader.setUniform1f("specularStrength", .4f);
-		ShaderManager.chunkShader.setUniform1f("shininess", 64);
+		ShaderManager.chunkShader.setUniform1f("shininess", 40);
 
 		ShaderManager.chunkShader.setUniform1f("apothem", (float) Math.sqrt(3) / 2);
 		ShaderManager.chunkShader.setUniform1f("side", 1f);
