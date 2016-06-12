@@ -11,7 +11,7 @@ import maths.Vector3f;
 import noiseLibrary.module.source.Perlin;
 
 public class Map {
-	public static final int HEXESACROSS = 193;
+	public static final int HEXESACROSS = 196;
 	public static final int HEXESDOWN = 96;
 	public static final int WORLDHEIGHT = 16;
 
