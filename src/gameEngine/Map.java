@@ -26,6 +26,10 @@ import maths.Utilities;
 import maths.Vector3f;
 
 public class Map {
+
+	int numberOfChunks = 10;
+	Chunk[] chunk = new Chunk[numberOfChunks];
+
 	public static final int HEXESACROSS = 192;
 	public static final int HEXESDOWN = 96;
 
@@ -150,6 +154,19 @@ public class Map {
 			}
 		}
 
+		float[][][] dat = new float[Chunk.CHUNKSIZE][Chunk.CHUNKSIZE][Chunk.CHUNKHEIGHT];
+
+		for (int x = 0; x < dat.length; x++) {
+			for (int y = 0; y < dat[0].length; y++) {
+				for (int z = 0; z < dat[0][0].length; z++) {
+					dat[x][y][z] = 1;
+				}
+			}
+		}
+		for (int i = 0; i < chunk.length; i++) {
+			chunk[i] = new Chunk(dat, i, 1);
+		}
+
 	}
 
 	@Deprecated
@@ -255,6 +272,7 @@ public class Map {
 		ShaderManager.chunkShader.start();
 		ShaderManager.chunkShader.setUniform3f("pos", new Vector3f(-zoomFactor + offsetX, zoomFactor + offsetY, 0));
 		ShaderManager.chunkShader.stop();
+
 	}
 
 	public void render() {
@@ -309,16 +327,9 @@ public class Map {
 		//			}
 		//		}
 
-		float[][][] data = new float[Chunk.CHUNKSIZE][Chunk.CHUNKSIZE][Chunk.CHUNKHEIGHT];
-		for (int x = 0; x < data.length; x++) {
-			for (int y = 0; y < data[0].length; y++) {
-				for (int z = 0; z < data[0][0].length; z++) {
-					data[x][y][z] = 1;
-				}
-			}
+		for(int i=0;i<numberOfChunks;i++){
+			chunk[i].render();
 		}
-
-		new Chunk(data, 1, 1).render();
 	}
 
 	public void update() {
