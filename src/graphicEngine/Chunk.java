@@ -179,8 +179,10 @@ public class Chunk {
 	public static final int BACKLEFT = 7;
 
 	//PER FACE VAOS, VAO LENGTHS, AND NORMALS
-	private VertexArrayObject[] VAOS = new VertexArrayObject[8];
-	private int[] numberOfPts = new int[8];
+	private static final VertexArrayObject[] VAOS = new VertexArrayObject[8];
+	private static final VertexArrayObject fullVAO = new VertexArrayObject(vertices, 1);
+	private static final int fullNumberOfPts = vertices.length;
+	private static final int[] numberOfPts = new int[8];
 	private static final Vector3f[] normals = new Vector3f[8];
 
 	public Vector3f[] boundingBox = new Vector3f[8];
@@ -282,16 +284,18 @@ public class Chunk {
 		ShaderManager.chunkShader.setUniformMatrix4f("model", model);
 		ShaderManager.chunkShader.setUniformMatrix4f("norm", normal);
 
+		ShaderManager.chunkShader.setUniformBlockf("Properties", UBO, 0);
+
 		Vector3f cameraDir = EntityManager.camera.getPos().subtract(EntityManager.camera.getTarget());
 
-		for (int i = 0; i < normals.length; i++) {
-			if (normals[i].dot(cameraDir) > 0) {
-				ShaderManager.chunkShader.setUniform3f("normal", normals[i]);
-				glBindVertexArray(VAOS[i].getVaoID());
-				glDrawArrays(GL_TRIANGLES, 0, numberOfPts[i]);
-			}
-		}
-
+		//for (int i = 0; i < normals.length; i++) {
+		//	if (normals[i].dot(cameraDir) > 0) {
+				ShaderManager.chunkShader.setUniform3f("normal", normals[0]);
+				glBindVertexArray(fullVAO.getVaoID());
+				glDrawArraysInstanced(GL_TRIANGLES, 0, fullNumberOfPts, CHUNKSIZE * CHUNKSIZE * CHUNKHEIGHT);
+	//		}
+		//}
+//
 		glBindVertexArray(0);
 		ShaderManager.chunkShader.stop();
 	}
