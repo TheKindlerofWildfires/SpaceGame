@@ -73,99 +73,82 @@ public class Chunk {
 	};
 	
 	private static final float[] bottom = {
-			2/sqrt3,   0, 0,  //right 0
-			1/sqrt3,  -1, 0,  // lower right 1
-			-1/sqrt3, -1, 0,  //lower left 2
-			
-			2/sqrt3,   0, 0, //right 0
-			-1/sqrt3, -1, 0, //lower left 2
-			-2/sqrt3,  0, 0, //left 3
-
-			2/sqrt3,   0, 0, //right 0
-			-2/sqrt3,  0, 0, //left 3
-			-1/sqrt3,  1, 0, //upper left 4
-
-			2/sqrt3,   0, 0, //right 0
-			-1/sqrt3,  1, 0, //upper left 4
-			1/sqrt3,   1, 0, //upper right 5
+			2/sqrt3,   0, 0,   0,1,1,  0,0,-1,//right 0
+			1/sqrt3,  -1, 0,   1,0,1,  0,0,-1,// lower right 1
+			-1/sqrt3, -1, 0,   1,1,0,  0,0,-1,//lower left 2
+			-2/sqrt3,  0, 0,   1,0,1,  0,0,-1,//left 3
+			-1/sqrt3,  1, 0,   0,1,1,  0,0,-1,//upper left 4
+			1/sqrt3,   1, 0,   1,0,1,  0,0,-1,//upper right 5
 	};
 		
 	private static final float[] top = { //NORMAL 0,0,1
-			2/sqrt3,   0, 1,  //right 0
-			1/sqrt3,  -1, 1,  // lower right 1
-			-1/sqrt3, -1, 1,  //lower left 2
-			
-			2/sqrt3,   0, 1, //right 0
-			-1/sqrt3, -1, 1, //lower left 2
-			-2/sqrt3,  0, 1, //left 3
-
-			2/sqrt3,   0, 1, //right 0
-			-2/sqrt3,  0, 1, //left 3
-			-1/sqrt3,  1, 1, //upper left 4
-
-			2/sqrt3,   0, 1, //right 0
-			-1/sqrt3,  1, 1, //upper left 4
-			1/sqrt3,   1, 1, //upper right 5
+			2/sqrt3,   0, 1,   1,0,0,  0,0,1,//right 0
+			1/sqrt3,  -1, 1,   0,0,1,  0,0,1,// lower right 1
+			-1/sqrt3, -1, 1,   1,0,0,  0,0,1,//lower left 2
+			-2/sqrt3,  0, 1,   0,0,1,  0,0,1,//left 3
+			-1/sqrt3,  1, 1,   1,0,0,  0,0,1,//upper left 4
+			1/sqrt3,   1, 1,   0,0,1,  0,0,1,//upper right 5
 	};
 	
 	private static final float[] front = {
-		-1/sqrt3,  1, 1, //upper left 4
-		1/sqrt3,   1, 1, //upper right 5
-		1/sqrt3,   1, 0, //upper right 5
-		
-		-1/sqrt3,  1, 1, //upper left 4
-		1/sqrt3,   1, 0, //upper right 5
-		-1/sqrt3,  1, 0  //upper left 4
+			-1/sqrt3,  1, 1,   1,0,1,  0,1,0,//upper left 4
+			1/sqrt3,   1, 1,   1,0,1,  0,1,0,//upper right 5
+			1/sqrt3,   1, 0,   1,0,1,  0,1,0,//upper right 5
+			-1/sqrt3,  1, 0,   1,0,1,  0,1,0,//upper left 4
 	};
 	
 	private static final float[] back = {
-			1/sqrt3,  -1, 1, // lower right 1
-			-1/sqrt3, -1, 1, //lower left 2
-			-1/sqrt3, -1, 0, //lower left 2
-			
-			1/sqrt3,  -1, 1, // lower right 1
-			-1/sqrt3, -1, 0, //lower left 2
-			1/sqrt3,  -1, 0  // lower right 1
+			1/sqrt3,  -1, 1,   0,1,0,  0,-1,0,// lower right 1
+			-1/sqrt3, -1, 1,   0,1,0,  0,-1,0,//lower left 2
+			-1/sqrt3, -1, 0,   0,1,0,  0,-1,0,//lower left 2
+			1/sqrt3,  -1, 0,   0,1,0,  0,-1,0,// lower right 1
 	};
 	
 	private static final float[] frontRight = {
-		1/sqrt3,   1, 1, //upper right 5
-		2/sqrt3,   0, 1, //right 0
-		2/sqrt3,   0, 0, //right 0
-		
-		1/sqrt3,   1, 1, //upper right 5
-		2/sqrt3,   0, 0, //right 0
-		1/sqrt3,   1, 0  //upper right 5
+			1/sqrt3,   1, 1,   1,1,0,  1/2,sqrt3/2,0,//upper right 5
+			2/sqrt3,   0, 1,   1,1,0,  1/2,sqrt3/2,0,//right 0
+			2/sqrt3,   0, 0,   1,1,0,  1/2,sqrt3/2,0,//right 0
+			1/sqrt3,   1, 0,   1,1,0,  1/2,sqrt3/2,0,//upper right 5
 	};
 	
 	private static final float[] frontLeft = {
-		-2/sqrt3,  0, 1, //left 3
-		-1/sqrt3, +1, 1, //lower left 2
-		-1/sqrt3, +1, 0, //lower left 2
-		
-		-2/sqrt3,  0, 1, //left 3
-		-1/sqrt3, +1, 0, //lower left 2
-		-2/sqrt3,  0, 0  //left 3
+			-2/sqrt3,  0, 1,   0,1,1,  -1/2,sqrt3/2,0,//left 3
+			-1/sqrt3, +1, 1,   0,1,1,  -1/2,sqrt3/2,0,//lower left 2
+			-1/sqrt3, +1, 0,   0,1,1,  -1/2,sqrt3/2,0,//lower left 2
+			-2/sqrt3,  0, 0,   0,1,1,  -1/2,sqrt3/2,0//left 3
 	};
 
 	private static final float[] backLeft = {
-		-1/sqrt3, -1, 1, //lower left 2
-		-2/sqrt3,  0, 1, //left 3
-		-2/sqrt3,  0, 0, //left 3
-		
-		-1/sqrt3, -1, 1, //lower left 2
-		-2/sqrt3,  0, 0, //left 3
-		-1/sqrt3, -1, 0  //lower left 2
+			-1/sqrt3, -1, 1,   0,0,1,  -1/2,-sqrt3/2,0,//lower left 2
+			-2/sqrt3,  0, 1,   0,0,1,  -1/2,-sqrt3/2,0,//left 3
+			-2/sqrt3,  0, 0,   0,0,1,  -1/2,-sqrt3/2,0,//left 3
+			-1/sqrt3, -1, 0,   0,0,1,  -1/2,-sqrt3/2,0,//lower left 2
 	};
 	
 	private static final float[] backRight = {
-		2/sqrt3,   0, 1, //right 0
-		1/sqrt3,  -1, 1, // lower right 1
-		1/sqrt3,  -1, 0, // lower right 1
-		
-		2/sqrt3,   0, 1, //right 0
-		1/sqrt3,  -1, 0, // lower right 1
-		2/sqrt3,   0, 0  //right 0
+			2/sqrt3,   0, 1,   1,0,0,  1/2,-sqrt3/2,0,//right 0
+			1/sqrt3,  -1, 1,   1,0,0,  1/2,-sqrt3/2,0,// lower right 1
+			1/sqrt3,  -1, 0,   1,0,0,  1/2,-sqrt3/2,0,// lower right 1
+			2/sqrt3,   0, 0,   1,0,0,  1/2,-sqrt3/2,0,//right 0
+	};
+	
+	public static byte[] indices = new byte[] {
+			0,1,2,0,2,3,0,3,4,0,4,5, 
+			6,7,8,6,8,9,6,9,10,6,10,11, 
+			12,13,14,12,14,15,
+			16,17,18,16,18,19,
+			20,21,22,20,22,23,
+			24,25,26,24,26,27,
+			28,29,30,28,30,31,
+			32,33,34,32,34,35 
+	};
+	
+	public static byte[] hexesIndices = {
+			0,1,2,0,2,3,0,3,4,0,4,5, 
+	};
+
+	public static byte[] sidesIndices = {
+			0,1,2,0,2,3
 	};
 	//@formatter:on
 
@@ -180,7 +163,7 @@ public class Chunk {
 
 	//PER FACE VAOS, VAO LENGTHS, AND NORMALS
 	private static final VertexArrayObject[] VAOS = new VertexArrayObject[8];
-	private static final VertexArrayObject fullVAO = new VertexArrayObject(vertices, 1);
+	private static final VertexArrayObject fullVAO = new VertexArrayObject(vertices, indices);
 	private static final int fullNumberOfPts = vertices.length;
 	private static final int[] numberOfPts = new int[8];
 	private static final Vector3f[] normals = new Vector3f[8];
@@ -237,14 +220,14 @@ public class Chunk {
 				2 * CHUNKSIZE * (float) Math.sqrt(3) / 2 * 1.2f * (chunkY + 1) - 10, 16);
 
 		//CREATE VAOS (Dont question it)
-		VAOS[TOP] = new VertexArrayObject(top, 1);
-		VAOS[BOTTOM] = new VertexArrayObject(bottom, 1);
-		VAOS[FRONT] = new VertexArrayObject(front, 1);
-		VAOS[BACK] = new VertexArrayObject(back, 1);
-		VAOS[FRONTRIGHT] = new VertexArrayObject(frontRight, 1);
-		VAOS[FRONTLEFT] = new VertexArrayObject(frontLeft, 1);
-		VAOS[BACKRIGHT] = new VertexArrayObject(backRight, 1);
-		VAOS[BACKLEFT] = new VertexArrayObject(backLeft, 1);
+		VAOS[TOP] = new VertexArrayObject(top, hexesIndices);
+		VAOS[BOTTOM] = new VertexArrayObject(bottom, hexesIndices);
+		VAOS[FRONT] = new VertexArrayObject(front, sidesIndices);
+		VAOS[BACK] = new VertexArrayObject(back, sidesIndices);
+		VAOS[FRONTRIGHT] = new VertexArrayObject(frontRight, sidesIndices);
+		VAOS[FRONTLEFT] = new VertexArrayObject(frontLeft, sidesIndices);
+		VAOS[BACKRIGHT] = new VertexArrayObject(backRight, sidesIndices);
+		VAOS[BACKLEFT] = new VertexArrayObject(backLeft, sidesIndices);
 
 		//HOW BIG ARE MY ARRAYS??? NO ONE KNOWS (Except this part of the code. it knows)
 		numberOfPts[TOP] = top.length;
@@ -288,14 +271,16 @@ public class Chunk {
 
 		Vector3f cameraDir = EntityManager.camera.getPos().subtract(EntityManager.camera.getTarget());
 
-		//for (int i = 0; i < normals.length; i++) {
-		//	if (normals[i].dot(cameraDir) > 0) {
-				ShaderManager.chunkShader.setUniform3f("normal", normals[0]);
-				glBindVertexArray(fullVAO.getVaoID());
-				glDrawArraysInstanced(GL_TRIANGLES, 0, fullNumberOfPts, CHUNKSIZE * CHUNKSIZE * CHUNKHEIGHT);
-	//		}
-		//}
-//
+		for (int i = 0; i < normals.length; i++) {
+			if (normals[i].dot(cameraDir) > .1) { //MAKES IT FASTER, BUT NEEDS TWEAKING
+				ShaderManager.chunkShader.setUniform3f("normal", normals[i]);
+				glBindVertexArray(VAOS[i].getVaoID());
+				glDrawElementsInstanced(GL_TRIANGLES,
+						(i == BOTTOM || i == TOP) ? hexesIndices.length : sidesIndices.length, GL_UNSIGNED_BYTE, 0,
+						CHUNKSIZE * CHUNKSIZE * CHUNKHEIGHT);
+			}
+		}
+		glDisableVertexAttribArray(0);
 		glBindVertexArray(0);
 		ShaderManager.chunkShader.stop();
 	}
