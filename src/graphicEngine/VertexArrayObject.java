@@ -66,7 +66,7 @@ public class VertexArrayObject {
 		glBufferData(GL_ARRAY_BUFFER, Utilities.createFloatBuffer(positions), GL_STATIC_DRAW);
 		for (int i = 0; i < numberOfVec3s; i++) {
 			glEnableVertexAttribArray(i);
-			glVertexAttribPointer(i, 3, GL_FLOAT, false, 4 * 3 * numberOfVec3s, i * 3 * 4); //send positions on pipe 0
+			glVertexAttribPointer(i, 3, GL_FLOAT, false, 4 * 3 * numberOfVec3s, i * 3 * 4); //send positions on pipe i
 		}
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}

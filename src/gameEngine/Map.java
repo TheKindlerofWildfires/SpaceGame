@@ -169,7 +169,7 @@ public class Map {
 		}
 		for (int i = 0; i < chunk.length / chunksUP; i++) {
 			for (int j = 0; j < chunksUP; j++) {
-				chunk[i*chunksUP+j] = new Chunk(dat, i, j);
+				chunk[i * chunksUP + j] = new Chunk(dat, i, j);
 			}
 		}
 	}
@@ -303,9 +303,6 @@ public class Map {
 		//				chunks[x][y].render();
 		//			}
 		//		}
-		Matrix4f mat = Matrix4f.perspective(45, 16 / 9f, .1f, 300)
-				.multiply(Matrix4f.gluLookAt(new Vector3f(0, 0, 0), new Vector3f(0, 10, 0), new Vector3f(0, 0, 1)));
-		Frustum frust = new Frustum(mat);
 		int counter = 0;
 		for (int i = 0; i < numberOfChunks; i++) {
 			if (EntityManager.camera.getFrustum().boxIsInside(chunk[i].boundingBox)) {
