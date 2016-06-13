@@ -188,7 +188,7 @@ public class Chunk {
 	private Matrix4f model;
 	private Matrix4f normal;
 
-	private int VBO;
+	private int UBO;
 
 	public Chunk(float[][][] properties, int chunkX, int chunkY) {
 		//NORMALS FOR LIGHT AND FOR FACE CULLING
@@ -254,28 +254,7 @@ public class Chunk {
 		numberOfPts[BACKLEFT] = backLeft.length;
 		numberOfPts[BACKRIGHT] = backRight.length;
 
-		VBO = glGenBuffers();
-		float[] liamPayne = threeDto1D(properties);
-		glBufferData(VBO)
-	}
-	
-	public static float[] oneDto3D(float[] input, int xSize, int ySize, int zSize){
-		float[][][] output = new float[xSize][ySize][zSize];
-		
-		return output;
-	}
-
-	public static float[] threeDto1D(float[][][] input) {
-		float[] output = new float[input.length * input[0].length * input[0][0].length];
-		int counter = 0;
-		for (int x = 0; x < input.length; x++) {
-			for (int y = 0; y < input[0].length; y++) {
-				for (int z = 0; z < input[0][0].length; z++) {
-					output[counter++] = input[x][y][z];
-				}
-			}
-		}
-		return output;
+		UBO = Utilities.createUniformBuffer(Utilities.createUniformFloatBuffer(Utilities.flatten(properties)));
 	}
 
 	public static void initShader() {

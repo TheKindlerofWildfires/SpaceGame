@@ -27,6 +27,33 @@ import org.lwjgl.BufferUtils;
 import GUI.MouseInput;
 
 public class Utilities {
+	public static float[][][] unflatten(float[] input, int xSize, int ySize, int zSize) {
+		float[][][] output = new float[xSize][ySize][zSize];
+		for (int i = 0; i < input.length; i++) {
+			int xPos = i % xSize;
+			int yPos = (i / xSize) % ySize;
+			int zPos = i / (xSize * ySize);
+			output[xPos][yPos][zPos] = input[i];
+		}
+		if (output[0][0].length != zSize) {
+			System.err.println("i feel hurt and betrayed");
+		}
+		return output;
+	}
+
+	public static float[] flatten(float[][][] input) {
+		float[] output = new float[input.length * input[0].length * input[0][0].length];
+		int counter = 0;
+		for (int z = 0; z < input[0][0].length; z++) {
+			for (int y = 0; y < input[0].length; y++) {
+				for (int x = 0; x < input.length; x++) {
+					output[counter++] = input[x][y][z];
+				}
+			}
+		}
+		return output;
+	}
+
 	public static FloatBuffer createFloatBuffer(float[] data) {
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(data.length);
 		buffer.put(data);
