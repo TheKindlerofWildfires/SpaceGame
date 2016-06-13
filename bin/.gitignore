@@ -1,5 +1,16 @@
+<<<<<<< HEAD
 /graphicEngine/
 /gameEngine/
 /gen/
+=======
+/shaders/
+/graphicEngine/
+/GUI/
+>>>>>>> iWillBeOptimizedPls
 /entity/
+/gameEngine/
 /maths/
+<<<<<<< HEAD
+=======
+/classesSimonDoesntLike/
+>>>>>>> iWillBeOptimizedPls

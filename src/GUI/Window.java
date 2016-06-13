@@ -22,20 +22,26 @@ import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
+import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.GL_TRUE;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
+import static org.lwjgl.opengl.GL30.glBindVertexArray;
+import static org.lwjgl.opengl.GL31.glDrawArraysInstanced;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
-import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.opengl.GL;
 
 import gameEngine.EntityManager;
 import gameEngine.Tick;
 import gameEngine.TickManager;
+import graphicEngine.ShaderManager;
+import graphicEngine.VertexArrayObject;
 import maths.Matrix4f;
 
 public class Window implements Runnable {
@@ -50,13 +56,10 @@ public class Window implements Runnable {
 
 	public static void main(String args[]) {
 
-		Matrix4f toast = new Matrix4f(1,1,1,1,
-				1,1,1,1,
-				1,1,1,1,
-				1,1,1,1);
-		
+		Matrix4f toast = new Matrix4f(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+
 		System.out.println(Matrix4f.inverse(toast));
-		
+
 		Window game = new Window();
 
 		game.run();
@@ -70,6 +73,7 @@ public class Window implements Runnable {
 		thread.start();
 
 	}
+
 	public void init() {
 		if (glfwInit() != GL_TRUE) {
 			System.err.println("GLFW init fail");
@@ -105,6 +109,7 @@ public class Window implements Runnable {
 		entityManager = new EntityManager();
 		tickManager = new TickManager();
 
+		
 		//System.out.println(glGetString(GL_VERSION));
 	}
 
@@ -114,12 +119,15 @@ public class Window implements Runnable {
 		tickManager.update();
 	}
 
+
 	public void render() {
 		glfwSwapBuffers(window);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		entityManager.render();
 		tickManager.render();
+
+		
 	}
 
 	@Override

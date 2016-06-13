@@ -2,7 +2,6 @@
 
 layout(location = 0) in vec3 position;
 layout(location = 1) in vec3 color;
-layout(location = 2) in vec3 normal;
 
 out vec3 VColor;
 out vec3 Normal;
@@ -22,18 +21,17 @@ uniform float side;
 
 uniform int chunkSize;
 
-uniform int chunkX;
-uniform int chunkY;
-
 layout(std140) uniform Properties{
 	float properties[16*16*16];
 };
 
+uniform vec3 normal;
+
 void main(void){
 	float prop = properties[gl_InstanceID];
-	int xPos = (gl_InstanceID / chunkSize) % chunkSize + chunkX;
+	int xPos = gl_InstanceID % chunkSize;
+	int yPos = (gl_InstanceID / chunkSize) % chunkSize;
 	int zPos = gl_InstanceID / (chunkSize * chunkSize);
-	int yPos = gl_InstanceID % chunkSize + chunkY;
 	
 	float xOfset = 1.2*(xPos*3*side/2);
 	float yOfset;
@@ -43,7 +41,7 @@ void main(void){
 		yOfset = 1.2*((yPos*2*apothem-apothem));
 	}
 	float zOfset=zPos*1.0f;
-	if(prop==100){
+if(prop==100){
 		VColor = vec3(0,1,0);
 	}else if(prop == 20){
 		VColor = vec3(0,0,1);
