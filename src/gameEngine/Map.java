@@ -12,22 +12,25 @@ import static org.lwjgl.opengl.GL15.glGenBuffers;
 import static org.lwjgl.opengl.GL30.GL_R32UI;
 import static org.lwjgl.opengl.GL31.GL_TEXTURE_BUFFER;
 import static org.lwjgl.opengl.GL31.glTexBuffer;
-import graphicEngine.Chunk;
-import graphicEngine.ShaderManager;
-import graphicEngine.VertexArrayObject;
 
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Random;
 
-import noiseLibrary.module.source.Perlin;
+import graphicEngine.Chunk;
+import graphicEngine.ShaderManager;
 import maths.Distance;
+import maths.Frustum;
+import maths.Matrix4f;
+import maths.Plane;
 import maths.Utilities;
 import maths.Vector3f;
+import noiseLibrary.module.source.Perlin;
 
 public class Map {
 
-	int numberOfChunks = 10;
+	int numberOfChunks = 2000;
+	int chunksUP = 40;
 	Chunk[] chunk = new Chunk[numberOfChunks];
 
 	public static final int HEXESACROSS = 192;
@@ -51,9 +54,6 @@ public class Map {
 	public static Random rng = new Random();
 
 	public Chunk[][] chunks = new Chunk[HEXESACROSS / Chunk.CHUNKSIZE][HEXESDOWN / Chunk.CHUNKSIZE];
-
-	public static VertexArrayObject vao = new VertexArrayObject(EntityManager.vertices, EntityManager.indices);
-	public static int vaoID = vao.getVaoID();
 
 	public static final String[] maps = { "fractal","soft","stand","trig","quad","e2","e" };
 	public static final String[] splots = { "grit","exp","ln","rng","arm","disk" };// there are more
@@ -159,49 +159,54 @@ public class Map {
 		for (int x = 0; x < dat.length; x++) {
 			for (int y = 0; y < dat[0].length; y++) {
 				for (int z = 0; z < dat[0][0].length; z++) {
-					dat[x][y][z] = 1;
+					if (z < 3) {
+						dat[x][y][z] = 1;
+					} else {
+						dat[x][y][z] = 0;
+					}
 				}
 			}
 		}
-		for (int i = 0; i < chunk.length; i++) {
-			chunk[i] = new Chunk(dat, i, 1);
+		for (int i = 0; i < chunk.length / chunksUP; i++) {
+			for (int j = 0; j < chunksUP; j++) {
+				chunk[i*chunksUP+j] = new Chunk(dat, i, j);
+			}
 		}
-
 	}
 
 	@Deprecated
-	private void initShader() {
-		ShaderManager.landShader.start();
-		ShaderManager.landShader.setUniform1f("side", EntityManager.side);
-		ShaderManager.landShader.setUniform1i("hexesAcross", HEXESACROSS);
-		ShaderManager.landShader.setUniform1f("apothem", EntityManager.APOTHEM);
-		ShaderManager.landShader.setUniform1f("aspect", EntityManager.aspectScaler);
-		ShaderManager.landShader.setUniform3f("pos", new Vector3f(-1f, 1f, 0));
-
-		int[] land = new int[HEXESACROSS * HEXESDOWN];
-		int counter = 0;
-		for (int x = 0; x < HEXESDOWN; x++) {
-			for (int y = 0; y < HEXESACROSS; y++) {
-				land[counter] = Map.land[y][x];
-				counter++;
-			}
-		}
-		int bufferID = glGenBuffers();
-
-		glBindBuffer(GL_ARRAY_BUFFER, bufferID);
-		glBindBuffer(GL_TEXTURE_BUFFER, bufferID);
-		IntBuffer data = Utilities.createIntBuffer(land);
-		glBufferData(GL_ARRAY_BUFFER, data, GL_STATIC_DRAW);
-
-		int textureID = glGenTextures();
-		glBindTexture(GL_TEXTURE_BUFFER, textureID);
-		glTexBuffer(GL_TEXTURE_BUFFER, GL_R32UI, bufferID);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-		glActiveTexture(GL_TEXTURE5);
-		glBindTexture(GL_TEXTURE_BUFFER, textureID);
-
-	}
+	//	private void initShader() {
+	//		ShaderManager.landShader.start();
+	//		ShaderManager.landShader.setUniform1f("side", EntityManager.side);
+	//		ShaderManager.landShader.setUniform1i("hexesAcross", HEXESACROSS);
+	//		ShaderManager.landShader.setUniform1f("apothem", EntityManager.APOTHEM);
+	//		ShaderManager.landShader.setUniform1f("aspect", EntityManager.aspectScaler);
+	//		ShaderManager.landShader.setUniform3f("pos", new Vector3f(-1f, 1f, 0));
+	//
+	//		int[] land = new int[HEXESACROSS * HEXESDOWN];
+	//		int counter = 0;
+	//		for (int x = 0; x < HEXESDOWN; x++) {
+	//			for (int y = 0; y < HEXESACROSS; y++) {
+	//				land[counter] = Map.land[y][x];
+	//				counter++;
+	//			}
+	//		}
+	//		int bufferID = glGenBuffers();
+	//
+	//		glBindBuffer(GL_ARRAY_BUFFER, bufferID);
+	//		glBindBuffer(GL_TEXTURE_BUFFER, bufferID);
+	//		IntBuffer data = Utilities.createIntBuffer(land);
+	//		glBufferData(GL_ARRAY_BUFFER, data, GL_STATIC_DRAW);
+	//
+	//		int textureID = glGenTextures();
+	//		glBindTexture(GL_TEXTURE_BUFFER, textureID);
+	//		glTexBuffer(GL_TEXTURE_BUFFER, GL_R32UI, bufferID);
+	//		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	//
+	//		glActiveTexture(GL_TEXTURE5);
+	//		glBindTexture(GL_TEXTURE_BUFFER, textureID);
+	//
+	//	}
 
 	/*
 	 * @Deprecated private Hexagon[] getAllNeighbors(Hexagon hex) { if
@@ -245,34 +250,6 @@ public class Map {
 		} else {
 			return new int[0][0];
 		}
-	}
-
-	@Deprecated
-	public void zoom(float zoomFactor) {
-		this.zoomFactor = zoomFactor;
-		ShaderManager.chunkShader.start();
-		ShaderManager.chunkShader.setUniform1f("side", EntityManager.side * zoomFactor);
-		ShaderManager.chunkShader.setUniform1f("apothem", EntityManager.APOTHEM * zoomFactor);
-		ShaderManager.chunkShader.setUniform3f("pos", new Vector3f(-zoomFactor + offsetX, zoomFactor + offsetY, 0));
-		ShaderManager.chunkShader.stop();
-	}
-
-	@Deprecated
-	public void offset(float x, float y) {
-		if (offsetX + x > -zoomFactor + 1 && offsetX + x < zoomFactor - 1) {
-			offsetX += x;
-		} else {
-			// System.out.println("toofar");
-		}
-		if (offsetY + y > -zoomFactor + 1 && offsetY + y < zoomFactor - 1) {
-			offsetY += y;
-		} else {
-			// System.out.println("toofar");
-		}
-		ShaderManager.chunkShader.start();
-		ShaderManager.chunkShader.setUniform3f("pos", new Vector3f(-zoomFactor + offsetX, zoomFactor + offsetY, 0));
-		ShaderManager.chunkShader.stop();
-
 	}
 
 	public void render() {
@@ -326,10 +303,17 @@ public class Map {
 		//				chunks[x][y].render();
 		//			}
 		//		}
-
-		for(int i=0;i<numberOfChunks;i++){
-			chunk[i].render();
+		Matrix4f mat = Matrix4f.perspective(45, 16 / 9f, .1f, 300)
+				.multiply(Matrix4f.gluLookAt(new Vector3f(0, 0, 0), new Vector3f(0, 10, 0), new Vector3f(0, 0, 1)));
+		Frustum frust = new Frustum(mat);
+		int counter = 0;
+		for (int i = 0; i < numberOfChunks; i++) {
+			if (EntityManager.camera.getFrustum().boxIsInside(chunk[i].boundingBox)) {
+				chunk[i].render();
+				counter++;
+			}
 		}
+		System.out.println(counter);
 	}
 
 	public void update() {

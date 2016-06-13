@@ -1,6 +1,3 @@
-/gameEngine/
 /graphicEngine/
-/shaders/
-/GUI/
-/entity/
+/gameEngine/
 /maths/
