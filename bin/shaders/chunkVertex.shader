@@ -2,10 +2,6 @@
 
 layout(location = 0) in vec3 position;
 layout(location = 1) in vec3 color;
-<<<<<<< HEAD
-layout(location = 2) in vec3 normal;
-=======
->>>>>>> iWillBeOptimizedPls
 
 out vec3 VColor;
 out vec3 Normal;
@@ -25,23 +21,10 @@ uniform float side;
 
 uniform int chunkSize;
 
-<<<<<<< HEAD
-uniform int chunkX;
-uniform int chunkY;
-
-=======
->>>>>>> iWillBeOptimizedPls
 layout(std140) uniform Properties{
 	float properties[16*16*16];
 };
 
-<<<<<<< HEAD
-void main(void){
-	float prop = properties[gl_InstanceID];
-	int xPos = (gl_InstanceID / chunkSize) % chunkSize + chunkX;
-	int zPos = gl_InstanceID / (chunkSize * chunkSize);
-	int yPos = gl_InstanceID % chunkSize + chunkY;
-=======
 uniform vec3 normal;
 
 void main(void){
@@ -49,7 +32,6 @@ void main(void){
 	int xPos = gl_InstanceID % chunkSize;
 	int yPos = (gl_InstanceID / chunkSize) % chunkSize;
 	int zPos = gl_InstanceID / (chunkSize * chunkSize);
->>>>>>> iWillBeOptimizedPls
 	
 	float xOfset = 1.2*(xPos*3*side/2);
 	float yOfset;
@@ -59,11 +41,7 @@ void main(void){
 		yOfset = 1.2*((yPos*2*apothem-apothem));
 	}
 	float zOfset=zPos*1.0f;
-<<<<<<< HEAD
-	if(prop==100){
-=======
 if(prop==100){
->>>>>>> iWillBeOptimizedPls
 		VColor = vec3(0,1,0);
 	}else if(prop == 20){
 		VColor = vec3(0,0,1);

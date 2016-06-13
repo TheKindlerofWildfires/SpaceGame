@@ -1,10 +1,8 @@
 package gameEngine;
 
-<<<<<<< HEAD
 import graphicEngine.Chunk;
 import graphicEngine.ShaderManager;
 import graphicEngine.VertexArrayObject;
-=======
 import static org.lwjgl.opengl.GL11.glBindTexture;
 import static org.lwjgl.opengl.GL11.glGenTextures;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE5;
@@ -17,13 +15,10 @@ import static org.lwjgl.opengl.GL15.glGenBuffers;
 import static org.lwjgl.opengl.GL30.GL_R32UI;
 import static org.lwjgl.opengl.GL31.GL_TEXTURE_BUFFER;
 import static org.lwjgl.opengl.GL31.glTexBuffer;
->>>>>>> iWillBeOptimizedPls
 
 import java.util.Random;
 
-<<<<<<< HEAD
 import maths.Distance;
-=======
 import graphicEngine.Chunk;
 import graphicEngine.ShaderManager;
 import maths.Distance;
@@ -31,21 +26,17 @@ import maths.Frustum;
 import maths.Matrix4f;
 import maths.Plane;
 import maths.Utilities;
->>>>>>> iWillBeOptimizedPls
 import maths.Vector3f;
 import noiseLibrary.module.source.Perlin;
 
 public class Map {
-<<<<<<< HEAD
-	public static final int HEXESACROSS = 196;
-=======
+
 
 	int numberOfChunks = 2000;
 	int chunksUP = 40;
 	Chunk[] chunk = new Chunk[numberOfChunks];
 
 	public static final int HEXESACROSS = 192;
->>>>>>> iWillBeOptimizedPls
 	public static final int HEXESDOWN = 96;
 	public static final int WORLDHEIGHT = 16;
 
@@ -65,12 +56,7 @@ public class Map {
 
 	public Chunk[][] chunks = new Chunk[HEXESACROSS / Chunk.CHUNKSIZE][HEXESDOWN
 			/ Chunk.CHUNKSIZE];
-
-<<<<<<< HEAD
-	public static VertexArrayObject vao = new VertexArrayObject(
-			EntityManager.vertices, EntityManager.indices);
-	public static int vaoID = vao.getVaoID();
-
+	
 	public static final String[] maps = { "fractal", "soft", "stand", "trig",
 			"quad", "e2", "e" };
 	public static final String[] splots = { "grit", "exp", "ln", "rng", "arm",
@@ -80,13 +66,7 @@ public class Map {
 	public static int[][][] land = new int[HEXESACROSS][HEXESDOWN][WORLDHEIGHT];
 	// public static int[][] elevation = new int[HEXESACROSS + 1][HEXESDOWN +
 	// 1];
-=======
-	public static final String[] maps = { "fractal","soft","stand","trig","quad","e2","e" };
-	public static final String[] splots = { "grit","exp","ln","rng","arm","disk" };// there are more
-	public static final String[] worldTypes = { "telilic","sapric","worlic" };
-	public static int[][] land = new int[HEXESACROSS][HEXESDOWN];
-	public static int[][] elevation = new int[HEXESACROSS + 1][HEXESDOWN + 1];
->>>>>>> iWillBeOptimizedPls
+
 	public static int[][] moisture = new int[HEXESACROSS + 1][HEXESDOWN + 1];
 
 	public int[][] seeds;
@@ -97,11 +77,7 @@ public class Map {
 	private float zoomFactor;
 	Perlin noise = new Perlin();
 
-<<<<<<< HEAD
 	float[] data = new float[Chunk.CHUNKSIZE * Chunk.CHUNKSIZE * WORLDHEIGHT];
-=======
-	float[] data = new float[Chunk.CHUNKSIZE * Chunk.CHUNKSIZE * Chunk.CHUNKHEIGHT];
->>>>>>> iWillBeOptimizedPls
 
 	public Map() {
 
@@ -112,7 +88,7 @@ public class Map {
 		noise.setFrequency(2);
 		noise.setLacunarity(2);
 		System.out.println("Random Seed is " + seed);
-<<<<<<< HEAD
+
 		land = new WorldGenerator().generate();
 		// initializeMap();
 		// generateFoliage();
@@ -125,77 +101,8 @@ public class Map {
 					int z = i / (Chunk.CHUNKSIZE * Chunk.CHUNKSIZE);
 					int y = i % Chunk.CHUNKSIZE + chunkY;
 					data[i] = land[x][y][z];
-=======
-		initializeMap();
-		generateFoliage();
-
-		for (int x = 0; x < chunks.length; x++) {
-			for (int y = 0; y < chunks[0].length; y++) {
-
-				for (int i = 0; i < Chunk.CHUNKSIZE * Chunk.CHUNKSIZE * Chunk.CHUNKHEIGHT; i++) {
-					data[i] = 0;
 				}
-
-				for (int i = 0; i < Chunk.CHUNKSIZE * Chunk.CHUNKSIZE * Chunk.CHUNKHEIGHT; i++) {
-					if (i < Chunk.CHUNKSIZE * Chunk.CHUNKSIZE) {
-						int a = i / Chunk.CHUNKSIZE + x * Chunk.CHUNKSIZE;
-						int b = i % Chunk.CHUNKSIZE + y * Chunk.CHUNKSIZE;
-
-						data[i] = land[a][b];
-						if (elevation[a][b] > 0) {
-							data[i + Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
-						}
-						if (elevation[a][b] > 1) {
-							data[i + 2 * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
-						}
-						if (elevation[a][b] > 2) {
-							data[i + 3 * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
-						}
-						if (elevation[a][b] > 3) {
-							data[i + 4 * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
-						}
-						if (elevation[a][b] > 4) {
-							data[i + 5 * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
-						}
-						if (elevation[a][b] > 5) {
-							data[i + 6 * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
-						}
-						if (elevation[a][b] > 6) {
-							data[i + 7 * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
-						}
-						if (elevation[a][b] > 7) {
-							data[i + 8 * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
-						}
-						if (elevation[a][b] > 8) {
-							data[i + 9 * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
-						}
-						if (elevation[a][b] > 9) {
-							data[i + 10 * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
-						}
-						if (elevation[a][b] > 10) {
-							data[i + 11 * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
-						}
-						if (elevation[a][b] > 11) {
-							data[i + 12 * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
-						}
-						if (elevation[a][b] > 12) {
-							data[i + 13 * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
-						}
-						if (elevation[a][b] > 13) {
-							data[i + 14 * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
-						}
-						if (elevation[a][b] > 14) {
-							data[i + 15 * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
-						}
-						//	if (elevation[a][b] > 15) {
-						//	data[i + 16 * Chunk.CHUNKSIZE * Chunk.CHUNKSIZE] = land[a][b];
-						//}*/
-					} else {
-						//data[i] = 0;
-					}
->>>>>>> iWillBeOptimizedPls
-				}
-				chunks[chunkX][chunkY] = new Chunk(data, chunkX, chunkY);
+			//TODO: FIX	chunks[chunkX][chunkY] = new Chunk(data, chunkX, chunkY);
 				// }
 
 <<<<<<< HEAD
