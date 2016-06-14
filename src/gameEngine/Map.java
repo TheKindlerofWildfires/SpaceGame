@@ -2,30 +2,11 @@ package gameEngine;
 
 import graphicEngine.Chunk;
 import graphicEngine.ShaderManager;
-import graphicEngine.VertexArrayObject;
-import static org.lwjgl.opengl.GL11.glBindTexture;
-import static org.lwjgl.opengl.GL11.glGenTextures;
-import static org.lwjgl.opengl.GL13.GL_TEXTURE5;
-import static org.lwjgl.opengl.GL13.glActiveTexture;
-import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
-import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
-import static org.lwjgl.opengl.GL15.glBindBuffer;
-import static org.lwjgl.opengl.GL15.glBufferData;
-import static org.lwjgl.opengl.GL15.glGenBuffers;
-import static org.lwjgl.opengl.GL30.GL_R32UI;
-import static org.lwjgl.opengl.GL31.GL_TEXTURE_BUFFER;
-import static org.lwjgl.opengl.GL31.glTexBuffer;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import maths.Distance;
-import graphicEngine.Chunk;
-import graphicEngine.ShaderManager;
-import maths.Distance;
-import maths.Frustum;
-import maths.Matrix4f;
-import maths.Plane;
-import maths.Utilities;
 import maths.Vector3f;
 import noiseLibrary.module.source.Perlin;
 
@@ -102,42 +83,8 @@ public class Map {
 					int y = i % Chunk.CHUNKSIZE + chunkY;
 					data[i] = land[x][y][z];
 				}
-			//TODO: FIX	chunks[chunkX][chunkY] = new Chunk(data, chunkX, chunkY);
+			chunks[chunkX][chunkY] = new Chunk(land, chunkX, chunkY);
 				// }
-
-<<<<<<< HEAD
-			}
-		}
-	}
-
-	/*
-	 * @Deprecated private void initShader() { ShaderManager.landShader.start();
-	 * ShaderManager.landShader.setUniform1f("side", EntityManager.side);
-	 * ShaderManager.landShader.setUniform1i("hexesAcross", HEXESACROSS);
-	 * ShaderManager.landShader.setUniform1f("apothem", EntityManager.APOTHEM);
-	 * ShaderManager.landShader.setUniform1f("aspect",
-	 * EntityManager.aspectScaler); ShaderManager.landShader.setUniform3f("pos",
-	 * new Vector3f(-1f, 1f, 0));
-	 * 
-	 * int[] land = new int[HEXESACROSS * HEXESDOWN]; int counter = 0; for (int
-	 * x = 0; x < HEXESDOWN; x++) { for (int y = 0; y < HEXESACROSS; y++) {
-	 * land[counter] = Map.land[y][x]; counter++; } } int bufferID =
-	 * glGenBuffers();
-	 * 
-	 * glBindBuffer(GL_ARRAY_BUFFER, bufferID); glBindBuffer(GL_TEXTURE_BUFFER,
-	 * bufferID); IntBuffer data = Utilities.createIntBuffer(land);
-	 * glBufferData(GL_ARRAY_BUFFER, data, GL_STATIC_DRAW);
-	 * 
-	 * int textureID = glGenTextures(); glBindTexture(GL_TEXTURE_BUFFER,
-	 * textureID); glTexBuffer(GL_TEXTURE_BUFFER, GL_R32UI, bufferID);
-	 * glBindBuffer(GL_ARRAY_BUFFER, 0);
-	 * 
-	 * glActiveTexture(GL_TEXTURE5); glBindTexture(GL_TEXTURE_BUFFER,
-	 * textureID);
-	 * 
-	 * }
-	 */
-=======
 				//	chunks[x][y] = new Chunk(data, x, y);
 			}
 		}
@@ -157,13 +104,12 @@ public class Map {
 		}
 		for (int i = 0; i < chunk.length / chunksUP; i++) {
 			for (int j = 0; j < chunksUP; j++) {
-				chunk[i * chunksUP + j] = new Chunk(dat, i, j);
+				chunk[i * chunksUP + j] = new Chunk(land, i, j);
 			}
 		}
 	}
->>>>>>> iWillBeOptimizedPls
 
-	@Deprecated
+	//@Deprecated
 	//	private void initShader() {
 	//		ShaderManager.landShader.start();
 	//		ShaderManager.landShader.setUniform1f("side", EntityManager.side);
@@ -213,15 +159,14 @@ public class Map {
 	 */
 
 
-<<<<<<< HEAD
 	@Deprecated
 	public void zoom(float zoomFactor) {
 		this.zoomFactor = zoomFactor;
 		ShaderManager.chunkShader.start();
-		ShaderManager.chunkShader.setUniform1f("side", EntityManager.side
-				* zoomFactor);
-		ShaderManager.chunkShader.setUniform1f("apothem", EntityManager.APOTHEM
-				* zoomFactor);
+		//ShaderManager.chunkShader.setUniform1f("side", EntityManager.side
+			//	* zoomFactor);
+		//ShaderManager.chunkShader.setUniform1f("apothem", EntityManager.APOTHEM
+			//	* zoomFactor);
 		ShaderManager.chunkShader.setUniform3f("pos", new Vector3f(-zoomFactor
 				+ offsetX, zoomFactor + offsetY, 0));
 		ShaderManager.chunkShader.stop();
@@ -245,8 +190,6 @@ public class Map {
 		ShaderManager.chunkShader.stop();
 	}
 
-=======
->>>>>>> iWillBeOptimizedPls
 	public void render() {
 		// ShaderManager.landShader.start();
 		// glBindVertexArray(vaoID);
@@ -312,56 +255,6 @@ public class Map {
 
 	}
 
-<<<<<<< HEAD
-	/*
-	 * private double getP(String genType, double p, int iter) { // pro tip,
-	 * these are not all to gen land, some could gen other effects switch
-	 * (genType) { case "fractal": p = .3 / (Math.log(p + 2)); break; case
-	 * "soft": // p = 0.21 / p; break; case "stand": p = (p + 1) / (p + 3.4);
-	 * break; case "disk": p = 0.97 * p; break; case "trig": p = Math.cos(1.443
-	 * * p); break; case "quad": if (p >= 1) { p = 0.15; } else { p =
-	 * Math.pow(p, 2) + 2 * p; } break; case "it": p -= 0.02; break; case "lin":
-	 * p -= p * 0.02; break; case "atic": p -= Math.pow(p, 2) * 0.05; break;
-	 * case "grit": p -= Math.sin(p / 4) / 9; break; case "exp": p -=
-	 * Math.pow(Math.E, p / 50) - Math.pow(Math.E, 1 / 49); break; case "ln": p
-	 * -= Math.log(p + 2) / 75; break; case "root": p -= Math.sqrt(p) - 0.6;
-	 * break; case "rng": p -= (rng.nextDouble() + 1) / 100; break; case "arm":
-	 * p -= (p / (p + 50)); break; case "invE": p = (100 / (Math.pow(Math.E,
-	 * iter / 400)) * (rng.nextDouble() + 1) / 2); break; case "inv": p = ((5000
-	 * / iter) - +(Math.abs(rng.nextDouble()))); break; case "invL": p = ((10 /
-	 * Math.log(iter)) - (Math.abs(rng.nextDouble()))); break; case "invT":
-	 * System.err.println("invalid map type"); System.exit(-1); p =
-	 * ((Math.pow(Math.cos(iter) * (1.9), 2)) - (1 * Math.abs(rng.nextDouble()))
-	 * + 0.1); break; case "e": p = Math.pow(Math.E, iter / -(HEXESACROSS *
-	 * HEXESDOWN / 2)); break; case "e2": p = 0.35 * Math.pow(Math.E, iter /
-	 * (HEXESACROSS * HEXESDOWN / 2)); break; default:
-	 * System.err.println("invalid map type"); System.exit(-1); p = 0; }
-	 * 
-	 * return p; }
-	 * 
-	 * private void scatter(String type, String genType, int[] seed) {
-	 * 
-	 * ArrayList<int[]> outerLand = new ArrayList<int[]>();
-	 * 
-	 * for (int i = 0; i < seedCount; i++) { outerLand.add(seed);
-	 * land[seed[0]][seed[1]][0] = SEED; } double p = 1; int iter = 0; while
-	 * (outerLand.size() != 0 && p != 0) { ArrayList<int[]> newLand = new
-	 * ArrayList<int[]>(); for (int i = 0; i < outerLand.size(); i++) { int[][]
-	 * neighbors = getNeighborIndices(outerLand.get(i)[0], outerLand.get(i)[1]);
-	 * for (int j = 0; j < neighbors.length; j++) {
-	 * 
-	 * if (land[neighbors[j][0]][neighbors[j][1]] != LAND &&
-	 * land[neighbors[j][0]][neighbors[j][1]] != SEED) { if (rng.nextDouble() <=
-	 * p) { land[neighbors[j][0]][neighbors[j][1]] = LAND; //
-	 * moisture[neighbors[j][0]][neighbors[j][1]] = // (int) (p*(20 +
-	 * 5*rng.nextDouble())); // elevation[neighbors[j][0]][neighbors[j][1]] = //
-	 * (int) (p*(20+ 5*rng.nextDouble())); iter++; newLand.add(neighbors[j]); }
-	 * } } } outerLand.clear(); outerLand.addAll(newLand); newLand.clear(); p =
-	 * getP(genType, p, iter);
-	 * 
-	 * // System.out.println(p*100); } }
-	 */
-=======
 	private double getP(String genType, double p, int iter) {
 		// pro tip, these are not all to gen land, some could gen other effects
 		switch (genType) {
@@ -449,7 +342,7 @@ public class Map {
 
 		for (int i = 0; i < seedCount; i++) {
 			outerLand.add(seed);
-			land[seed[0]][seed[1]] = SEED;
+			land[seed[0]][seed[1]][0] = Block.SEED;
 		}
 		double p = 1;
 		int iter = 0;
@@ -459,10 +352,10 @@ public class Map {
 				int[][] neighbors = getNeighborIndices(outerLand.get(i)[0], outerLand.get(i)[1]);
 				for (int j = 0; j < neighbors.length; j++) {
 
-					if (land[neighbors[j][0]][neighbors[j][1]] != LAND
-							&& land[neighbors[j][0]][neighbors[j][1]] != SEED) {
+					if (land[neighbors[j][0]][neighbors[j][1]][0] != Block.LAND
+							&& land[neighbors[j][0]][neighbors[j][1]][0] != Block.SEED) {
 						if (rng.nextDouble() <= p) {
-							land[neighbors[j][0]][neighbors[j][1]] = LAND;
+							land[neighbors[j][0]][neighbors[j][1]][0] = Block.LAND;
 							// moisture[neighbors[j][0]][neighbors[j][1]] =
 							// (int) (p*(20 + 5*rng.nextDouble()));
 							// elevation[neighbors[j][0]][neighbors[j][1]] =
@@ -482,6 +375,10 @@ public class Map {
 		}
 	}
 
+	private int[][] getNeighborIndices(int i, int j) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	private void initializeMap() {
 		// INIT MAPTYPE ETC
 		//mapType = "e2";
@@ -499,8 +396,8 @@ public class Map {
 		// INIT LAND ARRAY
 		for (int x = 0; x < HEXESACROSS; x++) {
 			for (int y = 0; y < HEXESDOWN; y++) {
-				land[x][y] = WATER;
-				elevation[x][y] = 0;
+				land[x][y][0] = Block.WATER;
+
 				moisture[x][y] = 0;
 			}
 		}
@@ -534,12 +431,11 @@ public class Map {
 						moisture[neighbors[k][0]][neighbors[k][1]] = 20;
 					}
 				}*/
-				if (land[i][j] == LAND) {
+				if (land[i][j][0] == Block.LAND) {
 
 					int elev = (int) (Math.abs(noise.getValue(i / ELEVATIONSCALER, j / ELEVATIONSCALER, .1)) * 16);
 					int moist = (int) (Math.abs(noise.getValue(i / MOISTURESCALER, j / MOISTURESCALER, .1)) * 16);
 					for (int k = 0; k < neighbors.length; k++) {
-						elev += elevation[neighbors[k][0]][neighbors[k][1]];
 						moist += moisture[neighbors[k][0]][neighbors[k][1]];
 					}
 					elev = elev / 3 - rng.nextInt(2);
@@ -548,8 +444,7 @@ public class Map {
 					//moist = (elev / 5 + (int) (4+4*rng.nextDouble()));
 					moisture[i][j] = moist;
 
-					elevation[i][j] = elev;
-					land[i][j] = Block.getBlock(elevation[i][j], worldType, moisture[i][j]);
+					//land[i][j] = Block.getBlock(elevation[i][j], worldType, moisture[i][j]);
 					landCount += 1;
 				}
 			}
@@ -572,7 +467,6 @@ public class Map {
 			//System.exit(-1);
 		}
 	}
->>>>>>> iWillBeOptimizedPls
 
 	/*
 	 * private void initializeMap() { // INIT MAPTYPE ETC // mapType = "e2";

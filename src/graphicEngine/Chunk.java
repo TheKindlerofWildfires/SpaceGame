@@ -175,7 +175,7 @@ public class Chunk {
 
 	private int UBO;
 
-	public Chunk(float[][][] properties, int chunkX, int chunkY) {
+	public Chunk(int[][][] properties, int chunkX, int chunkY) {
 		//NORMALS FOR LIGHT AND FOR FACE CULLING
 		normals[FRONT] = new Vector3f(0, 1, 0);
 		normals[BACK] = new Vector3f(0, -1, 0);
@@ -249,11 +249,8 @@ public class Chunk {
 		///	ShaderManager.chunkShader.setUniform3f("objectColor", new Vector3f(1f, .5f, .31f));
 		ShaderManager.chunkShader.setUniform1f("ambientStrength", .1f);
 		ShaderManager.chunkShader.setUniform1f("specularStrength", .4f);
-<<<<<<< HEAD
-		ShaderManager.chunkShader.setUniform1f("shininess", 40);
-=======
 		ShaderManager.chunkShader.setUniform1f("shininess", 256);
->>>>>>> iWillBeOptimizedPls
+
 
 		ShaderManager.chunkShader.setUniform1f("apothem", (float) Math.sqrt(3) / 2);
 		ShaderManager.chunkShader.setUniform1f("side", 1f);

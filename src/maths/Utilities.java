@@ -27,7 +27,7 @@ import org.lwjgl.BufferUtils;
 import GUI.MouseInput;
 
 public class Utilities {
-	public static float[][][] unflatten(float[] input, int xSize, int ySize, int zSize) {
+	public static float[][][] unflatten(int[] input, int xSize, int ySize, int zSize) {
 		float[][][] output = new float[xSize][ySize][zSize];
 		for (int i = 0; i < input.length; i++) {
 			int xPos = i % xSize;
@@ -41,13 +41,13 @@ public class Utilities {
 		return output;
 	}
 
-	public static float[] flatten(float[][][] input) {
-		float[] output = new float[input.length * input[0].length * input[0][0].length];
+	public static float[] flatten(int[][][] properties) {
+		float[] output = new float[properties.length * properties[0].length * properties[0][0].length];
 		int counter = 0;
-		for (int z = 0; z < input[0][0].length; z++) {
-			for (int y = 0; y < input[0].length; y++) {
-				for (int x = 0; x < input.length; x++) {
-					output[counter++] = input[x][y][z];
+		for (int z = 0; z < properties[0][0].length; z++) {
+			for (int y = 0; y < properties[0].length; y++) {
+				for (int x = 0; x < properties.length; x++) {
+					output[counter++] = properties[x][y][z];
 				}
 			}
 		}
