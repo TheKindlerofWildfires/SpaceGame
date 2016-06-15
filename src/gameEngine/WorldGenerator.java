@@ -8,7 +8,7 @@ public class WorldGenerator {
 	private static final double HEIGHT = 9;
 	private static final double ELEVATIONSCALER = 20;
 	private static final int WATERLEVEL = 4;
-	private static final int MOISTURESCALER = 12;
+	private static final int MOISTURESCALER = 20;
 	public static String mapType;
 	public static String worldType;
 	public static int seedCount;
@@ -183,7 +183,7 @@ public class WorldGenerator {
 			return new int[0][0];
 		}
 	}
-
+	
 	private int[][] getNeighborIndices2(int x, int y) {
 		// System.out.println(x + "," + y);
 		if (x > 0 && y > 0 && x < Map.HEXESACROSS - 1 && y < Map.HEXESDOWN - 1) {
@@ -213,7 +213,7 @@ public class WorldGenerator {
 			return new int[0][0];
 		}
 	}
-
+	@Deprecated
 	private void initMap() {
 		worldType = "telilic";
 		seedCount = 1;
