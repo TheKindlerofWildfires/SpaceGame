@@ -188,7 +188,7 @@ public class Chunk {
 
 		//MATRICES FOR RENDERING
 		model = Matrix4f
-				.translate(6 * 1.2f * chunkX / 4 * CHUNKSIZE - 10,
+				.translate(1.5f * 1.2f * chunkX * CHUNKSIZE - 10,
 						2 * CHUNKSIZE * (float) Math.sqrt(3) / 2 * 1.2f * chunkY - 10, 0)
 				.multiply(Matrix4f.scale(1, 1, .5f));
 
@@ -273,7 +273,7 @@ public class Chunk {
 		Vector3f cameraDir = EntityManager.camera.getPos().subtract(EntityManager.camera.getTarget());
 
 		for (int i = 0; i < normals.length; i++) {
-			if (normals[i].dot(cameraDir) > .1) { //MAKES IT FASTER, BUT NEEDS TWEAKING
+			if (normals[i].dot(cameraDir) > 0) { //MAKES IT FASTER, BUT NEEDS TWEAKING
 				ShaderManager.chunkShader.setUniform3f("normal", normals[i]);
 				glBindVertexArray(VAOS[i].getVaoID());
 				glDrawElementsInstanced(GL_TRIANGLES,

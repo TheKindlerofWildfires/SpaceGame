@@ -3,7 +3,6 @@ package gameEngine;
 import java.util.Random;
 
 import combat.BuffHandler;
-
 import entity.Entity;
 
 public class Block {
@@ -33,60 +32,64 @@ public class Block {
 	static Random rng = Map.rng;
 	public Block(){
 	}
-	public static int getBlock(int elevation, String worldType, int moisture){
-		int biome = 100;
-		double eP = 10*elevation/(double)Map.HEXESACROSS;
-		double mP = 15*moisture/(double)Map.HEXESACROSS;
+	public static int setBlock(int elevation, int moisture){
+		int block = 100;
+		String worldType = Map.worldType;
+		//worldType = "telilic";
+		double eP = elevation/8.0;
+		double mP = moisture/4.0;
 		//System.out.println(mP);
 		double chance = Math.abs(rng.nextDouble());
 		while (chance >0.6 || chance <0.4){
 			chance = Math.abs(rng.nextDouble());
 		}
+		System.out.println(mP+ "," + eP);
 		switch(worldType){
 		case "telilic":
 			if (mP>= chance && eP>=chance){
-				biome = UPPERFOREST;
+				
+				block = UPPERFOREST;
 			}else if (mP>= chance && eP<=chance){
-				biome = LOWERFOREST;
+				block = LOWERFOREST;
 			}else if (mP<= chance && eP>=chance){
- 				biome = MIDFOREST;
+ 				block = MIDFOREST;
 			}else if (mP<= chance && eP<=chance){
-				biome = MUD;
+				block = MUD;
 			}else{
-				biome = 100;
+				block = 100;
 			}
 			break;
 		case "sapric":
 			if (mP>= chance && eP>=chance){
-				biome = HIGHLAND;
+				block = HIGHLAND;
 			}else if (mP>= chance && eP<=chance){
-				biome = THORNS;
+				block = THORNS;
 			}else if (mP<= chance && eP>=chance){
- 				biome = DEEPFOREST;
+ 				block = DEEPFOREST;
 			}else if (mP<= chance && eP<=chance){
-				biome = UNDERBRUSH;
+				block = UNDERBRUSH;
 			}else{
-				biome = 100;
+				block = 100;
 			}
 			break;
 		case "worlic":
 			if (mP>= chance && eP>=chance){
-				biome = SANDSTONE;
+				block = SANDSTONE;
 			}else if (mP>= chance && eP<=chance){
-				biome = SAND;
+				block = SAND;
 			}else if (mP<= chance && eP>=chance){
- 				biome = ASH;
+ 				block = ASH;
 			}else if (mP<= chance && eP<=chance){
-				biome = ROCK;
+				block = ROCK;
 			}else{
-				biome = 100;
+				block = 100;
 			}
 			break;
 		default:
 			System.err.println("Not a valid worldType");
 		}
 			
-		return biome;
+		return block;
 	}
 
 	public static boolean destinationTraversable(int xIndex, int yIndex) {

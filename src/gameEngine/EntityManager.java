@@ -29,7 +29,7 @@ public class EntityManager {
 
 	public EntityManager() {
 		ShaderManager.loadAll();
-		camera = new Camera(startingCameraPos, startingCameraTarget, startingUp, 45f, 16 / 9f, .1f, 300f);
+		camera = new Camera(startingCameraPos, startingCameraTarget, startingUp, 60f, 16 / 9f, .1f, 300f);
 		ShaderManager.setLight(startingLampPos);
 
 		Chunk.initShader();

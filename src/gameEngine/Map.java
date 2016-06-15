@@ -7,18 +7,19 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import maths.Distance;
+import maths.Utilities;
 import maths.Vector3f;
 import noiseLibrary.module.source.Perlin;
 
 public class Map {
 
-
-	int numberOfChunks = 2000;
-	int chunksUP = 40;
+	int numberOfChunks = HEXESACROSS*HEXESDOWN/Chunk.CHUNKSIZE/Chunk.CHUNKSIZE;
 	Chunk[] chunk = new Chunk[numberOfChunks];
 
-	public static final int HEXESACROSS = 192;
-	public static final int HEXESDOWN = 96;
+	public static final int HEXESACROSS = 256;
+	public static final int HEXESDOWN = 256;
+	public static final int CHUNKSACROSS = HEXESACROSS/Chunk.CHUNKSIZE;
+	public static final int CHUNKSDOWN = HEXESDOWN/Chunk.CHUNKSIZE;
 	public static final int WORLDHEIGHT = 16;
 
 	public static final int MOISTURESCALER = 3;
@@ -56,25 +57,24 @@ public class Map {
 	private float offsetX = 0;
 	private float offsetY = 0;
 	private float zoomFactor;
-	Perlin noise = new Perlin();
+	public static Perlin noise = new Perlin();
 
 	float[] data = new float[Chunk.CHUNKSIZE * Chunk.CHUNKSIZE * WORLDHEIGHT];
 
 	public Map() {
-
+		worldType = worldTypes[rng.nextInt(worldTypes.length)];
 		distance = new Distance();
 		long seed = rng.nextLong();
 		rng.setSeed(seed);
 		noise.setSeed((int) seed);
-		noise.setFrequency(2);
-		noise.setLacunarity(2);
+		
 		System.out.println("Random Seed is " + seed);
 
 		land = new WorldGenerator().generate();
 		// initializeMap();
 		// generateFoliage();
-
-		for (int chunkX = 0; chunkX < chunks.length; chunkX++) {
+		//data = Utilities.flatten(land);
+		/*for (int chunkX = 0; chunkX < chunks.length; chunkX++) {
 			for (int chunkY = 0; chunkY < chunks[0].length; chunkY++) {
 				for (int i = 0; i < Chunk.CHUNKSIZE * Chunk.CHUNKSIZE
 						* WORLDHEIGHT; i++) {
@@ -87,11 +87,11 @@ public class Map {
 				// }
 				//	chunks[x][y] = new Chunk(data, x, y);
 			}
-		}
+		}*/
 
 		float[][][] dat = new float[Chunk.CHUNKSIZE][Chunk.CHUNKSIZE][Chunk.CHUNKHEIGHT];
 
-		for (int x = 0; x < dat.length; x++) {
+		/*for (int x = 0; x < dat.length; x++) {
 			for (int y = 0; y < dat[0].length; y++) {
 				for (int z = 0; z < dat[0][0].length; z++) {
 					if (z < 3) {
@@ -101,14 +101,28 @@ public class Map {
 					}
 				}
 			}
-		}
-		for (int i = 0; i < chunk.length / chunksUP; i++) {
-			for (int j = 0; j < chunksUP; j++) {
-				chunk[i * chunksUP + j] = new Chunk(land, i, j);
+		}*/
+
+
+		for (int i = 0; i < CHUNKSACROSS; i++) {
+			for (int j = 0; j < CHUNKSDOWN; j++) {
+				chunk[i * CHUNKSDOWN + j] = new Chunk(convertLand(land, i, j), i, j);
 			}
 		}
 	}
-
+		
+	public int[][][] convertLand(int[][][] input, int cx, int cy){
+		int[][][] output = new int[16][16][16];
+		for(int x = cx *Chunk.CHUNKSIZE; x<(cx+1)*Chunk.CHUNKSIZE; x++){
+			for(int y = cy*Chunk.CHUNKSIZE; y<(cy+1)*Chunk.CHUNKSIZE;y++){
+				for(int z = 0; z<Chunk.CHUNKHEIGHT; z++){
+					//System.out.println(x);
+					output[x-cx*Chunk.CHUNKSIZE][y-cy*Chunk.CHUNKSIZE][z]= input[x][y][z];
+				}
+			}
+		}
+		return output;
+	}
 	//@Deprecated
 	//	private void initShader() {
 	//		ShaderManager.landShader.start();
@@ -254,7 +268,7 @@ public class Map {
 	public void update() {
 
 	}
-
+	@Deprecated
 	private double getP(String genType, double p, int iter) {
 		// pro tip, these are not all to gen land, some could gen other effects
 		switch (genType) {
@@ -335,7 +349,7 @@ public class Map {
 
 		return p;
 	}
-
+	@Deprecated
 	private void scatter(String type, String genType, int[] seed) {
 
 		ArrayList<int[]> outerLand = new ArrayList<int[]>();
@@ -374,17 +388,18 @@ public class Map {
 			// System.out.println(p*100);
 		}
 	}
-
+	@Deprecated
 	private int[][] getNeighborIndices(int i, int j) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	@Deprecated
 	private void initializeMap() {
 		// INIT MAPTYPE ETC
 		//mapType = "e2";
 		mapType = maps[rng.nextInt(maps.length)];
 		//worldType = "sapric"; //"telilic", "sapric", "worlic"
-		worldType = worldTypes[rng.nextInt(worldTypes.length)];
+		
 		seedCount = 1;
 		seeds = new int[seedCount][2];
 

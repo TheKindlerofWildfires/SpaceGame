@@ -1,102 +1,103 @@
 package gameEngine;
 
+import graphicEngine.Chunk;
+
 import java.util.ArrayList;
 
 public class WorldGenerator {
+	private static final double HEIGHT = 9;
+	private static final double ELEVATIONSCALER = 20;
+	private static final int WATERLEVEL = 4;
+	private static final int MOISTURESCALER = 12;
 	public static String mapType;
 	public static String worldType;
 	public static int seedCount;
 	int[][] seeds;
 	int[] seed = new int[3];
-	double p;
-	boolean f = true;
+	int[][] eTracker = new int[Map.HEXESACROSS][Map.HEXESDOWN];
+	int[][] mTracker = new int[Map.HEXESACROSS][Map.HEXESDOWN];
 	// public int[] seed = new int[2];
 	public int[][][] data = new int[Map.HEXESACROSS][Map.HEXESDOWN][Map.WORLDHEIGHT];
+	boolean f = true;
 
 	public WorldGenerator() {
-
+		Map.noise.setFrequency(1);
+		Map.noise.setLacunarity(2);
+		Map.noise.setOctaveCount(30);
 	}
 
 	public int[][][] generate() {
-		setSeed();
-		p = 1;
-		for (int z = 0; z < Map.WORLDHEIGHT; z++) {
-			for (int y = 0; y < Map.HEXESDOWN; y++) {
-				for (int x = 1; x < Map.HEXESACROSS; x++) {
-					data[x][y][z] = getID(x, y, z);
-				}
+		for (int y = 0; y < Map.HEXESDOWN; y++) {
+			for (int x = 0; x < Map.HEXESACROSS; x++) {
+				elevate(x, y);// /getID(x, y, z);
+				// soften(x, y);
+				fill(x, y);
+				moisturize(x, y);
+				block(x, y);
 			}
 		}
-		while (f) {
-			for (int z = 0; z < Map.WORLDHEIGHT; z++) {
-				for (int y = 0; y < Map.HEXESDOWN; y++) {
-					for (int x = 1; x < Map.HEXESACROSS; x++) {
-						data[x][y][z] = cleanUp(x, y, z);
-					}
-				}
-			}
-		}
-		// gen();
 		return data;
 	}
 
-	private void setSeed() {
-		seed[0] = Map.HEXESACROSS / 2;
-		seed[1] = Map.HEXESDOWN / 2;
-		seed[2] = Map.WORLDHEIGHT / 2;
-
-	}
-
-	private int cleanUp(int x, int y, int z) {
-		f = false;
-		if(z < 8){
-			if (data[x][y][8] == 1) {
-				return 1;
-			}else{
-				return data[x][y][z];
-			}
-		} else{
-			return data[x][y][z];
-			//smth here kills water
-		}/*else if (data[x][y][z - 1] != 1) {
-			data[x][y][z - 1] = 1;
-			f = true;
-			return 0;
-		} else {
-			return data[x][y][z];
-		}*/
-	}
-
-	private int getID(int x, int y, int z) {
-		if (z < 8) {
-			return 20;
-		} else {
-			double p = (16.0 - z) / 8.0;
-			p = 0.5;
-			if (Map.rng.nextDouble() < p) {
-				return 1;
-			} else {
-				return 0;
+	private void block(int x, int y) {
+		for (int z = 0; z < Chunk.CHUNKHEIGHT; z++) {
+			if (data[x][y][z] == 1) {
+				data[x][y][z] = Block.setBlock(eTracker[x][y], mTracker[x][y]);
 			}
 		}
 
-		/*
-		 * switch(z){ case 0: return 1; case 1: return 1; case 2: return 1; case
-		 * 10: return 1; default: return 0; }
-		 */
-		/*
-		 * int dx = Math.abs(x-seed[0]); int dy = Math.abs(y- seed[1]); int dz =
-		 * Math.abs(z-seed[2]); double dt = dx+dy+dz; //number from 0 to smth
-		 * like 200 p = c/(p+1) double mx = Map.HEXESACROSS + Map.HEXESDOWN +
-		 * Map.WORLDHEIGHT; p = (1-dt/mx); System.out.println(p); mx = mx*10;
-		 * 
-		 * //p = p-0.000001;
-		 * 
-		 * return p;
-		 */
 	}
 
-	private void gen() {
+	private void moisturize(int x, int y) {
+		int moist = (int) (Math.abs(Map.noise.getValue(x / MOISTURESCALER, y
+				/ MOISTURESCALER, 0.1)) * HEIGHT);
+		mTracker[x][y] = moist;
+
+	}
+
+	private void soften(int x, int y) { // takes five evers & does jackshit
+		int[][] neighbors = getNeighborIndices2(x, y);
+		for (int j = 0; j < neighbors.length; j++) {
+			System.out.println(2);
+			if (eTracker[neighbors[j][0]][neighbors[j][1]] + 2 <= eTracker[x][y]) {
+				eTracker[neighbors[j][0]][neighbors[j][1]] += 1;
+			} else if (eTracker[neighbors[j][0]][neighbors[j][1]] - 2 >= eTracker[x][y]) {
+				eTracker[x][y] = eTracker[x][y] + 1;
+			}
+		}
+		// get nearby trackers
+		// if too differnt fix
+		// if no fixes toggle f off
+		// round up
+	}
+
+	private void fill(int x, int y) {
+		data[x][y][eTracker[x][y]] = 1;
+		for (int z = 0; z < Map.WORLDHEIGHT; z++) {
+			if (data[x][y][z] == 0 && z < eTracker[x][y]) {
+				data[x][y][z] = 1;
+			}
+			if (eTracker[x][y] < WATERLEVEL) {
+				if (data[x][y][z] == 0 && z < WATERLEVEL) {
+					data[x][y][z] = 20;
+				}
+			} else {
+
+			}
+		}
+
+	}
+
+	private void elevate(int x, int y) {
+		int elev = (int) (Math.abs(Map.noise.getValue(x / ELEVATIONSCALER, y
+				/ ELEVATIONSCALER, 0.1)) * HEIGHT);
+		// data[x][y][elev] = 1;
+		eTracker[x][y] = elev;
+
+	}
+
+	private void badbadbad() {
+		// Map.noise.getValue(double, double , 0.1);
 		worldType = "telilic";
 		seedCount = 1;
 		seeds = new int[seedCount][3];
@@ -186,7 +187,7 @@ public class WorldGenerator {
 	private int[][] getNeighborIndices2(int x, int y) {
 		// System.out.println(x + "," + y);
 		if (x > 0 && y > 0 && x < Map.HEXESACROSS - 1 && y < Map.HEXESDOWN - 1) {
-			int[][] neighbors = new int[8][3];
+			int[][] neighbors = new int[6][3];
 			neighbors[0][0] = x;
 			neighbors[0][1] = y + 1;
 			neighbors[1][0] = x;
@@ -276,8 +277,4 @@ public class WorldGenerator {
 	 * return p; }
 	 */
 
-	private double getP(double p, int iter) {
-		p = p / 10;
-		return p;
-	}
 }
