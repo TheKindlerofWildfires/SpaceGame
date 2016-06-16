@@ -16,8 +16,8 @@ public class Map {
 	int numberOfChunks = HEXESACROSS*HEXESDOWN/Chunk.CHUNKSIZE/Chunk.CHUNKSIZE;
 	Chunk[] chunk = new Chunk[numberOfChunks];
 
-	public static final int HEXESACROSS = 256;
-	public static final int HEXESDOWN = 256;
+	public static final int HEXESACROSS = 128;
+	public static final int HEXESDOWN = 128;
 	public static final int CHUNKSACROSS = HEXESACROSS/Chunk.CHUNKSIZE;
 	public static final int CHUNKSDOWN = HEXESDOWN/Chunk.CHUNKSIZE;
 	public static final int WORLDHEIGHT = 16;
@@ -63,6 +63,7 @@ public class Map {
 
 	public Map() {
 		worldType = worldTypes[rng.nextInt(worldTypes.length)];
+		worldType = "telilic";
 		distance = new Distance();
 		long seed = rng.nextLong();
 		rng.setSeed(seed);

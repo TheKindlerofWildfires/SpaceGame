@@ -43,7 +43,7 @@ public class Block {
 		while (chance >0.6 || chance <0.4){
 			chance = Math.abs(rng.nextDouble());
 		}
-		System.out.println(mP+ "," + eP);
+		//System.out.println(mP+ "," + eP);
 		switch(worldType){
 		case "telilic":
 			if (mP>= chance && eP>=chance){

@@ -3,11 +3,12 @@ package gameEngine;
 import graphicEngine.Chunk;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class WorldGenerator {
-	private static final double HEIGHT = 9;
+	public static final double HEIGHT = 9;
 	private static final double ELEVATIONSCALER = 20;
-	private static final int WATERLEVEL = 4;
+	public static final int WATERLEVEL = 3;
 	private static final int MOISTURESCALER = 20;
 	public static String mapType;
 	public static String worldType;
@@ -17,8 +18,9 @@ public class WorldGenerator {
 	int[][] eTracker = new int[Map.HEXESACROSS][Map.HEXESDOWN];
 	int[][] mTracker = new int[Map.HEXESACROSS][Map.HEXESDOWN];
 	// public int[] seed = new int[2];
-	public int[][][] data = new int[Map.HEXESACROSS][Map.HEXESDOWN][Map.WORLDHEIGHT];
+	public static int[][][] data = new int[Map.HEXESACROSS][Map.HEXESDOWN][Map.WORLDHEIGHT];
 	boolean f = true;
+	Random rng = Map.rng;
 
 	public WorldGenerator() {
 		Map.noise.setFrequency(1);
@@ -33,10 +35,34 @@ public class WorldGenerator {
 				// soften(x, y);
 				fill(x, y);
 				moisturize(x, y);
+				foliate(x,y);
 				block(x, y);
+				
+				
 			}
 		}
 		return data;
+	}
+	/*public void generateFoliage() { for (int i = 0; i < HEXESACROSS; i++) {
+		 * for (int j = 0; j < HEXESDOWN; j++) { if (Block.destinationTraversable(i,
+		 * j)) { switch (worldType) { case "telilic": if (rng.nextDouble() > 0.99) {
+		 * elevation[i][j] += 30; land[i][j] = Block.JG_TREE; } else if
+		 * (rng.nextDouble() > 0.98) { land[i][j] = Block.FRUIT_BUSH; } break; case
+		 * "sapric": if (rng.nextDouble() > 0.99) { elevation[i][j] += 30;
+		 * land[i][j] = Block.ASH_TREE; } else if (rng.nextDouble() > 0.98) {
+		 * land[i][j] = Block.THORN_BUSH; } break; case "worlic": if
+		 * (rng.nextDouble() > 0.99) { elevation[i][j] += 30; land[i][j] =
+		 * Block.PALM_TREE; } else if (rng.nextDouble() > 0.98) { land[i][j] =
+		 * Block.REEDS; } break; } // System.out.println(land[i][j]); } } }*/
+	private void foliate(int x, int y) {
+		if(data[x][y][eTracker[x][y]] == 1){
+			if(rng.nextDouble()>0.99){
+				Plant.tree(x,y,eTracker[x][y]);
+			}else if(rng.nextDouble()>0.98){
+				Plant.bush(x, y,eTracker[x][y]);
+			}
+		}
+		
 	}
 
 	private void block(int x, int y) {
@@ -96,9 +122,8 @@ public class WorldGenerator {
 
 	}
 
-	private void badbadbad() {
+	public int[][][] badbadbad() {
 		// Map.noise.getValue(double, double , 0.1);
-		worldType = "telilic";
 		seedCount = 1;
 		seeds = new int[seedCount][3];
 		ArrayList<int[]> outerLand = new ArrayList<int[]>();
@@ -122,8 +147,8 @@ public class WorldGenerator {
 		while (outerLand.size() != 0 && p != 0) {
 			ArrayList<int[]> newLand = new ArrayList<int[]>();
 			for (int i = 0; i < outerLand.size(); i++) {
-				int[][] neighbors = getNeighborIndices2(outerLand.get(i)[0],
-						outerLand.get(i)[1]);
+				int[][] neighbors = getNeighborIndices3(outerLand.get(i)[0],
+						outerLand.get(i)[1], outerLand.get(i)[2]);
 				for (int j = 0; j < neighbors.length; j++) {
 					if (data[neighbors[j][0]][neighbors[j][1]][0] != Block.LAND
 							&& data[neighbors[j][0]][neighbors[j][1]][neighbors[j][2]] != Block.SEED) {
@@ -136,8 +161,9 @@ public class WorldGenerator {
 				}
 			}
 		}
+		return data;
 	}
-
+	
 	private int[][] getNeighborIndices3(int x, int y, int z) {
 		// System.out.println(x + "," + y);
 		if (x > 0 && y > 0 && x < Map.HEXESACROSS - 1 && y < Map.HEXESDOWN - 1
@@ -184,7 +210,7 @@ public class WorldGenerator {
 		}
 	}
 	
-	private int[][] getNeighborIndices2(int x, int y) {
+	public static int[][] getNeighborIndices2(int x, int y) {
 		// System.out.println(x + "," + y);
 		if (x > 0 && y > 0 && x < Map.HEXESACROSS - 1 && y < Map.HEXESDOWN - 1) {
 			int[][] neighbors = new int[6][3];
