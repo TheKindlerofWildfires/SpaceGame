@@ -1,8 +1,11 @@
-package gameEngine;
+package gen;
 
 import java.util.ArrayList;
 
 import maths.Utilities;
+import gameEngine.Block;
+import gameEngine.Map;
+import gameEngine.WorldGenerator;
 import graphicEngine.Chunk;
 
 public class Plant {
@@ -37,14 +40,14 @@ public class Plant {
 	}
 
 	private static void reed(int x, int y, int z) {
-		if (z > WorldGenerator.WATERLEVEL) {
+		if (z > WorldGenerator.WATERLEVEL&& z<Chunk.CHUNKHEIGHT-2) {
 			WorldGenerator.data[x][y][z + 1] = Block.REEDS;
 			WorldGenerator.data[x][y][z + 2] = Block.REEDS;
 		}
 	}
 
 	private static void thornBush(int x, int y, int z) {
-		if (z > WorldGenerator.WATERLEVEL) {
+		if (z > WorldGenerator.WATERLEVEL&& z<Chunk.CHUNKHEIGHT-2) {
 			WorldGenerator.data[x][y][z + 1] = Block.THORN_BUSH;
 			WorldGenerator.data[x][y][z + 2] = Block.THORN_BUSH;
 		}
@@ -52,7 +55,7 @@ public class Plant {
 	}
 
 	private static void fruitBush(int x, int y, int z) {
-		if (z > WorldGenerator.WATERLEVEL) {
+		if (z > WorldGenerator.WATERLEVEL && z<Chunk.CHUNKHEIGHT-2) {
 			WorldGenerator.data[x][y][z + 1] = Block.FRUIT_BUSH;
 			WorldGenerator.data[x][y][z + 2] = Block.FRUIT_BUSH;
 		}
@@ -86,11 +89,19 @@ public class Plant {
 
 		}
 		//THIS IS HARD TO SEE
+		int a = 0;
 		for(int l = 0; l <branchCore.size(); l++){
 			int[][] b = Utilities.getNeighborIndices2(branchCore.get(l)[0], branchCore.get(l)[1], 1);
 			for(int q = 0; q<b.length; q++){
 				if(Map.rng.nextDouble()>0.5){
-					WorldGenerator.data[b[q][0]][b[q][1]][13] = Block.JG_TREE;
+					WorldGenerator.data[b[q][0]][b[q][1]][12] = Block.JG_TREE;
+					if(a== 2){
+						int [] branch = new int[2];
+						branch[0] = neighbors[q][0];
+						branch[1] = neighbors[q][1];
+						branchCore.add(branch);
+						a++;
+					}
 					leaves1.add(b);
 				}
 			}

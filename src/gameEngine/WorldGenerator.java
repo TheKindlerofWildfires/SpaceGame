@@ -1,14 +1,16 @@
 package gameEngine;
 
+import gen.Plant;
+
 import java.util.ArrayList;
 import java.util.Random;
 
 import maths.Utilities;
 
 public class WorldGenerator {
-	public static final double HEIGHT = 12;
+	public static final double HEIGHT = 11;
 	private static final double ELEVATIONSCALER = 50;
-	public static final int WATERLEVEL = 2;
+	public static final int WATERLEVEL = 3;
 	private static final int MOISTURESCALER = 20;
 	public static String mapType;
 	public static String worldType;

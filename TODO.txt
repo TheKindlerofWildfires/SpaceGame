@@ -1,6 +1,6 @@
 TO DO:
 Textures
-Fix height limits
+Fix height limits (its in the shader, why can't i change it?)
 Re-implement player
 Fix camera
 Merge and correct side culling

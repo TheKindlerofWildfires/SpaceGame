@@ -20,10 +20,8 @@ public class Map {
 	public static final int HEXESDOWN = 128;
 	public static final int CHUNKSACROSS = HEXESACROSS / Chunk.CHUNKSIZE;
 	public static final int CHUNKSDOWN = HEXESDOWN / Chunk.CHUNKSIZE;
-	public static final int WORLDHEIGHT = 16;
+	public static final int WORLDHEIGHT = 64;
 
-	public static final int MOISTURESCALER = 3;
-	public static final int ELEVATIONSCALER = 1;
 
 	public static String mapType;
 	public static String worldType;
@@ -101,10 +99,10 @@ public class Map {
 	}
 
 	public int[][][] convertLand(int[][][] input, int cx, int cy) {
-		int[][][] output = new int[Chunk.CHUNKSIZE][Chunk.CHUNKSIZE][Chunk.CHUNKHEIGHT];
+		int[][][] output = new int[Chunk.CHUNKSIZE][Chunk.CHUNKSIZE][Chunk.CHUNKHEIGHT];//flag
 		for (int x = cx * Chunk.CHUNKSIZE; x < (cx + 1) * Chunk.CHUNKSIZE; x++) {
 			for (int y = cy * Chunk.CHUNKSIZE; y < (cy + 1) * Chunk.CHUNKSIZE; y++) {
-				for (int z = 0; z < Chunk.CHUNKHEIGHT; z++) {
+				for (int z = 0; z < Chunk.CHUNKHEIGHT; z++) {//flag
 					// System.out.println(x);
 					output[x - cx * Chunk.CHUNKSIZE][y - cy * Chunk.CHUNKSIZE][z] = input[x][y][z];
 				}
@@ -438,20 +436,7 @@ public class Map {
 				 * moisture[neighbors[k][0]][neighbors[k][1]] = 20; } }
 				 */
 				if (land[i][j][0] == Block.LAND) {
-
-					int elev = (int) (Math.abs(noise.getValue(i
-							/ ELEVATIONSCALER, j / ELEVATIONSCALER, .1)) * 16);
-					int moist = (int) (Math.abs(noise.getValue(i
-							/ MOISTURESCALER, j / MOISTURESCALER, .1)) * 16);
 					for (int k = 0; k < neighbors.length; k++) {
-						moist += moisture[neighbors[k][0]][neighbors[k][1]];
-					}
-					elev = elev / 3 - rng.nextInt(2);
-					moist = moist / 3 - rng.nextInt(3);
-					// elev = (elev / 5 + (int) (4+4*rng.nextDouble()));//one
-					// day this will all be perlin
-					// moist = (elev / 5 + (int) (4+4*rng.nextDouble()));
-					moisture[i][j] = moist;
 
 					// land[i][j] = Block.getBlock(elevation[i][j], worldType,
 					// moisture[i][j]);
@@ -545,4 +530,5 @@ public class Map {
 	 * Block.PALM_TREE; } else if (rng.nextDouble() > 0.98) { land[i][j] =
 	 * Block.REEDS; } break; } // System.out.println(land[i][j]); } } } }
 	 */
+}
 }

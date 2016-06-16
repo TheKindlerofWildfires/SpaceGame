@@ -40,7 +40,7 @@ void main(void){
 	} else{
 		yOfset = 1.2*((yPos*2*apothem-apothem));
 	}
-	float zOfset=zPos*1.0f;
+	float zOfset=zPos*1.05f;
 if(prop==100){
 		VColor = vec3(0,1,0);
 	}else if(prop == 128){
@@ -54,15 +54,15 @@ if(prop==100){
 	}else if(prop == 3){
 		VColor = vec3(0.21,0.6,0.34);
 	}else if(prop == 4){
-		VColor = vec3(0,0.3,0.12);
+		VColor = vec3(0.4,0.7,0.52);
 	}else if(prop == 5){
-		VColor = vec3(0.92,0.78,0.68);
+		VColor = vec3(0.89,0.88,0.88);
 	}else if(prop == 6){
-		VColor = vec3(0.98,0.70,0.60);
+		VColor = vec3(0.88,0.85,0.85);
 	}else if(prop == 7){
-		VColor = vec3(0.5,0.5,0.4);
+		VColor = vec3(0.9,0.9,0.9);
 	}else if(prop == 8){
-		VColor = vec3(0.3,0.3,0.3);
+		VColor = vec3(0.6,0.6,0.6);
 	}else if(prop == 9){
 		VColor = vec3(0.15,0.56,0.36);
 	}else if(prop == 10){

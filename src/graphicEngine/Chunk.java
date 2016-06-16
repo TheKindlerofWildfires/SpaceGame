@@ -257,7 +257,7 @@ public class Chunk {
 		ShaderManager.chunkShader.setUniformBlockf("Properties", Utilities
 				.createUniformBuffer(Utilities
 						.createUniformFloatBuffer(new float[CHUNKSIZE
-								* CHUNKSIZE * CHUNKHEIGHT])), 0);
+								* CHUNKSIZE * CHUNKHEIGHT])), 0);//flag
 
 		ShaderManager.chunkShader.stop();
 	}
