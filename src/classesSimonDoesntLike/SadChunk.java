@@ -2,17 +2,15 @@ package classesSimonDoesntLike;
 
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.glDrawArrays;
-import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
-import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
+import gameEngine.EntityManager;
+import graphicEngine.ShaderManager;
 
 import java.util.ArrayList;
 
-import gameEngine.EntityManager;
 import maths.Matrix4f;
 import maths.Utilities;
 import maths.Vector3f;
-import maths.Vector4f;
 
 public class SadChunk {
 
@@ -23,150 +21,144 @@ public class SadChunk {
 	public static final float APOTHEM = sqrt3 / 2;
 	public static final float SIDE = 1f;
 
-	//@formatter:off	
+	// @formatter:off
 	private static final float[] vertices = {
-			//TOP
-			2/sqrt3,   0, 1,   1,0,0,  0,0,1,//right 0
-			1/sqrt3,  -1, 1,   0,0,1,  0,0,1,// lower right 1
-			-1/sqrt3, -1, 1,   1,0,0,  0,0,1,//lower left 2
-			-2/sqrt3,  0, 1,   0,0,1,  0,0,1,//left 3
-			-1/sqrt3,  1, 1,   1,0,0,  0,0,1,//upper left 4
-			1/sqrt3,   1, 1,   0,0,1,  0,0,1,//upper right 5
-			//BOTTOM
-			2/sqrt3,   0, 0,   0,1,1,  0,0,-1,//right 0
-			1/sqrt3,  -1, 0,   1,0,1,  0,0,-1,// lower right 1
-			-1/sqrt3, -1, 0,   1,1,0,  0,0,-1,//lower left 2
-			-2/sqrt3,  0, 0,   1,0,1,  0,0,-1,//left 3
-			-1/sqrt3,  1, 0,   0,1,1,  0,0,-1,//upper left 4
-			1/sqrt3,   1, 0,   1,0,1,  0,0,-1,//upper right 5
-			//FRONT
-			-1/sqrt3,  1, 1,   1,0,1,  0,1,0,//upper left 4
-			1/sqrt3,   1, 1,   1,0,1,  0,1,0,//upper right 5
-			1/sqrt3,   1, 0,   1,0,1,  0,1,0,//upper right 5
-			-1/sqrt3,  1, 0,   1,0,1,  0,1,0,//upper left 4
-			//FRONT RIGHT
-			1/sqrt3,   1, 1,   1,1,0,  1/2,sqrt3/2,0,//upper right 5
-			2/sqrt3,   0, 1,   1,1,0,  1/2,sqrt3/2,0,//right 0
-			2/sqrt3,   0, 0,   1,1,0,  1/2,sqrt3/2,0,//right 0
-			1/sqrt3,   1, 0,   1,1,0,  1/2,sqrt3/2,0,//upper right 5
-			//BACK RIGHT
-			2/sqrt3,   0, 1,   1,0,0,  1/2,-sqrt3/2,0,//right 0
-			1/sqrt3,  -1, 1,   1,0,0,  1/2,-sqrt3/2,0,// lower right 1
-			1/sqrt3,  -1, 0,   1,0,0,  1/2,-sqrt3/2,0,// lower right 1
-			2/sqrt3,   0, 0,   1,0,0,  1/2,-sqrt3/2,0,//right 0
-			//BACK
-			1/sqrt3,  -1, 1,   0,1,0,  0,-1,0,// lower right 1
-			-1/sqrt3, -1, 1,   0,1,0,  0,-1,0,//lower left 2
-			-1/sqrt3, -1, 0,   0,1,0,  0,-1,0,//lower left 2
-			1/sqrt3,  -1, 0,   0,1,0,  0,-1,0,// lower right 1
-			//BACK LEFT
-			-1/sqrt3, -1, 1,   0,0,1,  -1/2,-sqrt3/2,0,//lower left 2
-			-2/sqrt3,  0, 1,   0,0,1,  -1/2,-sqrt3/2,0,//left 3
-			-2/sqrt3,  0, 0,   0,0,1,  -1/2,-sqrt3/2,0,//left 3
-			-1/sqrt3, -1, 0,   0,0,1,  -1/2,-sqrt3/2,0,//lower left 2
-			//FRONT LEFT
-			-2/sqrt3,  0, 1,   0,1,1,  -1/2,sqrt3/2,0,//left 3
-			-1/sqrt3, +1, 1,   0,1,1,  -1/2,sqrt3/2,0,//lower left 2
-			-1/sqrt3, +1, 0,   0,1,1,  -1/2,sqrt3/2,0,//lower left 2
-			-2/sqrt3,  0, 0,   0,1,1,  -1/2,sqrt3/2,0//left 3
-	};
-	
-	private static final float[] bottom = {
-			2/sqrt3,   0, 0,  //right 0
-			1/sqrt3,  -1, 0,  // lower right 1
-			-1/sqrt3, -1, 0,  //lower left 2
-			
-			2/sqrt3,   0, 0, //right 0
-			-1/sqrt3, -1, 0, //lower left 2
-			-2/sqrt3,  0, 0, //left 3
-
-			2/sqrt3,   0, 0, //right 0
-			-2/sqrt3,  0, 0, //left 3
-			-1/sqrt3,  1, 0, //upper left 4
-
-			2/sqrt3,   0, 0, //right 0
-			-1/sqrt3,  1, 0, //upper left 4
-			1/sqrt3,   1, 0, //upper right 5
-	};
-		
-	private static final float[] top = { //NORMAL 0,0,1
-			2/sqrt3,   0, 1,  //right 0
-			1/sqrt3,  -1, 1,  // lower right 1
-			-1/sqrt3, -1, 1,  //lower left 2
-			
-			2/sqrt3,   0, 1, //right 0
-			-1/sqrt3, -1, 1, //lower left 2
-			-2/sqrt3,  0, 1, //left 3
-
-			2/sqrt3,   0, 1, //right 0
-			-2/sqrt3,  0, 1, //left 3
-			-1/sqrt3,  1, 1, //upper left 4
-
-			2/sqrt3,   0, 1, //right 0
-			-1/sqrt3,  1, 1, //upper left 4
-			1/sqrt3,   1, 1, //upper right 5
-	};
-	
-	private static final float[] front = {
-		-1/sqrt3,  1, 1, //upper left 4
-		1/sqrt3,   1, 1, //upper right 5
-		1/sqrt3,   1, 0, //upper right 5
-		
-		-1/sqrt3,  1, 1, //upper left 4
-		1/sqrt3,   1, 0, //upper right 5
-		-1/sqrt3,  1, 0  //upper left 4
-	};
-	
-	private static final float[] back = {
-			1/sqrt3,  -1, 1, // lower right 1
-			-1/sqrt3, -1, 1, //lower left 2
-			-1/sqrt3, -1, 0, //lower left 2
-			
-			1/sqrt3,  -1, 1, // lower right 1
-			-1/sqrt3, -1, 0, //lower left 2
-			1/sqrt3,  -1, 0  // lower right 1
-	};
-	
-	private static final float[] frontRight = {
-		1/sqrt3,   1, 1, //upper right 5
-		2/sqrt3,   0, 1, //right 0
-		2/sqrt3,   0, 0, //right 0
-		
-		1/sqrt3,   1, 1, //upper right 5
-		2/sqrt3,   0, 0, //right 0
-		1/sqrt3,   1, 0  //upper right 5
-	};
-	
-	private static final float[] frontLeft = {
-		-2/sqrt3,  0, 1, //left 3
-		-1/sqrt3, +1, 1, //lower left 2
-		-1/sqrt3, +1, 0, //lower left 2
-		
-		-2/sqrt3,  0, 1, //left 3
-		-1/sqrt3, +1, 0, //lower left 2
-		-2/sqrt3,  0, 0  //left 3
+			// TOP
+			2 / sqrt3, 0, 1, 1, 0, 0, 0, 0, 1,// right 0
+			1 / sqrt3, -1, 1, 0, 0, 1, 0, 0, 1,// lower right 1
+			-1 / sqrt3, -1, 1, 1, 0, 0, 0, 0, 1,// lower left 2
+			-2 / sqrt3, 0, 1, 0, 0, 1, 0, 0, 1,// left 3
+			-1 / sqrt3, 1, 1, 1, 0, 0, 0, 0, 1,// upper left 4
+			1 / sqrt3, 1, 1, 0, 0, 1, 0, 0, 1,// upper right 5
+			// BOTTOM
+			2 / sqrt3, 0, 0, 0, 1, 1, 0, 0, -1,// right 0
+			1 / sqrt3, -1, 0, 1, 0, 1, 0, 0, -1,// lower right 1
+			-1 / sqrt3, -1, 0, 1, 1, 0, 0, 0, -1,// lower left 2
+			-2 / sqrt3, 0, 0, 1, 0, 1, 0, 0, -1,// left 3
+			-1 / sqrt3, 1, 0, 0, 1, 1, 0, 0, -1,// upper left 4
+			1 / sqrt3, 1, 0, 1, 0, 1, 0, 0, -1,// upper right 5
+			// FRONT
+			-1 / sqrt3, 1, 1, 1, 0, 1, 0, 1, 0,// upper left 4
+			1 / sqrt3, 1, 1, 1, 0, 1, 0, 1, 0,// upper right 5
+			1 / sqrt3, 1, 0, 1, 0, 1, 0, 1, 0,// upper right 5
+			-1 / sqrt3, 1, 0, 1, 0, 1, 0, 1, 0,// upper left 4
+			// FRONT RIGHT
+			1 / sqrt3, 1, 1, 1, 1, 0, 1 / 2, sqrt3 / 2, 0,// upper right 5
+			2 / sqrt3, 0, 1, 1, 1, 0, 1 / 2, sqrt3 / 2, 0,// right 0
+			2 / sqrt3, 0, 0, 1, 1, 0, 1 / 2, sqrt3 / 2, 0,// right 0
+			1 / sqrt3, 1, 0, 1, 1, 0, 1 / 2, sqrt3 / 2, 0,// upper right 5
+			// BACK RIGHT
+			2 / sqrt3, 0, 1, 1, 0, 0, 1 / 2, -sqrt3 / 2, 0,// right 0
+			1 / sqrt3, -1, 1, 1, 0, 0, 1 / 2, -sqrt3 / 2, 0,// lower right 1
+			1 / sqrt3, -1, 0, 1, 0, 0, 1 / 2, -sqrt3 / 2, 0,// lower right 1
+			2 / sqrt3, 0, 0, 1, 0, 0, 1 / 2, -sqrt3 / 2, 0,// right 0
+			// BACK
+			1 / sqrt3, -1, 1, 0, 1, 0, 0, -1, 0,// lower right 1
+			-1 / sqrt3, -1, 1, 0, 1, 0, 0, -1, 0,// lower left 2
+			-1 / sqrt3, -1, 0, 0, 1, 0, 0, -1, 0,// lower left 2
+			1 / sqrt3, -1, 0, 0, 1, 0, 0, -1, 0,// lower right 1
+			// BACK LEFT
+			-1 / sqrt3, -1, 1, 0, 0, 1, -1 / 2, -sqrt3 / 2, 0,// lower left 2
+			-2 / sqrt3, 0, 1, 0, 0, 1, -1 / 2, -sqrt3 / 2, 0,// left 3
+			-2 / sqrt3, 0, 0, 0, 0, 1, -1 / 2, -sqrt3 / 2, 0,// left 3
+			-1 / sqrt3, -1, 0, 0, 0, 1, -1 / 2, -sqrt3 / 2, 0,// lower left 2
+			// FRONT LEFT
+			-2 / sqrt3, 0, 1, 0, 1, 1, -1 / 2, sqrt3 / 2, 0,// left 3
+			-1 / sqrt3, +1, 1, 0, 1, 1, -1 / 2, sqrt3 / 2, 0,// lower left 2
+			-1 / sqrt3, +1, 0, 0, 1, 1, -1 / 2, sqrt3 / 2, 0,// lower left 2
+			-2 / sqrt3, 0, 0, 0, 1, 1, -1 / 2, sqrt3 / 2, 0 // left 3
 	};
 
-	private static final float[] backLeft = {
-		-1/sqrt3, -1, 1, //lower left 2
-		-2/sqrt3,  0, 1, //left 3
-		-2/sqrt3,  0, 0, //left 3
-		
-		-1/sqrt3, -1, 1, //lower left 2
-		-2/sqrt3,  0, 0, //left 3
-		-1/sqrt3, -1, 0  //lower left 2
+	private static final float[] bottom = { 2 / sqrt3, 0, 0, // right 0
+			1 / sqrt3, -1, 0, // lower right 1
+			-1 / sqrt3, -1, 0, // lower left 2
+
+			2 / sqrt3, 0, 0, // right 0
+			-1 / sqrt3, -1, 0, // lower left 2
+			-2 / sqrt3, 0, 0, // left 3
+
+			2 / sqrt3, 0, 0, // right 0
+			-2 / sqrt3, 0, 0, // left 3
+			-1 / sqrt3, 1, 0, // upper left 4
+
+			2 / sqrt3, 0, 0, // right 0
+			-1 / sqrt3, 1, 0, // upper left 4
+			1 / sqrt3, 1, 0, // upper right 5
 	};
-	
-	private static final float[] backRight = {
-		2/sqrt3,   0, 1, //right 0
-		1/sqrt3,  -1, 1, // lower right 1
-		1/sqrt3,  -1, 0, // lower right 1
-		
-		2/sqrt3,   0, 1, //right 0
-		1/sqrt3,  -1, 0, // lower right 1
-		2/sqrt3,   0, 0  //right 0
+
+	private static final float[] top = { // NORMAL 0,0,1
+	2 / sqrt3, 0, 1, // right 0
+			1 / sqrt3, -1, 1, // lower right 1
+			-1 / sqrt3, -1, 1, // lower left 2
+
+			2 / sqrt3, 0, 1, // right 0
+			-1 / sqrt3, -1, 1, // lower left 2
+			-2 / sqrt3, 0, 1, // left 3
+
+			2 / sqrt3, 0, 1, // right 0
+			-2 / sqrt3, 0, 1, // left 3
+			-1 / sqrt3, 1, 1, // upper left 4
+
+			2 / sqrt3, 0, 1, // right 0
+			-1 / sqrt3, 1, 1, // upper left 4
+			1 / sqrt3, 1, 1, // upper right 5
 	};
-	//@formatter:on
+
+	private static final float[] front = { -1 / sqrt3, 1, 1, // upper left 4
+			1 / sqrt3, 1, 1, // upper right 5
+			1 / sqrt3, 1, 0, // upper right 5
+
+			-1 / sqrt3, 1, 1, // upper left 4
+			1 / sqrt3, 1, 0, // upper right 5
+			-1 / sqrt3, 1, 0 // upper left 4
+	};
+
+	private static final float[] back = { 1 / sqrt3, -1, 1, // lower right 1
+			-1 / sqrt3, -1, 1, // lower left 2
+			-1 / sqrt3, -1, 0, // lower left 2
+
+			1 / sqrt3, -1, 1, // lower right 1
+			-1 / sqrt3, -1, 0, // lower left 2
+			1 / sqrt3, -1, 0 // lower right 1
+	};
+
+	private static final float[] frontRight = { 1 / sqrt3, 1, 1, // upper right
+																	// 5
+			2 / sqrt3, 0, 1, // right 0
+			2 / sqrt3, 0, 0, // right 0
+
+			1 / sqrt3, 1, 1, // upper right 5
+			2 / sqrt3, 0, 0, // right 0
+			1 / sqrt3, 1, 0 // upper right 5
+	};
+
+	private static final float[] frontLeft = { -2 / sqrt3, 0, 1, // left 3
+			-1 / sqrt3, +1, 1, // lower left 2
+			-1 / sqrt3, +1, 0, // lower left 2
+
+			-2 / sqrt3, 0, 1, // left 3
+			-1 / sqrt3, +1, 0, // lower left 2
+			-2 / sqrt3, 0, 0 // left 3
+	};
+
+	private static final float[] backLeft = { -1 / sqrt3, -1, 1, // lower left 2
+			-2 / sqrt3, 0, 1, // left 3
+			-2 / sqrt3, 0, 0, // left 3
+
+			-1 / sqrt3, -1, 1, // lower left 2
+			-2 / sqrt3, 0, 0, // left 3
+			-1 / sqrt3, -1, 0 // lower left 2
+	};
+
+	private static final float[] backRight = { 2 / sqrt3, 0, 1, // right 0
+			1 / sqrt3, -1, 1, // lower right 1
+			1 / sqrt3, -1, 0, // lower right 1
+
+			2 / sqrt3, 0, 1, // right 0
+			1 / sqrt3, -1, 0, // lower right 1
+			2 / sqrt3, 0, 0 // right 0
+	};
+	// @formatter:on
 
 	public static final int FRONT = 0;
 	public static final int BACK = 1;
@@ -177,8 +169,8 @@ public class SadChunk {
 	public static final int BACKRIGHT = 6;
 	public static final int BACKLEFT = 7;
 
-	//PER FACE VAOS, VAO LENGTHS, AND NORMALS
-	private VertexArrayObject[] VAOS = new VertexArrayObject[8];
+	// PER FACE VAOS, VAO LENGTHS, AND NORMALS
+	// private VertexArrayObject[] VAOS = new VertexArrayObject[8];
 	private int[] numberOfPts = new int[8];
 	private static final Vector3f[] normals = new Vector3f[8];
 
@@ -188,7 +180,7 @@ public class SadChunk {
 	private Matrix4f normal;
 
 	public SadChunk(float[][][] properties, int chunkX, int chunkY) {
-		//NORMALS FOR LIGHT AND FOR FACE CULLING
+		// NORMALS FOR LIGHT AND FOR FACE CULLING
 		normals[FRONT] = new Vector3f(0, 1, 0);
 		normals[BACK] = new Vector3f(0, -1, 0);
 		normals[TOP] = new Vector3f(0, 0, 1);
@@ -198,40 +190,45 @@ public class SadChunk {
 		normals[BACKRIGHT] = new Vector3f(1 / 2, -sqrt3 / 2, 0);
 		normals[BACKLEFT] = new Vector3f(-1 / 2, -sqrt3 / 2, 0);
 
-		//MATRICES FOR RENDERING
-		model = Matrix4f
-				.translate(6 * 1.2f * chunkX / 4 * CHUNKSIZE - 10,
-						2 * CHUNKSIZE * (float) Math.sqrt(3) / 2 * 1.2f * chunkY - 10, 0)
-				.multiply(Matrix4f.scale(1, 1, .5f));
+		// MATRICES FOR RENDERING
+		model = Matrix4f.translate(6 * 1.2f * chunkX / 4 * CHUNKSIZE - 10,
+				2 * CHUNKSIZE * (float) Math.sqrt(3) / 2 * 1.2f * chunkY - 10,
+				0).multiply(Matrix4f.scale(1, 1, .5f));
 
 		normal = Matrix4f.inverse(model).transpose();
 
-		//BOUNDING BOX FOR FRUSTUM CULLING
-		boundingBox[0] = new Vector3f(6 * 1.2f * chunkX / 4 * CHUNKSIZE - 10,
-				2 * CHUNKSIZE * (float) Math.sqrt(3) / 2 * 1.2f * chunkY - 10, 0);
+		// BOUNDING BOX FOR FRUSTUM CULLING
+		boundingBox[0] = new Vector3f(6 * 1.2f * chunkX / 4 * CHUNKSIZE - 10, 2
+				* CHUNKSIZE * (float) Math.sqrt(3) / 2 * 1.2f * chunkY - 10, 0);
 
-		boundingBox[1] = new Vector3f(6 * 1.2f * (chunkX + 1) / 4 * CHUNKSIZE - 10,
-				2 * CHUNKSIZE * (float) Math.sqrt(3) / 2 * 1.2f * chunkY - 10, 0);
+		boundingBox[1] = new Vector3f(6 * 1.2f * (chunkX + 1) / 4 * CHUNKSIZE
+				- 10, 2 * CHUNKSIZE * (float) Math.sqrt(3) / 2 * 1.2f * chunkY
+				- 10, 0);
 
-		boundingBox[2] = new Vector3f(6 * 1.2f * chunkX / 4 * CHUNKSIZE - 10,
-				2 * CHUNKSIZE * (float) Math.sqrt(3) / 2 * 1.2f * (chunkY + 1) - 10, 0);
+		boundingBox[2] = new Vector3f(6 * 1.2f * chunkX / 4 * CHUNKSIZE - 10, 2
+				* CHUNKSIZE * (float) Math.sqrt(3) / 2 * 1.2f * (chunkY + 1)
+				- 10, 0);
 
-		boundingBox[3] = new Vector3f(6 * 1.2f * (chunkX + 1) / 4 * CHUNKSIZE - 10,
-				2 * CHUNKSIZE * (float) Math.sqrt(3) / 2 * 1.2f * (chunkY + 1) - 10, 0);
+		boundingBox[3] = new Vector3f(6 * 1.2f * (chunkX + 1) / 4 * CHUNKSIZE
+				- 10, 2 * CHUNKSIZE * (float) Math.sqrt(3) / 2 * 1.2f
+				* (chunkY + 1) - 10, 0);
 
-		boundingBox[4] = new Vector3f(6 * 1.2f * chunkX / 4 * CHUNKSIZE - 10,
-				2 * CHUNKSIZE * (float) Math.sqrt(3) / 2 * 1.2f * chunkY - 10, 16);
+		boundingBox[4] = new Vector3f(6 * 1.2f * chunkX / 4 * CHUNKSIZE - 10, 2
+				* CHUNKSIZE * (float) Math.sqrt(3) / 2 * 1.2f * chunkY - 10, 16);
 
-		boundingBox[5] = new Vector3f(6 * 1.2f * (chunkX + 1) / 4 * CHUNKSIZE - 10,
-				2 * CHUNKSIZE * (float) Math.sqrt(3) / 2 * 1.2f * chunkY - 10, 16);
+		boundingBox[5] = new Vector3f(6 * 1.2f * (chunkX + 1) / 4 * CHUNKSIZE
+				- 10, 2 * CHUNKSIZE * (float) Math.sqrt(3) / 2 * 1.2f * chunkY
+				- 10, 16);
 
-		boundingBox[6] = new Vector3f(6 * 1.2f * chunkX / 4 * CHUNKSIZE - 10,
-				2 * CHUNKSIZE * (float) Math.sqrt(3) / 2 * 1.2f * (chunkY + 1) - 10, 16);
+		boundingBox[6] = new Vector3f(6 * 1.2f * chunkX / 4 * CHUNKSIZE - 10, 2
+				* CHUNKSIZE * (float) Math.sqrt(3) / 2 * 1.2f * (chunkY + 1)
+				- 10, 16);
 
-		boundingBox[7] = new Vector3f(6 * 1.2f * (chunkX + 1) / 4 * CHUNKSIZE - 10,
-				2 * CHUNKSIZE * (float) Math.sqrt(3) / 2 * 1.2f * (chunkY + 1) - 10, 16);
+		boundingBox[7] = new Vector3f(6 * 1.2f * (chunkX + 1) / 4 * CHUNKSIZE
+				- 10, 2 * CHUNKSIZE * (float) Math.sqrt(3) / 2 * 1.2f
+				* (chunkY + 1) - 10, 16);
 
-		//CREATE VAOS (Dont question it)
+		// CREATE VAOS (Dont question it)
 
 		float[] color = new float[3];
 		color[0] = .5f;
@@ -748,7 +745,7 @@ public class SadChunk {
 			top[i] = topPts.get(i);
 		}
 
-		VAOS[TOP] = new VertexArrayObject(top, 2);
+		// VAOS[TOP] = new VertexArrayObject(top, 2);
 
 		numberOfPts[TOP] = top.length / 2;
 
@@ -757,7 +754,7 @@ public class SadChunk {
 			bottom[i] = bottomPts.get(i);
 		}
 
-		VAOS[BOTTOM] = new VertexArrayObject(bottom, 2);
+		// VAOS[BOTTOM] = new VertexArrayObject(bottom, 2);
 
 		numberOfPts[BOTTOM] = bottom.length / 2;
 
@@ -766,7 +763,7 @@ public class SadChunk {
 			front[i] = frontPts.get(i);
 		}
 
-		VAOS[FRONT] = new VertexArrayObject(front, 2);
+		// VAOS[FRONT] = new VertexArrayObject(front, 2);
 
 		numberOfPts[FRONT] = front.length / 2;
 
@@ -775,7 +772,7 @@ public class SadChunk {
 			back[i] = backPts.get(i);
 		}
 
-		VAOS[BACK] = new VertexArrayObject(back, 2);
+		// VAOS[BACK] = new VertexArrayObject(back, 2);
 
 		numberOfPts[BACK] = back.length / 2;
 
@@ -784,7 +781,7 @@ public class SadChunk {
 			frontRight[i] = frontRightPts.get(i);
 		}
 
-		VAOS[FRONTRIGHT] = new VertexArrayObject(frontRight, 2);
+		// VAOS[FRONTRIGHT] = new VertexArrayObject(frontRight, 2);
 
 		numberOfPts[FRONTRIGHT] = frontRight.length / 2;
 
@@ -793,7 +790,7 @@ public class SadChunk {
 			frontLeft[i] = frontLeftPts.get(i);
 		}
 
-		VAOS[FRONTLEFT] = new VertexArrayObject(frontLeft, 2);
+		// VAOS[FRONTLEFT] = new VertexArrayObject(frontLeft, 2);
 
 		numberOfPts[FRONTLEFT] = frontLeft.length / 2;
 
@@ -802,8 +799,8 @@ public class SadChunk {
 			backLeft[i] = backLeftPts.get(i);
 		}
 
-		VAOS[BACKLEFT] = new VertexArrayObject(backLeft, 2);
-
+		// VAOS[BACKLEFT] = new VertexArrayObject(backLeft, 2);
+		//
 		numberOfPts[BACKLEFT] = backLeft.length / 2;
 
 		float[] backRight = new float[backRightPts.size()];
@@ -811,7 +808,7 @@ public class SadChunk {
 			backRight[i] = backRightPts.get(i);
 		}
 
-		VAOS[BACKRIGHT] = new VertexArrayObject(backRight, 2);
+		// VAOS[BACKRIGHT] = new VertexArrayObject(backRight, 2);
 
 		numberOfPts[BACKRIGHT] = backRight.length / 2;
 	}
@@ -819,18 +816,23 @@ public class SadChunk {
 	public static void initShader() {
 		ShaderManager.chunkShader.start();
 
-		ShaderManager.chunkShader.setUniform3f("lightColor", new Vector3f(1f, 1, 1));
-		///	ShaderManager.chunkShader.setUniform3f("objectColor", new Vector3f(1f, .5f, .31f));
+		ShaderManager.chunkShader.setUniform3f("lightColor", new Vector3f(1f,
+				1, 1));
+		// / ShaderManager.chunkShader.setUniform3f("objectColor", new
+		// Vector3f(1f, .5f, .31f));
 		ShaderManager.chunkShader.setUniform1f("ambientStrength", .1f);
 		ShaderManager.chunkShader.setUniform1f("specularStrength", .4f);
 		ShaderManager.chunkShader.setUniform1f("shininess", 256);
 
-		ShaderManager.chunkShader.setUniform1f("apothem", (float) Math.sqrt(3) / 2);
+		ShaderManager.chunkShader.setUniform1f("apothem",
+				(float) Math.sqrt(3) / 2);
 		ShaderManager.chunkShader.setUniform1f("side", 1f);
 		ShaderManager.chunkShader.setUniform1i("chunkSize", CHUNKSIZE);
 
-		ShaderManager.chunkShader.setUniformBlockf("Properties", Utilities.createUniformBuffer(
-				Utilities.createUniformFloatBuffer(new float[CHUNKSIZE * CHUNKSIZE * CHUNKHEIGHT])), 0);
+		ShaderManager.chunkShader.setUniformBlockf("Properties", Utilities
+				.createUniformBuffer(Utilities
+						.createUniformFloatBuffer(new float[CHUNKSIZE
+								* CHUNKSIZE * CHUNKHEIGHT])), 0);
 
 		ShaderManager.chunkShader.stop();
 	}
@@ -841,12 +843,13 @@ public class SadChunk {
 		ShaderManager.chunkShader.setUniformMatrix4f("model", model);
 		ShaderManager.chunkShader.setUniformMatrix4f("norm", normal);
 
-		Vector3f cameraDir = EntityManager.camera.getPos().subtract(EntityManager.camera.getTarget());
+		Vector3f cameraDir = EntityManager.camera.getPos().subtract(
+				EntityManager.camera.getTarget());
 
 		for (int i = 0; i < normals.length; i++) {
 			if (normals[i].dot(cameraDir) > 0) {
 				ShaderManager.chunkShader.setUniform3f("normal", normals[i]);
-				glBindVertexArray(VAOS[i].getVaoID());
+				// glBindVertexArray(VAOS[i].getVaoID());
 				glDrawArrays(GL_TRIANGLES, 0, numberOfPts[i]);
 			}
 		}

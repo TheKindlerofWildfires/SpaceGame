@@ -43,7 +43,7 @@ void main(void){
 	float zOfset=zPos*1.0f;
 if(prop==100){
 		VColor = vec3(0,1,0);
-	}else if(prop == 20){
+	}else if(prop == 128){
 		VColor = vec3(0,0,1);
 	}else if(prop ==50){
 		VColor = vec3(1,0,1);
@@ -72,17 +72,23 @@ if(prop==100){
 	}else if(prop == 12){
 		VColor = vec3(0.16,0.43,0.16);
 	}else if(prop == 13){
-		VColor = vec3(0.1,0.43,0.16);
+		VColor = vec3(0.6,0.5,0.5);
 	}else if(prop == 14){
-		VColor = vec3(0.43,0.43,0.66);
+		VColor = vec3(0.1,0.83,0.66);
 	}else if(prop == 15){
-		VColor = vec3(0.21,0.73,0.26);
+		VColor = vec3(1,1,1);
 	}else if(prop == 16){
-		VColor = vec3(0.8,0.43,0.46);
+		VColor = vec3(0.2,0.93,0.76);
 	}else if(prop == 17){
-		VColor = vec3(0.5,0.1,0.5);
+		VColor = vec3(0.8,0.7,0.7);
 	}else if(prop == 18){
-		VColor = vec3(0.6,0.63,0.46);
+		VColor = vec3(0.1,0.83,0.66);
+	}else if(prop == 19){
+		VColor = vec3(0.9,0.83,0.66);
+	}else if(prop == 20){
+		VColor = vec3(1,0.53,0.56);
+	}else if(prop == 21){
+		VColor = vec3(0.9,0.7,0.7);
 	}else{
 		VColor = vec3(1,1,1);
 	}	

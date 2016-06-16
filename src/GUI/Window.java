@@ -22,27 +22,19 @@ import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
-import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.GL_TRUE;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.opengl.GL11.glEnable;
-import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
-import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL31.glDrawArraysInstanced;
 import static org.lwjgl.system.MemoryUtil.NULL;
+import gameEngine.EntityManager;
+import gameEngine.Tick;
+import gameEngine.TickManager;
+import maths.Matrix4f;
 
 import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.opengl.GL;
-
-import gameEngine.EntityManager;
-import gameEngine.Tick;
-import gameEngine.TickManager;
-import graphicEngine.ShaderManager;
-import graphicEngine.VertexArrayObject;
-import maths.Matrix4f;
 
 public class Window implements Runnable {
 	private Thread thread;
@@ -56,7 +48,8 @@ public class Window implements Runnable {
 
 	public static void main(String args[]) {
 
-		Matrix4f toast = new Matrix4f(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+		Matrix4f toast = new Matrix4f(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+				1, 1);
 
 		System.out.println(Matrix4f.inverse(toast));
 
@@ -92,9 +85,10 @@ public class Window implements Runnable {
 		}
 
 		glfwSetKeyCallback(window, keyCallback = new KeyboardInput());
-		glfwSetCursorPosCallback(window, cursorCallback = (GLFWCursorPosCallback) new MouseInput());
+		glfwSetCursorPosCallback(window,
+				cursorCallback = (GLFWCursorPosCallback) new MouseInput());
 
-		//GLFWVidMode vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+		// GLFWVidMode vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 		glfwSetWindowPos(window, 0, 20);
 
 		glfwMakeContextCurrent(window);
@@ -109,8 +103,7 @@ public class Window implements Runnable {
 		entityManager = new EntityManager();
 		tickManager = new TickManager();
 
-		
-		//System.out.println(glGetString(GL_VERSION));
+		// System.out.println(glGetString(GL_VERSION));
 	}
 
 	public void update() {
@@ -119,7 +112,6 @@ public class Window implements Runnable {
 		tickManager.update();
 	}
 
-
 	public void render() {
 		glfwSwapBuffers(window);
 
@@ -127,7 +119,6 @@ public class Window implements Runnable {
 		entityManager.render();
 		tickManager.render();
 
-		
 	}
 
 	@Override

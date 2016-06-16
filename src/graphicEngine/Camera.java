@@ -1,6 +1,5 @@
 package graphicEngine;
 
-import gameEngine.EntityManager;
 import maths.Frustum;
 import maths.Matrix4f;
 import maths.Vector3f;
@@ -11,17 +10,21 @@ public class Camera {
 	private float angle, aspect, near, far;
 
 	private Matrix4f projection;
-	
+
 	private Frustum frust;
 
 	/**
 	 * Initializes camera
-	 * @param cameraPos position of camera
-	 * @param cameraTarget location camera is looking at
-	 * @param cameraUp up vector
+	 * 
+	 * @param cameraPos
+	 *            position of camera
+	 * @param cameraTarget
+	 *            location camera is looking at
+	 * @param cameraUp
+	 *            up vector
 	 */
-	public Camera(Vector3f cameraPos, Vector3f cameraTarget, Vector3f cameraUp, float angle, float aspect, float near,
-			float far) {
+	public Camera(Vector3f cameraPos, Vector3f cameraTarget, Vector3f cameraUp,
+			float angle, float aspect, float near, float far) {
 		pos = cameraPos;
 		target = cameraTarget;
 		up = cameraUp;
@@ -39,7 +42,9 @@ public class Camera {
 
 	/**
 	 * Moves the camera and target
-	 * @param displacement displacement vector
+	 * 
+	 * @param displacement
+	 *            displacement vector
 	 */
 	public void moveCamera(Vector3f displacement) {
 		pos = pos.add(displacement);

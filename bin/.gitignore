@@ -1,16 +1,7 @@
-<<<<<<< HEAD
-/graphicEngine/
 /gameEngine/
-/gen/
-=======
+/graphicEngine/
 /shaders/
-/graphicEngine/
-/GUI/
->>>>>>> iWillBeOptimizedPls
-/entity/
-/gameEngine/
 /maths/
-<<<<<<< HEAD
-=======
+/entity/
 /classesSimonDoesntLike/
->>>>>>> iWillBeOptimizedPls
+/GUI/

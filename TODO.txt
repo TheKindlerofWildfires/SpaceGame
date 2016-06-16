@@ -1,11 +1,10 @@
 TO DO:
-Textures: NO
-Select screen:
-Status bars:
-Reseting land:
-Zoom function:
-Camera following:
-Contact alpha testers:
+Textures
+Fix height limits
+Re-implement player
+Fix camera
+Merge and correct side culling
+Separate blocks by enough so we can see
+Field lines of pretty
+Cull out dead branches and obs code
 
-Shaders on monsters
-THE SIMPLEST AI EVER

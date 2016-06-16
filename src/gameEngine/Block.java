@@ -8,7 +8,7 @@ import entity.Entity;
 public class Block {
 	public static final int AIR = 0;
 	public static final int LAND = 100;
-	public static final int WATER = 20;
+	public static final int WATER = 128;
 	public static final int SEED = 50;
 	public static final int UPPERFOREST = 1;
 	public static final int LOWERFOREST = 2;
@@ -23,11 +23,14 @@ public class Block {
 	public static final int THORNS = 11;
 	public static final int UNDERBRUSH = 12;
 	public static final int JG_TREE = 13;
-	public static final int ASH_TREE = 14;
-	public static final int PALM_TREE = 15;
-	public static final int FRUIT_BUSH = 16;
-	public static final int THORN_BUSH = 17;
-	public static final int REEDS = 18;
+	public static final int JG_LEAF = 14;
+	public static final int ASH_TREE = 15;
+	public static final int ASH_LEAF = 16;
+	public static final int PALM_TREE = 17;
+	public static final int PALM_LEAF = 18;
+	public static final int FRUIT_BUSH = 19;
+	public static final int THORN_BUSH = 20;
+	public static final int REEDS = 21;
 	
 	static Random rng = Map.rng;
 	public Block(){
@@ -92,11 +95,11 @@ public class Block {
 		return block;
 	}
 
-	public static boolean destinationTraversable(int xIndex, int yIndex) {
-		switch(Map.land[xIndex][yIndex]){
-		case Map.SEED:
+	public static boolean destinationTraversable(int xIndex, int yIndex, int zIndex,Entity entity) {
+		switch(Map.land[xIndex][yIndex][zIndex]){
+		case SEED:
 			return true;
-		case Map.LAND:
+		case LAND:
 			return true;
 		case UPPERFOREST:
 			return true;
@@ -122,7 +125,7 @@ public class Block {
 			return true;
 		case UNDERBRUSH:
 			return true;
-		case Map.WATER:
+		case WATER:
 			return false;
 		case JG_TREE:
 			return true;
@@ -141,8 +144,8 @@ public class Block {
 			return false;
 		}
 	}
-	public static void steppedOn(int xIndex, int yIndex, Entity entity) {
-		switch(Map.land[xIndex][yIndex]){
+	public static void steppedOn(int xIndex, int yIndex, int zIndex,Entity entity) {
+		switch(Map.land[xIndex][yIndex][zIndex]){
 		case THORN_BUSH:
 			entity.setEntityHealth(entity.getEntityHealth()-(double)1/3);
 			//System.out.println(entity.getEntityHealth());
