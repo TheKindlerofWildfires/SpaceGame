@@ -54,7 +54,7 @@ public class Structure {
 		sizeY = 7;
 		sizeZ = 7;
 		if (cx + sizeX < Map.HEXESACROSS && cy + sizeY < Map.HEXESDOWN
-				&& cz + sizeZ < Map.WORLDHEIGHT) {
+				&& cz + sizeZ < Map.WORLDHEIGHT && cx%2 == 0) {
 			for (int z = cz; z < cz + 5; z++) {
 				WorldGenerator.data[cx + 5][cy + 1][z] = Block.OCTOWALL;
 				WorldGenerator.data[cx + 4][cy + 1][z] = Block.OCTOWALL;
