@@ -31,6 +31,8 @@ public class Block {
 	public static final int FRUIT_BUSH = 19;
 	public static final int THORN_BUSH = 20;
 	public static final int REEDS = 21;
+	public static final int OCTOWALL = 22;
+	public static final int OCTOROOF = 23;
 	
 	static Random rng = Map.rng;
 	public Block(){

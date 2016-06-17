@@ -89,6 +89,10 @@ if(prop==100){
 		VColor = vec3(1,0.53,0.56);
 	}else if(prop == 21){
 		VColor = vec3(0.9,0.7,0.7);
+	}else if(prop == 22){
+		VColor = vec3(0.6,0.6,0.7);
+	}else if(prop == 23){
+		VColor = vec3(0.5,0.5,0.6);
 	}else{
 		VColor = vec3(1,1,1);
 	}	

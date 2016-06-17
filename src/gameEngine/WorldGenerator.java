@@ -38,11 +38,11 @@ public class WorldGenerator {
 				fill(x, y);
 				moisturize(x, y);
 				foliate(x, y);
+				build(x, y);
 				block(x, y);
 
 			}
 		}
-		new Structure();
 		return data;
 	}
 
@@ -60,7 +60,7 @@ public class WorldGenerator {
 	 * Block.REEDS; } break; } // System.out.println(land[i][j]); } } }
 	 */
 	private void foliate(int x, int y) {
-		if (data[x][y][eTracker[x][y]] == 1) {
+		if (data[x][y][eTracker[x][y]] == 1 && eTracker[x][y]>WATERLEVEL) {
 			if (rng.nextDouble() > 0.99) {
 				Plant.tree(x, y, eTracker[x][y]);
 			} else if (rng.nextDouble() > 0.98) {
@@ -68,6 +68,13 @@ public class WorldGenerator {
 			}
 		}
 
+	}
+	private void build(int x, int y) {
+		if (data[x][y][eTracker[x][y]] == 1  && eTracker[x][y]>WATERLEVEL) {
+			if (rng.nextDouble() > 0.999) {
+				Structure.gen(x, y, eTracker[x][y]);
+			}
+		}
 	}
 
 	private void block(int x, int y) {
