@@ -13,7 +13,7 @@ import maths.Vector3f;
 
 public class Chunk {
 
-	public static final int CHUNKSIZE = 16;
+	public static final int CHUNKSIZE = 4;
 	public static final int CHUNKHEIGHT = Map.WORLDHEIGHT;
 
 	public static final float sqrt3 = (float) Math.sqrt(3);

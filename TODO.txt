@@ -4,7 +4,10 @@ Fix height limits (its in the shader, why can't i change it?)
 Re-implement player
 Fix camera
 Merge and correct side culling
-Separate blocks by enough so we can see
 Field lines of pretty
 Cull out dead branches and obs code
+Sky box
+Structure gen
+Make ends of world meet
+
 

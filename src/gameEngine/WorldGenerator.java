@@ -1,6 +1,8 @@
 package gameEngine;
 
 import gen.Plant;
+import gen.Structure;
+import graphicEngine.Chunk;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -8,9 +10,9 @@ import java.util.Random;
 import maths.Utilities;
 
 public class WorldGenerator {
-	public static final double HEIGHT = 11;
+	public static final double HEIGHT = Chunk.CHUNKHEIGHT/2;
 	private static final double ELEVATIONSCALER = 50;
-	public static final int WATERLEVEL = 3;
+	public static final int WATERLEVEL = Chunk.CHUNKHEIGHT/5;
 	private static final int MOISTURESCALER = 20;
 	public static String mapType;
 	public static String worldType;
@@ -23,6 +25,7 @@ public class WorldGenerator {
 	Random rng = Map.rng;
 
 	public WorldGenerator() {
+		new WorldType();
 		Map.noise.setFrequency(1);
 		Map.noise.setLacunarity(2);
 		Map.noise.setOctaveCount(30);
@@ -31,8 +34,7 @@ public class WorldGenerator {
 	public int[][][] generate() {
 		for (int y = 0; y < Map.HEXESDOWN; y++) {
 			for (int x = 0; x < Map.HEXESACROSS; x++) {
-				elevate(x, y);// /getID(x, y, z);
-				// soften(x, y);
+				elevate(x, y);
 				fill(x, y);
 				moisturize(x, y);
 				foliate(x, y);
@@ -40,6 +42,7 @@ public class WorldGenerator {
 
 			}
 		}
+		new Structure();
 		return data;
 	}
 
@@ -86,8 +89,11 @@ public class WorldGenerator {
 	private void fill(int x, int y) {
 		data[x][y][eTracker[x][y]] = 1;
 		for (int z = 0; z < Map.WORLDHEIGHT; z++) {
-			if (data[x][y][z] == 0 && z < eTracker[x][y]) {
+			if (data[x][y][z] == 0 && z < (eTracker[x][y])) {
 				data[x][y][z] = 1;
+			}
+			if (data[x][y][z] == 1 && z < (eTracker[x][y]-4)) {
+				data[x][y][z] = 8;
 			}
 			if (eTracker[x][y] < WATERLEVEL) {
 				if (data[x][y][z] == 0 && z < WATERLEVEL) {

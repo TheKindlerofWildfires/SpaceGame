@@ -18,8 +18,8 @@ public class EntityManager {
 	// public static Monster monster;
 	public WorldType world;
 
-	public static final Vector3f startingCameraPos = new Vector3f(0, 0, 10);
-	public static final Vector3f startingCameraTarget = new Vector3f(0, 10, 0);
+	public static final Vector3f startingCameraPos = new Vector3f(0, 0, 50);
+	public static final Vector3f startingCameraTarget = new Vector3f(0, 20, 0);
 	public static final Vector3f startingUp = new Vector3f(0, 0, 1);
 	public static final Vector3f startingLampPos = new Vector3f(150, 150, 100);
 

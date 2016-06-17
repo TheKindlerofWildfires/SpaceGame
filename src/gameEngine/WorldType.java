@@ -5,16 +5,16 @@ import java.util.Random;
 
 public class WorldType {
 	public static String worldType;
-	private static float difficulty;
-	private static ArrayList<String>hazards= new ArrayList<String>();
-	private static ArrayList<String> adaptations= new ArrayList<String>();
-	private static ArrayList<String> interference= new ArrayList<String>();
-	private static Random rng = Map.rng;
+	public static float difficulty;
+	public static ArrayList<String>hazards= new ArrayList<String>();
+	public static ArrayList<String> adaptations= new ArrayList<String>();
+	public static ArrayList<String> interference= new ArrayList<String>();
+	public static Random rng = Map.rng;
 	
 	public WorldType(){
 		//PLEASE PLEASE INIT ME
-//		worldType = Map.worldType; 
-	    worldType = "sapric";
+		worldType = Map.worldType; 
+	  //  worldType = "sapric";
 		switch(worldType){
 		case "telilic":
 			difficulty = 1;
@@ -26,7 +26,7 @@ public class WorldType {
 			adaptations.add("treeClimb");
 			adaptations.add("camo");
 			adaptations.add("nightHunter");
-			interference.add("octividRuins");
+			interference.add("octividRuins1");
 			break;
 		case "sapric":
 			difficulty = 1;
@@ -38,7 +38,7 @@ public class WorldType {
 			adaptations.add("plateArmor");
 			adaptations.add("fast");
 			adaptations.add("flashSwarm");
-			interference.add("kinikariRuins");
+			interference.add("kinikariRuins1");
 			break;
 		case "worlic":
 			difficulty = 1;
@@ -49,8 +49,8 @@ public class WorldType {
 			adaptations.add("guerilla");
 			adaptations.add("rage");
 			adaptations.add("tracker");
-			interference.add("jeneunGates");
-			interference.add("jeneunCultists");
+			interference.add("jeneunGates1");
+			interference.add("jeneunRuins1");
 			break;
 		default:
 				System.err.println("Not a worldType");

@@ -60,8 +60,8 @@ public class Map {
 	float[] data = new float[Chunk.CHUNKSIZE * Chunk.CHUNKSIZE * WORLDHEIGHT];
 
 	public Map() {
-		worldType = worldTypes[rng.nextInt(worldTypes.length)];
-		// worldType = "telilic";
+		//worldType = worldTypes[rng.nextInt(worldTypes.length)];
+		worldType = "telilic";
 		distance = new Distance();
 		long seed = rng.nextLong();
 		rng.setSeed(seed);
