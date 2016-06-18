@@ -1,13 +1,15 @@
 TO DO:
 Textures
-Fix height limits (its in the shader, why can't i change it?)
+Fix height limits (its in the shader, why can't I change it?)
 Re-implement player
 Fix camera
 Merge and correct side culling
 Field lines of pretty
 Cull out dead branches and obs code
 Sky box
-Structure gen
+Structure gen kinikari
+Caves
+Fix lag
 Make ends of world meet
 
 

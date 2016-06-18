@@ -26,9 +26,9 @@ public class WorldType {
 			adaptations.add("treeClimb");
 			adaptations.add("camo");
 			adaptations.add("nightHunter");
-			interference.add("octividRuins1");
+			interference.add("octividRuinsLeast");
 			break;
-		case "sapric":
+		case "worlic":
 			difficulty = 1;
 			hazards.add("dry");
 			hazards.add("exposed");
@@ -38,9 +38,9 @@ public class WorldType {
 			adaptations.add("plateArmor");
 			adaptations.add("fast");
 			adaptations.add("flashSwarm");
-			interference.add("kinikariRuins1");
+			interference.add("kinikariRuinsLeast");
 			break;
-		case "worlic":
+		case "sapric":
 			difficulty = 1;
 			hazards.add("marsh");
 			hazards.add("fog");
@@ -49,8 +49,8 @@ public class WorldType {
 			adaptations.add("guerilla");
 			adaptations.add("rage");
 			adaptations.add("tracker");
-			interference.add("jeneunGates1");
-			interference.add("jeneunRuins1");
+			interference.add("jeneunGateLeast");
+			interference.add("jeneunRuinsLeast");
 			break;
 		default:
 				System.err.println("Not a worldType");

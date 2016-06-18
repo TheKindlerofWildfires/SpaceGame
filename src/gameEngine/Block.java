@@ -24,23 +24,34 @@ public class Block {
 	public static final int UNDERBRUSH = 12;
 	public static final int JG_TREE = 13;
 	public static final int JG_LEAF = 14;
-	public static final int ASH_TREE = 15;
-	public static final int ASH_LEAF = 16;
+	public static final int BIRCH_TREE = 15;
+	public static final int BIRCH_LEAF = 16;
 	public static final int PALM_TREE = 17;
 	public static final int PALM_LEAF = 18;
 	public static final int FRUIT_BUSH = 19;
 	public static final int THORN_BUSH = 20;
 	public static final int REEDS = 21;
-	public static final int OCTOWALL = 22;
-	public static final int OCTOROOF = 23;
+	public static final int OCTO_WALL = 22;
+	public static final int OCTO_ROOF = 23;
+	public static final int JENEUN_WALL = 24;
+	public static final int JENEUN_ROOF = 25;
+	public static final int KINIKARI_WALL = 26;
+	public static final int KINIKARI_ROOF = 27;
 	
 	static Random rng = Map.rng;
+	public static final int[] gen= {LAND, AIR,SEED};
+	public static final int[] natural = {WATER, UPPERFOREST, LOWERFOREST, 
+		MIDFOREST, MUD, SAND, SANDSTONE, ASH, ROCK, HIGHLAND, DEEPFOREST, THORNS, UNDERBRUSH
+	};
+	public static final int[] foliage =  {JG_TREE, JG_LEAF,BIRCH_TREE, BIRCH_LEAF, PALM_TREE, PALM_LEAF, FRUIT_BUSH, THORN_BUSH, REEDS};
+	public static final int[] octo = {OCTO_WALL, OCTO_ROOF};
+	public static final int[] jenuen = {JENEUN_WALL, JENEUN_ROOF};
+	public static final int[] kinikari = {KINIKARI_WALL, KINIKARI_ROOF};
 	public Block(){
 	}
 	public static int setBlock(int elevation, int moisture){
 		int block = 100;
 		String worldType = Map.worldType;
-		//worldType = "telilic";
 		double eP = elevation/8.0;
 		double mP = moisture/4.0;
 		//System.out.println(mP);
@@ -131,7 +142,7 @@ public class Block {
 			return false;
 		case JG_TREE:
 			return true;
-		case ASH_TREE:
+		case BIRCH_TREE:
 			return true;
 		case PALM_TREE:
 			return true;

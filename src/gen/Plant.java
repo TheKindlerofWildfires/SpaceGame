@@ -184,9 +184,9 @@ public class Plant {
 		// TOP LEVEL
 
 		for (int q = 0; q < neighbors.length; q++) {
-			WorldGenerator.data[neighbors[q][0]][neighbors[q][1]][treeHeight] = Block.ASH_LEAF;
-			WorldGenerator.data[neighbors[q][0]][neighbors[q][1]][treeHeight-1] = Block.ASH_LEAF;
-			WorldGenerator.data[neighbors[q][0]][neighbors[q][1]][treeHeight-2] = Block.ASH_LEAF;
+			WorldGenerator.data[neighbors[q][0]][neighbors[q][1]][treeHeight] = Block.BIRCH_LEAF;
+			WorldGenerator.data[neighbors[q][0]][neighbors[q][1]][treeHeight-1] = Block.BIRCH_LEAF;
+			WorldGenerator.data[neighbors[q][0]][neighbors[q][1]][treeHeight-2] = Block.BIRCH_LEAF;
 			leaves1.add(neighbors);
 
 		}
@@ -196,8 +196,8 @@ public class Plant {
 				neighbors2 = Utilities.getNeighborIndices2(
 						leaves1.get(l)[q][0], leaves1.get(l)[q][1], 1);
 				for (int e = 0; e < neighbors2.length; e++) {
-					WorldGenerator.data[neighbors2[e][0]][neighbors2[e][1]][treeHeight-1] = Block.ASH_LEAF;
-					WorldGenerator.data[neighbors2[e][0]][neighbors2[e][1]][treeHeight-2] = Block.ASH_LEAF;
+					WorldGenerator.data[neighbors2[e][0]][neighbors2[e][1]][treeHeight-1] = Block.BIRCH_LEAF;
+					WorldGenerator.data[neighbors2[e][0]][neighbors2[e][1]][treeHeight-2] = Block.BIRCH_LEAF;
 					leaves2.add(neighbors2);
 				}
 			}
@@ -216,7 +216,7 @@ public class Plant {
 
 		}
 		for (int h = z; h < treeHeight; h++) {
-			WorldGenerator.data[x][y][h] = Block.ASH_TREE;
+			WorldGenerator.data[x][y][h] = Block.BIRCH_TREE;
 
 		}
 

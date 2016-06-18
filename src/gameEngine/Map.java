@@ -61,7 +61,7 @@ public class Map {
 
 	public Map() {
 		//worldType = worldTypes[rng.nextInt(worldTypes.length)];
-		worldType = "telilic";
+		worldType = "worlic";
 		distance = new Distance();
 		long seed = rng.nextLong();
 		rng.setSeed(seed);
