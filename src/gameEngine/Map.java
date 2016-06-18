@@ -247,7 +247,7 @@ public class Map {
 				counter++;
 			}
 		}
-		System.out.println(counter);
+		//System.out.println(counter);
 	}
 
 	public void update() {

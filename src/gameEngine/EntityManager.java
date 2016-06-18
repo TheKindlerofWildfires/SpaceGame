@@ -6,6 +6,7 @@ import graphicEngine.Chunk;
 import graphicEngine.ShaderManager;
 import maths.Vector3f;
 import GUI.KeyboardInput;
+import GUI.MouseInput;
 import GUI.Window;
 
 public class EntityManager {
@@ -16,8 +17,8 @@ public class EntityManager {
 	// public static Monster monster;
 	public WorldType world;
 
-	public static final Vector3f startingCameraPos = new Vector3f(0, 0, 50);
-	public static final Vector3f startingCameraTarget = new Vector3f(0, 20, 0);
+	public static final Vector3f startingCameraPos = new Vector3f(0, 0, 30);
+	public static final Vector3f startingCameraTarget = new Vector3f(0, 1, 29);
 	public static final Vector3f startingUp = new Vector3f(0, 0, 1);
 	public static final Vector3f startingLampPos = new Vector3f(150, 150, 100);
 
@@ -44,8 +45,22 @@ public class EntityManager {
 
 	public void update() {
 		//camera.rotateCamera(Window.);
+		double[] mousePos = MouseInput.pos();
+		camera.rotateCamera(mousePos);
 		
-		System.out.println(Window.cursorCallback);
+		if (KeyboardInput.isKeyDown(GLFW_KEY_LEFT)) {
+			camera.rotateCamera("LEFT");
+		}
+		if (KeyboardInput.isKeyDown(GLFW_KEY_RIGHT)) {
+			camera.rotateCamera("RIGHT");
+		}
+		if (KeyboardInput.isKeyDown(GLFW_KEY_UP)) {
+			camera.rotateCamera("UP");
+		}
+		if (KeyboardInput.isKeyDown(GLFW_KEY_DOWN)) {
+			camera.rotateCamera("DOWN");
+		}
+		
 		if (KeyboardInput.isKeyDown(GLFW_KEY_D)) {
 			camera.moveCamera(new Vector3f(1, 0, 0));
 		}
