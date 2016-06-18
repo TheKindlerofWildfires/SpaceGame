@@ -60,7 +60,7 @@ public class WorldGenerator {
 	 * Block.REEDS; } break; } // System.out.println(land[i][j]); } } }
 	 */
 	private void foliate(int x, int y) {
-		if (data[x][y][eTracker[x][y]] == 1 && eTracker[x][y] > WATERLEVEL) {
+		if (data[x][y][eTracker[x][y]] == 100 && eTracker[x][y] > WATERLEVEL) {
 			if (rng.nextDouble() > 0.99) {
 				Plant.tree(x, y, eTracker[x][y]);
 			} else if (rng.nextDouble() > 0.98) {
@@ -72,7 +72,7 @@ public class WorldGenerator {
 
 	private void build(int x, int y) {
 		// write something to make sure nothing ends up on top
-		if (data[x][y][eTracker[x][y]] == 1 && eTracker[x][y] > WATERLEVEL) {
+		if (data[x][y][eTracker[x][y]] == 100 && eTracker[x][y] > WATERLEVEL) {
 			if (rng.nextDouble() > 0.999) {
 				Structure.gen(x, y, eTracker[x][y]);
 
@@ -85,7 +85,7 @@ public class WorldGenerator {
 				for (int w = y; w < y + Structure.sizeY; w++) {
 					for (int e = eTracker[x][y]; e < eTracker[x][y]
 							+ Structure.sizeZ; e++) {
-						if (WorldGenerator.data[q][w][e] == 1) {
+						if (WorldGenerator.data[q][w][e] == 100) {
 							WorldGenerator.data[q][w][e] = 0;
 						}
 					}
@@ -96,7 +96,7 @@ public class WorldGenerator {
 
 	private void block(int x, int y) {
 		for (int z = 0; z < Map.WORLDHEIGHT; z++) {
-			if (data[x][y][z] == 1) {
+			if (data[x][y][z] == 100) {
 				data[x][y][z] = Block.setBlock(z, mTracker[x][y]);
 			}
 		}
@@ -111,16 +111,16 @@ public class WorldGenerator {
 	}
 
 	private void fill(int x, int y) {
-		data[x][y][eTracker[x][y]] = 1;
+		data[x][y][eTracker[x][y]] = 100;
 		for (int z = 0; z < Map.WORLDHEIGHT; z++) {
-			if (data[x][y][z] == 0 && z < (eTracker[x][y])) {
-				data[x][y][z] = 1;
+			if (data[x][y][z] == 0 && z <= (eTracker[x][y])) {
+				data[x][y][z] = 100;
 			}
-			if (data[x][y][z] == 1 && z < (eTracker[x][y] - 4)) {
+			if (data[x][y][z] == 100 && z <= (eTracker[x][y] - 4)) {
 				data[x][y][z] = 8;
 			}
-			if (eTracker[x][y] < WATERLEVEL) {
-				if (data[x][y][z] == 0 && z < WATERLEVEL) {
+			if (eTracker[x][y] <= WATERLEVEL) {
+				if (data[x][y][z] == 0 && z <= WATERLEVEL) {
 					data[x][y][z] = Block.WATER;
 				}
 			}

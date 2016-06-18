@@ -7,7 +7,7 @@ Merge and correct side culling
 Field lines of pretty
 Cull out dead branches and obs code
 Sky box
-Structure gen kinikari
+Structure gen jeunen gate
 Caves
 Fix lag
 Make ends of world meet

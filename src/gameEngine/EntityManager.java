@@ -1,14 +1,12 @@
 package gameEngine;
 
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_UP;
+import static org.lwjgl.glfw.GLFW.*;
 import graphicEngine.Camera;
 import graphicEngine.Chunk;
 import graphicEngine.ShaderManager;
 import maths.Vector3f;
 import GUI.KeyboardInput;
+import GUI.Window;
 
 public class EntityManager {
 
@@ -45,21 +43,26 @@ public class EntityManager {
 	}
 
 	public void update() {
-		if (KeyboardInput.isKeyDown(GLFW_KEY_RIGHT)) {
-			// System.out.println("right");
+		//camera.rotateCamera(Window.);
+		
+		System.out.println(Window.cursorCallback);
+		if (KeyboardInput.isKeyDown(GLFW_KEY_D)) {
 			camera.moveCamera(new Vector3f(1, 0, 0));
 		}
-		if (KeyboardInput.isKeyDown(GLFW_KEY_LEFT)) {
-			// System.out.println("left");
+		if (KeyboardInput.isKeyDown(GLFW_KEY_A)) {
 			camera.moveCamera(new Vector3f(-1, 0, 0));
 		}
-		if (KeyboardInput.isKeyDown(GLFW_KEY_UP)) {
-			// System.out.println("up");
+		if (KeyboardInput.isKeyDown(GLFW_KEY_W)) {
 			camera.moveCamera(new Vector3f(0, 1, 0));
 		}
-		if (KeyboardInput.isKeyDown(GLFW_KEY_DOWN)) {
-			// System.out.println("down");
+		if (KeyboardInput.isKeyDown(GLFW_KEY_S)) {
 			camera.moveCamera(new Vector3f(0, -1, 0));
+		}
+		if (KeyboardInput.isKeyDown(GLFW_KEY_SPACE)) {
+			camera.moveCamera(new Vector3f(0, 0, 1));
+		}
+		if (KeyboardInput.isKeyDown(GLFW_KEY_LEFT_SHIFT)) {
+			camera.moveCamera(new Vector3f(0, 0, -1));
 		}
 	}
 

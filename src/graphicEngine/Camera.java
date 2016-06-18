@@ -1,5 +1,6 @@
 package graphicEngine;
 
+import GUI.MouseInput;
 import maths.Frustum;
 import maths.Matrix4f;
 import maths.Vector3f;
@@ -47,7 +48,18 @@ public class Camera {
 	 *            displacement vector
 	 */
 	public void moveCamera(Vector3f displacement) {
+		
+		//do some vector math between target and pos to get move direction with displacement
+		System.out.println(MouseInput.pos()[1]);
+		
 		pos = pos.add(displacement);
+		target = target.add(displacement);
+		Matrix4f view = Matrix4f.gluLookAt(pos, target, up);
+		ShaderManager.setCamera(view, pos);
+		frust.updateMatrix(projection.multiply(view));
+	}
+	
+	public void rotateCamera(Vector3f displacement) {
 		target = target.add(displacement);
 		Matrix4f view = Matrix4f.gluLookAt(pos, target, up);
 		ShaderManager.setCamera(view, pos);

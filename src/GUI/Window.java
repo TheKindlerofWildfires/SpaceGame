@@ -40,7 +40,7 @@ public class Window implements Runnable {
 	private Thread thread;
 	public boolean running = true;
 	private GLFWKeyCallback keyCallback;
-	private GLFWCursorPosCallback cursorCallback;
+	public static GLFWCursorPosCallback cursorCallback;
 
 	public Long window;
 	EntityManager entityManager;
@@ -111,7 +111,6 @@ public class Window implements Runnable {
 		entityManager.update();
 		tickManager.update();
 	}
-
 	public void render() {
 		glfwSwapBuffers(window);
 

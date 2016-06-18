@@ -10,7 +10,7 @@ public class MouseInput extends GLFWCursorPosCallback{
 		MouseInput.xpos = xpos;
 		MouseInput.ypos = ypos;
 		//print pos to console
-		//System.out.println(xpos + "," +ypos);
+		System.out.println(xpos + "," +ypos);
 	}
 	public static double[] pos(){
 		double[] pos = {xpos, ypos};

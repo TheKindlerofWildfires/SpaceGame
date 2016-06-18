@@ -145,7 +145,7 @@ public class Structure {
 			for (int q = cx; q < cx + Structure.sizeX; q++) {
 				for (int w = cy; w < cy + Structure.sizeY; w++) {
 					for (int e = 0; e < cz; e++) {
-						WorldGenerator.data[q][w][e] = 1;
+						WorldGenerator.data[q][w][e] = 100;
 					}
 				}
 			}
@@ -208,7 +208,7 @@ public class Structure {
 			for (int q = cx; q < cx + Structure.sizeX; q++) {
 				for (int w = cy; w < cy + Structure.sizeY; w++) {
 					for (int e = 0; e < cz; e++) {
-						WorldGenerator.data[q][w][e] = 1;
+						WorldGenerator.data[q][w][e] = 100;
 					}
 				}
 			}
@@ -282,7 +282,7 @@ public class Structure {
 			for (int q = cx; q < cx + Structure.sizeX; q++) {
 				for (int w = cy; w < cy + Structure.sizeY; w++) {
 					for (int e = 0; e < cz; e++) {
-						WorldGenerator.data[q][w][e] = 1;
+						WorldGenerator.data[q][w][e] = 100;
 					}
 				}
 			}
