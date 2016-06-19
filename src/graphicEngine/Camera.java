@@ -9,7 +9,8 @@ public class Camera {
 
 	private Vector3f pos, target, up;
 	private float angle, aspect, near, far;
-	private double degX;
+	private double degX, degZ;
+	private double sense = 0.1;
 	private Matrix4f projection;
 
 	private Frustum frust;
@@ -47,9 +48,26 @@ public class Camera {
 	 * @param displacement
 	 *            displacement vector
 	 */
-	public void moveCamera(Vector3f displacement) {
+	public void moveCamera(String dir) {
 		
 		//do some vector math between target and pos to get move direction with displacement
+		float vx = pos.x- target.x;
+		float vy = pos.y - target.y;
+		float vz = pos.z - target.z;
+		Vector3f displacement = new Vector3f(0,0,0);
+		if(dir=="UP"){
+			displacement = new Vector3f(0,0,1);
+		}else if(dir=="DOWN"){
+			displacement = new Vector3f(0,0,-1);
+		}else if(dir == "FORWARD"){
+			displacement = new Vector3f(-vx,-vy,0);
+		}else if(dir == "BACK"){
+			displacement = new Vector3f(vx,vy,0);
+		}else if(dir == "LEFT"){
+			displacement = new Vector3f(-vy,vx,0);
+		}else if(dir == "RIGHT"){
+			displacement = new Vector3f(vy,-vx,0);
+		}
 		
 		pos = pos.add(displacement);
 		target = target.add(displacement);
@@ -62,6 +80,9 @@ public class Camera {
 		if (degX>360){
 			degX -=360;
 		}
+		if (degZ>360){
+			degZ -=360;
+		}
 		float mouseX = (float) ((1920/2-mousePos[0])/1920*2); 
 		//could be -pi/2 to pi/2
 		float mouseY = (float) ((1080/2-mousePos[1])/1080*2); 
@@ -69,12 +90,19 @@ public class Camera {
 		//float dx = target.x-pos.x;
 		//float dy = target.y-pos.y;
 		degX += mouseX;
-		System.out.println(degX);
-		float x = (float) Math.cos(degX);
-		float y = (float) Math.sin(degX);
+		degZ += mouseY;
+		//System.out.println(degX);
+		float x = (float) Math.cos(degX*sense);
+		float y = (float) Math.sin(degX*sense);
+		
+		float xz = (float) Math.cos(degZ*sense);
+		float z= (float) Math.sin(degZ*sense);
 		
 		target.x = x+pos.x;
 		target.y = y +pos.y;
+		
+		//target.x = xz +pos.x;
+		//target.z = pos.z+z;
 		//System.out.println(target.x+ "    "+ target.y);
 		//target.z += mouseY;
 		

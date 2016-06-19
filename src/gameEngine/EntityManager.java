@@ -48,36 +48,23 @@ public class EntityManager {
 		double[] mousePos = MouseInput.pos();
 		camera.rotateCamera(mousePos);
 		
-		if (KeyboardInput.isKeyDown(GLFW_KEY_LEFT)) {
-			camera.rotateCamera("LEFT");
-		}
-		if (KeyboardInput.isKeyDown(GLFW_KEY_RIGHT)) {
-			camera.rotateCamera("RIGHT");
-		}
-		if (KeyboardInput.isKeyDown(GLFW_KEY_UP)) {
-			camera.rotateCamera("UP");
-		}
-		if (KeyboardInput.isKeyDown(GLFW_KEY_DOWN)) {
-			camera.rotateCamera("DOWN");
-		}
-		
 		if (KeyboardInput.isKeyDown(GLFW_KEY_D)) {
-			camera.moveCamera(new Vector3f(1, 0, 0));
+			camera.moveCamera("LEFT");
 		}
 		if (KeyboardInput.isKeyDown(GLFW_KEY_A)) {
-			camera.moveCamera(new Vector3f(-1, 0, 0));
+			camera.moveCamera("RIGHT");
 		}
 		if (KeyboardInput.isKeyDown(GLFW_KEY_W)) {
-			camera.moveCamera(new Vector3f(0, 1, 0));
+			camera.moveCamera("FORWARD");
 		}
 		if (KeyboardInput.isKeyDown(GLFW_KEY_S)) {
-			camera.moveCamera(new Vector3f(0, -1, 0));
+			camera.moveCamera("BACK");
 		}
 		if (KeyboardInput.isKeyDown(GLFW_KEY_SPACE)) {
-			camera.moveCamera(new Vector3f(0, 0, 1));
+			camera.moveCamera("UP");
 		}
 		if (KeyboardInput.isKeyDown(GLFW_KEY_LEFT_SHIFT)) {
-			camera.moveCamera(new Vector3f(0, 0, -1));
+			camera.moveCamera("DOWN");
 		}
 	}
 
