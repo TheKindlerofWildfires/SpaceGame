@@ -6,14 +6,16 @@ import entity.Entity;
 public class Sniper extends Entity{
 	public Sniper(){
 		entityTag = "Sniper"; 
+		entityLevel = 1;
 		entityHealth = 50;
 		entityArmor = 8;
 		entityWeaponTag = "null";
 		entityWeaponDamage = 20;
 		entityWeaponPriority = 2;
 		entityArmorTag = "null"; 
-		entityNatAbility = "Dead Eye";
+		entityNatAbility = "deadEye";
 		entitySpeed = 1;
+		entityRange = 5;
 		addEntityAbility(entityNatAbility);
  }
 }

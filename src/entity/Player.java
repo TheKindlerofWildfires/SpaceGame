@@ -4,176 +4,211 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
-import GUI.Tick;
+import GUI.KeyboardInput;
+import combat.BuffHandler;
 import combat.Mechanics;
+import maths.Distance;
+import maths.Utilities;
 import maths.Vector3f;
-import classesSimonDoesntLike.KeyboardInput;
+import gameEngine.Block;
 import gameEngine.EntityManager;
 import gameEngine.Map;
+import gameEngine.Tick;
 import graphicEngine.ShaderManager;
-import graphicEngine.VertexArrayObject;
 
-public class Player {
+public class Player extends Entity{
 
-	public int vaoID;
-	public int count;
-	public static final float sqrt3 = 1.7320508075688772f;
-	private VertexArrayObject vao;
-	public Vector3f position;
-	public Vector3f destination;
-	private float elevation;
-	public int xIndex;
-	public int yIndex;
+	private int destXIndex = 0;
+	private int destYIndex = 0;
+
+
+	private int xIndex = Map.HEXESACROSS / 2;
+	private int yIndex = Map.HEXESDOWN / 2;
 	private int lastMove;
-	static Entity self = Entity.getEntity("Agent");
-	Entity target = MonsterV1.self; //rwff --Monsterv1.self
-	public static final float aspectScaler = 16 / 9f;
-	float apothem = gameEngine.EntityManager.APOTHEM;
-	float side = (float) (apothem * 2 / sqrt3);
-	float[] vertices = { side, 0, 0, //right 0
-			side / 2, -apothem * aspectScaler, 0, // lower right 1
-			-side / 2, -apothem * aspectScaler, 0, //lower left 2
-			-side, 0, 0, //left 3
-			-side / 2, apothem * aspectScaler, 0, //upper left 4
-			side / 2, apothem * aspectScaler, 0, //upper right 5
-			0, 0, 0 //center 6
-	};
-	Mechanics ah = new Mechanics();
-	byte[] indices = new byte[] { 0, 1, 2, 3, 4, 5, 0 };
+
+	Distance distance = new Distance();
+
+	private float offsetX;
+	private float offsetY;
+	private float zoomFactor;
+
+	Mechanics m = new Mechanics();
+
 	Map map;
-	public Player(Map map) {
+
+	public Player(Map map, String entityTag) {
+		initEntity("Neo"); //should do stuff
+		System.out.println(getEntityHealth());
+
+		//all values from my txt files, but im lazy and that will change anyways
+		initPlayerShader();
 		this.map = map;
+		addEntityInventory(getEntityWeaponTag());
+		addEntityInventory(getEntityArmorTag());
 		lastMove = 0;
-		xIndex = 14;
-		yIndex = 21;
-		this.count = indices.length;
-		this.position = new Vector3f();
-		this.destination = new Vector3f();
-		vao = new VertexArrayObject(vertices, indices);
-		this.vaoID = vao.getVaoID();
-		this.position.z = this.elevation;
-		if (xIndex % 2 == 0) {
-			this.position.y = -1.2f * (yIndex * apothem * 2) * aspectScaler + 1;
-			this.position.x = 1.2f * (xIndex * 3 * apothem / sqrt3) - 1;
-			this.destination.x = this.position.x;
-			this.destination.y = this.position.y;
-		} else {
-			this.position.y = -1.2f * (yIndex * apothem * 2 + apothem) * aspectScaler + 1;
-			this.position.x = 1.2f * (xIndex * 3 * apothem / sqrt3) - 1;
-			this.destination.x = this.position.x;
-			this.destination.y = this.position.y;
-		}
+		xIndex = Map.HEXESACROSS / 2;
+		yIndex = Map.HEXESDOWN / 2;
+	}
+
+	private void initPlayerShader() {
+		ShaderManager.entityShader.start();
+		ShaderManager.entityShader.setUniform1f("side", EntityManager.side);
+		ShaderManager.entityShader.setUniform1i("ID", getID(getEntityTag()));
+		ShaderManager.entityShader.setUniform1f("apothem", EntityManager.APOTHEM);
+		ShaderManager.entityShader.setUniform1f("aspect", EntityManager.aspectScaler);
+		ShaderManager.entityShader.setUniform3f("pos", new Vector3f(-1f, 1f, 0));
+		ShaderManager.entityShader.setUniform1i("xcoord", xIndex);
+		ShaderManager.entityShader.setUniform1i("ycoord", yIndex);
+		ShaderManager.entityShader.stop();
 	}
 
 	public void render() {
-		if (dead()) {
-			ShaderManager.deathShader.start();
-			ShaderManager.deathShader.setUniform3f("pos", this.position);
-			glBindVertexArray(this.vaoID);
-			glEnableVertexAttribArray(0);
-			glDrawElements(GL_TRIANGLE_FAN, 7, GL_UNSIGNED_BYTE, 0);
-			glDisableVertexAttribArray(0);
-			glBindVertexArray(0);
-			ShaderManager.deathShader.stop();
-		} else {
-			ShaderManager.playerShader.start();
-			ShaderManager.playerShader.setUniform3f("pos", this.position);
-			glBindVertexArray(this.vaoID);
-			glEnableVertexAttribArray(0);
-			glDrawElements(GL_TRIANGLE_FAN, 7, GL_UNSIGNED_BYTE, 0);
-			glDisableVertexAttribArray(0);
-			glBindVertexArray(0);
-			ShaderManager.playerShader.stop();
-		}
+		ShaderManager.entityShader.start();
+		ShaderManager.entityShader.setUniform1i("death", this.dead() ? 1 : 0);
+		glBindVertexArray(Map.vaoID);
+		glEnableVertexAttribArray(0);
+		glDrawElements(GL_TRIANGLE_FAN, 7, GL_UNSIGNED_BYTE, 0);
+		glDisableVertexAttribArray(0);
+		glBindVertexArray(0);
+		ShaderManager.entityShader.stop();
 	}
 
 	public boolean dead() {
-		if (self.getEntityHealth() <= 0) {
+		if (getEntityHealth() <= 0) {
 			return true;
 		} else {
 			return false;
 		}
 	}
-
+	public void hunger(){
+		if(BuffHandler.gatedEvent(300)){
+			setEntityHunger(getEntityHunger()-1);
+		}
+	}
 	public void update() {
-		//System.out.println(Tick.getUpdateTick());
-		//System.out.println(self.getEntitySpeed());
-		getDestination();
+		hunger();
+		//System.out.println(self.getEntityHunger());
+		Block.steppedOn(xIndex, yIndex, EntityManager.player); //yeah yeah ill fix it later
+		if (Tick.getUpdateTick() - lastMove > (35.2 / getEntitySpeed() - 5.2)) {
+			getDestination();
 
-		if (checkDestination()) {//thisisnevercalled
-			if ((this.position.x - this.destination.x != 0) || (this.position.y - this.destination.y != 0)) {
-				lastMove = Tick.getUpdateTick();
-				this.position.x = this.destination.x;
-				this.position.y = this.destination.y;
+			if (checkDestination()) {				
+				xIndex = destXIndex;
+				yIndex = destYIndex;
+				ShaderManager.entityShader.start();
+				ShaderManager.entityShader.setUniform1i("xcoord", xIndex);
+				ShaderManager.entityShader.setUniform1i("ycoord", yIndex);
+				ShaderManager.entityShader.start();
+				//	}
+			} else {
+				destXIndex = xIndex;
+				destYIndex = yIndex;
 			}
-		} else {
-			destination.x = position.x;
-			destination.y = position.y;
+			lastMove = Tick.getUpdateTick();
 		}
 	}
 
 	public void getDestination() {
-
-		int time = Tick.getUpdateTick();
-		//why is only r called 5 times
-		//only called once per tick
 		if (!dead()) {
-			if (time - lastMove > 1.8 * (6 - self.getEntitySpeed())) { //between 6.66 - 33 tiles per second
-				//only called once per tick
-				//System.out.println(time);
-				float dis = (2.4f);
-				if (KeyboardInput.isKeyDown(GLFW_KEY_Q)) {
-					destination.x = position.x - (apothem * sqrt3 / 2 * dis);
-					destination.y = position.y + (apothem / 2 * aspectScaler * dis);
-					yIndex += 1; //I suspect this is much more complicated
-					xIndex -= 1;
-				} else if (KeyboardInput.isKeyDown(GLFW_KEY_W)) {
-					destination.y = position.y + (apothem * aspectScaler * dis);
-					yIndex += 1;
-				} else if (KeyboardInput.isKeyDown(GLFW_KEY_E)) {
-					destination.x = position.x + (apothem * sqrt3 / 2 * dis);
-					destination.y = position.y + (apothem / 2 * aspectScaler * dis);
-					yIndex += 1;
-					xIndex += 1;
-				} else if (KeyboardInput.isKeyDown(GLFW_KEY_A)) {
-					destination.x = position.x - (apothem * sqrt3 / 2 * dis);
-					destination.y = position.y - (apothem / 2 * aspectScaler * dis);
-					yIndex -= 1;
-					xIndex -= 1;
-				} else if (KeyboardInput.isKeyDown(GLFW_KEY_S)) {
-					destination.y = position.y - (apothem * aspectScaler * dis);
-					yIndex -= 1;
-				} else if (KeyboardInput.isKeyDown(GLFW_KEY_D)) {
-					destination.x = position.x + (apothem * sqrt3 / 2 * dis);
-					destination.y = position.y - (apothem / 2 * aspectScaler * dis);
-					yIndex -= 1;
-					xIndex += 1;
-				} else if (KeyboardInput.isKeyDown(GLFW_KEY_R)) {
+			//System.out.println(Tick.getUpdateTick() - lastMove);
 
-					MonsterV1 monster = EntityManager.monster;
-					ah.attackHandler(self, target, position, monster.getPosition());
-					//System.out.println("posx "+position.x+" posy" +position.y);
-					//System.out.println("posx "+monster.getPosition().x+" posy" +monster.getPosition().y);
+			destXIndex = xIndex;
+			destYIndex = yIndex;
+
+			if (KeyboardInput.isKeyDown(GLFW_KEY_Q)) {
+				if (xIndex % 2 == 0) {
+					destXIndex -= 1;
+				} else {
+					destYIndex -= 1;
+					destXIndex -= 1;
 				}
+			} else if (KeyboardInput.isKeyDown(GLFW_KEY_W)) {
+				destYIndex -= 1;
+			} else if (KeyboardInput.isKeyDown(GLFW_KEY_E)) {
+				if (xIndex % 2 == 0) {
+					destXIndex += 1;
+
+				} else {
+					destXIndex += 1;
+					destYIndex -= 1;
+				}
+			} else if (KeyboardInput.isKeyDown(GLFW_KEY_A)) {
+				if (xIndex % 2 == 0) {
+					destXIndex -= 1;
+					destYIndex += 1;
+				} else {
+					destXIndex -= 1;
+				}
+
+			} else if (KeyboardInput.isKeyDown(GLFW_KEY_S)) {
+				destYIndex += 1;
+			} else if (KeyboardInput.isKeyDown(GLFW_KEY_D)) {
+				if (xIndex % 2 == 0) {
+					destXIndex += 1;
+					destYIndex += 1;
+				} else {
+					destXIndex += 1;
+				}
+			} else if (KeyboardInput.isKeyDown(GLFW_KEY_R)) {
+				//System.out.println(Map.elevation[xIndex][yIndex]);
+				int[] i = Utilities.convertMouseIndex();
+				//System.out.println(i[0] + " " + i[1]);
+				System.out.println(xIndex + " " + yIndex);
+				lastMove = Tick.getUpdateTick();
+				//Monster monster = EntityManager.monster;
+				//int[] index = { xIndex, yIndex };
+				//System.out.println(monster.getIndex() + "H");//thows null pointer cuz not init
+				//m.attackHandler(self, monster, index, monster.getIndex());
+			}else if (KeyboardInput.isKeyDown(GLFW_KEY_I)) {
+				System.out.println(inventory.size());
+				for(int i = 0; i<inventory.size(); i++)
+				System.out.println(inventory.get(i));
+			}else if (KeyboardInput.isKeyDown(GLFW_MOUSE_BUTTON_3)) {
+				System.out.println("IM A MOUSE"); //need a mouse button handler case
 			}
+
 		}
 	}
 
 	private boolean checkDestination() {
 		//System.out.println(xIndex + " " + yIndex);
-		//System.out.println(map.land[xIndex][yIndex]);//x,y
-		if (map.land[xIndex][yIndex] == Map.LAND) {
-
+		if ((destXIndex > 0) && (destYIndex > 0) && (destXIndex < (Map.HEXESACROSS))
+				&& (destYIndex < (Map.HEXESDOWN))) {
+			if (Block.destinationTraversable(destXIndex, destYIndex)) {
+				if (Math.abs(Map.elevation[xIndex][yIndex] - Map.elevation[destXIndex][destYIndex]) < 15) {
+					return true;
+					//controls step up height
+				}
+			}
 		}
-		return true;
-		//else{
-		//	return false;
-		//this function ensures that is its land... or it would
-		//}
+		return false;
 	}
 
-	public Vector3f getPosition() {
-		return this.position;
+	public void zoom(float zoomFactor) {
+		this.zoomFactor = zoomFactor;
+		ShaderManager.entityShader.start();
+		ShaderManager.entityShader.setUniform1f("side", EntityManager.side * zoomFactor);
+		ShaderManager.entityShader.setUniform1f("apothem", EntityManager.APOTHEM * zoomFactor);
+		ShaderManager.entityShader.setUniform3f("pos", new Vector3f(-zoomFactor + offsetX, zoomFactor + offsetY, 0));
+		ShaderManager.entityShader.stop();
 	}
 
+	public void offset(float x, float y) {
+		if (offsetX + x > -zoomFactor + 1 && offsetX + x < zoomFactor - 1) {
+			offsetX += x;
+		} else {
+		}
+		if (offsetY + y > -zoomFactor + 1 && offsetY + y < zoomFactor - 1) {
+			offsetY += y;
+		} else {
+		}
+		ShaderManager.entityShader.start();
+		ShaderManager.entityShader.setUniform3f("pos", new Vector3f(-zoomFactor + offsetX, zoomFactor + offsetY, 0));
+		ShaderManager.entityShader.stop();
+	}
+
+	public int[] getIndex() {
+		System.out.println("L");
+		return new int[] { xIndex, yIndex };
+	}
 }

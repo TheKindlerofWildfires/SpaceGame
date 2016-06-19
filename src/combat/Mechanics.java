@@ -3,22 +3,20 @@ package combat;
 import java.util.Random;
 
 import entity.Entity;
-import gameEngine.EntityManager;
-import maths.Euclidian;
+import maths.Distance;
 import maths.Gaussian;
-import maths.Vector3f;
 
 public class Mechanics {
 	private AbilityHandler ab;
 	private Random rng = new Random();
 	double hitChance;
-	Vector3f attHex;
-	Vector3f tarHex;
+	int[] attIndex;
+	int[] tarIndex;
 
 	public Mechanics() {
 		ab = new AbilityHandler();
-		tarHex = new Vector3f();
-		attHex = new Vector3f();
+		tarIndex = new int[2];
+		attIndex = new int[2];
 	}
 
 	public boolean tryAttack(Entity attacker, Entity target) {
@@ -44,7 +42,6 @@ public class Mechanics {
 	public void attackHit(Entity attacker, Entity target) {
 		ab.checkAbility("onHit", attacker, target);
 		double damage = attacker.getEntityWeaponDamage() * (10 / (10 + target.getEntityArmor()));
-		//System.out.println(target.getEntityArmor());
 		target.setEntityHealth(target.getEntityHealth() - damage);
 		System.out.println(target.getEntityTag() + " " + target.getEntityHealth());
 	}
@@ -54,10 +51,12 @@ public class Mechanics {
 	}
 
 	public boolean inRange(Entity attacker) {
-		Euclidian e = new Euclidian();
-		double disInHexes = e.euclidDis(attHex, tarHex) / EntityManager.APOTHEM / 4.26666625;
-		//System.out.println(disInHexes);
-		if (attacker.getEntityRange() > (disInHexes)) {
+		Distance d = new Distance();
+		double disInHexes = d.manhattenDis(attIndex, tarIndex);
+		//System.out.println(disInHexes + "dis");
+		//System.out.println(attacker.getEntityRange());
+		if (attacker.getEntityRange() >= (disInHexes)) {
+			//System.out.println("In Range");
 			return true;
 		} else {
 			return false;
@@ -65,12 +64,14 @@ public class Mechanics {
 
 	}
 
-	public void attackHandler(Entity attacker, Entity target, Vector3f attHex, Vector3f tarHex) {
+	public void attackHandler(Entity attacker, Entity target, int[] attIndex, int[] tarIndex) {
 		//find if in range
-		this.attHex = attHex;
-		this.tarHex = tarHex;
-		if (inRange(attacker)) {
-
+		//System.out.println("e");
+		
+		this.attIndex = attIndex;
+		this.tarIndex = tarIndex;
+		if (inRange(attacker)&&target.getEntityHealth()>0) {
+			
 			//consume animation time or action counter - just a delay in code
 			//Entity attacker = Entity.getEntity(attackerTag);
 			//Entity target = Entity.getEntity(targetTag);

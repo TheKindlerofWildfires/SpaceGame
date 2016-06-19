@@ -24,11 +24,39 @@ void main(void){
 	uint land = texelFetch(land,gl_InstanceID).x;
 	vec3 color;
 	if(land==100){
-		color = vec3(1,1,1);
-	} else if(land ==50){
-		color = vec3(1,0,1);
-	} else{
+		color = vec3(0,1,0);
+	}else if(land == 0){
 		color = vec3(0,0,1);
+	}else if(land ==50){
+		color = vec3(1,0,1);
+	} else if(land == 1){
+		color = vec3(0.18,0.75,0.38);
+	}else if(land == 2){
+		color = vec3(0.3,0.3,0.12);
+	}else if(land == 3){
+		color = vec3(0.21,0.6,0.34);
+	}else if(land == 4){
+		color = vec3(0,0.3,0.12);
+	}else if(land == 5){
+		color = vec3(0.92,0.78,0.68);
+	}else if(land == 6){
+		color = vec3(0.98,0.70,0.60);
+	}else if(land == 7){
+		color = vec3(0.5,0.5,0.4);
+	}else if(land == 8){
+		color = vec3(0.3,0.3,0.3);
+	}else if(land == 9){
+		color = vec3(0.15,0.56,0.36);
+	}else if(land == 10){
+		color = vec3(0,0.16,0.1);
+	}else if(land == 11){
+		color = vec3(0.5,1,0.1);
+	}else if(land == 12){
+		color = vec3(0.16,0.43,0.16);
+	}else if(land == 13){
+		color = vec3(0.1,0.43,0.16);
+	}else{
+		color = vec3(1,1,1);
 	}
 	gl_Position = vec4(position.x+pos.x+xOfset,position.y+pos.y-yOfset,position.z+pos.z, 1.0);
 	colour = color;

@@ -1,17 +1,15 @@
 TO DO:
+Textures --??? 
+Fix height limits (its in the shader, why can't I change it?) -- SIMON HELP
+Re-implement player- ???
+Merge and correct side culling -???
+Field lines of pretty --???
+//Cull out dead branches and obs code
+Sky box -- ???
+Structure gen jeunen gate
+Fix how structures dont actually gen floors & gen underground
+Caves--???
+Fix lag -- Rendering 
+Make ends of world meet --Rendering
 
-Fix all the god damn rendering code
-Make some of the colors less ghastly
-Elevation, biomes etc
-Player token
-Map regen—if less than 500 land, more than ⅔ of screen, etc
-Make ocean a thing
-Make borders have neighbors
-Fix biome generation and colouring (I’m a brit)
 
-
-colliders are death
-
-Makes some enemies to fight --> looks like fires 5 times;
-Actually gen a world
-Do all the sad terrain stuff --> simons job

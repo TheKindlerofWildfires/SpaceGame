@@ -1,5 +1,6 @@
 package GUI;
 
+//import static org.lwjgl.glfw.GLFW.glfwSetCursorPosCallback;
 import static org.lwjgl.glfw.GLFW.GLFW_CONTEXT_VERSION_MAJOR;
 import static org.lwjgl.glfw.GLFW.GLFW_CONTEXT_VERSION_MINOR;
 import static org.lwjgl.glfw.GLFW.GLFW_OPENGL_CORE_PROFILE;
@@ -26,26 +27,31 @@ import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.system.MemoryUtil.NULL;
+import gameEngine.EntityManager;
+import gameEngine.Tick;
+import gameEngine.TickManager;
+import maths.Matrix4f;
 
 import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.opengl.GL;
 
-import classesSimonDoesntLike.KeyboardInput;
-import classesSimonDoesntLike.MouseInput;
-import gameEngine.EntityManager;
-
 public class Window implements Runnable {
 	private Thread thread;
 	public boolean running = true;
 	private GLFWKeyCallback keyCallback;
-	private GLFWCursorPosCallback cursorCallback;
+	public static GLFWCursorPosCallback cursorCallback;
 
 	public Long window;
-
 	EntityManager entityManager;
+	TickManager tickManager;
 
 	public static void main(String args[]) {
+
+		Matrix4f toast = new Matrix4f(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+				1, 1);
+
+		System.out.println(Matrix4f.inverse(toast));
 
 		Window game = new Window();
 
@@ -79,10 +85,11 @@ public class Window implements Runnable {
 		}
 
 		glfwSetKeyCallback(window, keyCallback = new KeyboardInput());
-		glfwSetCursorPosCallback(window, cursorCallback = (GLFWCursorPosCallback) new MouseInput());
+		glfwSetCursorPosCallback(window,
+				cursorCallback = (GLFWCursorPosCallback) new MouseInput());
 
-		//GLFWVidMode vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-		glfwSetWindowPos(window, 0, 20);
+		// GLFWVidMode vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+		glfwSetWindowPos(window, 0, 20); 
 
 		glfwMakeContextCurrent(window);
 		glfwShowWindow(window);
@@ -93,34 +100,24 @@ public class Window implements Runnable {
 
 		glEnable(GL_DEPTH_TEST);
 
-		entityManager = new EntityManager(); //rwff
+		entityManager = new EntityManager();
+		tickManager = new TickManager();
 
-		//System.out.println(glGetString(GL_VERSION));
+		// System.out.println(glGetString(GL_VERSION));
 	}
 
 	public void update() {
-		entityManager.update();
-
 		glfwPollEvents();
-		/*
-		if (KeyboardInput.keys[GLFW_KEY_A]) {
-			System.out.println("A");
-		}else if(KeyboardInput.keys[GLFW_KEY_W]) {
-			System.out.println("W");
-		}else if(KeyboardInput.keys[GLFW_KEY_S]) {
-			System.out.println("S");
-		}else if(KeyboardInput.keys[GLFW_KEY_D]) {
-			System.out.println("D");
-		}
-		*/
+		entityManager.update();
+		tickManager.update();
 	}
-
 	public void render() {
 		glfwSwapBuffers(window);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 		entityManager.render();
+		tickManager.render();
+
 	}
 
 	@Override
@@ -146,7 +143,7 @@ public class Window implements Runnable {
 			frames++;
 			if (System.currentTimeMillis() - timer > 1000) {
 				timer += 1000;
-				//System.out.println(updates + " UPS, " + frames + " FPS");
+				System.out.println(updates + " UPS, " + frames + " FPS");
 				frames = 0;
 				updates = 0;
 			}
