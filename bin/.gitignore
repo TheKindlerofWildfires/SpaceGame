@@ -1,8 +1,10 @@
-/gameEngine/
-/graphicEngine/
-/shaders/
-/maths/
-/entity/
-/classesSimonDoesntLike/
 /GUI/
+/classesSimonDoesntLike/
+/combat/
+/entity/
+/gameEngine/
 /gen/
+/graphicEngine/
+/inventory/
+/maths/
+/shaders/
