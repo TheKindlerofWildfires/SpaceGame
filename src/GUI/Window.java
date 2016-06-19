@@ -89,7 +89,7 @@ public class Window implements Runnable {
 				cursorCallback = (GLFWCursorPosCallback) new MouseInput());
 
 		// GLFWVidMode vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-		glfwSetWindowPos(window, 0, 20);
+		glfwSetWindowPos(window, 0, 20); 
 
 		glfwMakeContextCurrent(window);
 		glfwShowWindow(window);

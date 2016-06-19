@@ -1,15 +1,15 @@
 TO DO:
-Textures
-Fix height limits (its in the shader, why can't I change it?)
-Re-implement player
-Fix camera
-Merge and correct side culling
-Field lines of pretty
-Cull out dead branches and obs code
-Sky box
+Textures --??? 
+Fix height limits (its in the shader, why can't I change it?) -- SIMON HELP
+Re-implement player- ???
+Merge and correct side culling -???
+Field lines of pretty --???
+//Cull out dead branches and obs code
+Sky box -- ???
 Structure gen jeunen gate
-Caves
-Fix lag
-Make ends of world meet
+Fix how structures dont actually gen floors & gen underground
+Caves--???
+Fix lag -- Rendering 
+Make ends of world meet --Rendering
 
 
