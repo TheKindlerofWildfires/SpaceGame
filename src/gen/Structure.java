@@ -35,6 +35,7 @@ public class Structure {
 		}
 	}
 	private static void clear(int cx, int cy, int cz){
+		//these "functions" may do literally jack shit
 		for(int q = cx; q<cx+sizeX; q++){
 			for(int w = cy; w<cy+sizeY; w++){
 				for(int e = cz; e<Map.WORLDHEIGHT; e++){
