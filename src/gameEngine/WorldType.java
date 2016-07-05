@@ -1,5 +1,7 @@
 package gameEngine;
 
+import graphicEngine.Chunk;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -10,11 +12,17 @@ public class WorldType {
 	public static ArrayList<String> adaptations= new ArrayList<String>();
 	public static ArrayList<String> interference= new ArrayList<String>();
 	public static Random rng = Map.rng;
+	public static final String[] worldTypes = { "telilic", "sapric", "worlic" };
 	
+	
+	public static int height = 0;
+	public static int elevationScaler = 0;
+	public static int moistureScaler = 0;
+	public static int waterLevel;
 	public WorldType(){
-		//PLEASE PLEASE INIT ME
-		worldType = Map.worldType; 
-	  //  worldType = "sapric";
+		worldType = worldTypes[rng.nextInt(worldTypes.length)];
+		System.out.println(worldType);
+	    //worldType = "sapric";
 		switch(worldType){
 		case "telilic":
 			difficulty = 1;
@@ -27,6 +35,10 @@ public class WorldType {
 			adaptations.add("camo");
 			adaptations.add("nightHunter");
 			interference.add("octividRuinsLeast");
+			height = (int) (Chunk.CHUNKHEIGHT/2);
+			elevationScaler = 70;
+			moistureScaler = 20;
+			waterLevel = height/5;
 			break;
 		case "worlic":
 			difficulty = 1;
@@ -39,6 +51,10 @@ public class WorldType {
 			adaptations.add("fast");
 			adaptations.add("flashSwarm");
 			interference.add("kinikariRuinsLeast");
+			height = (int) (Chunk.CHUNKHEIGHT/3);
+			elevationScaler = 200;
+			moistureScaler = 20;
+			waterLevel = height/6;
 			break;
 		case "sapric":
 			difficulty = 1;
@@ -51,6 +67,10 @@ public class WorldType {
 			adaptations.add("tracker");
 			interference.add("jeneunGateLeast");
 			interference.add("jeneunRuinsLeast");
+			height = (int) (Chunk.CHUNKHEIGHT/1.5);
+			elevationScaler = 50;
+			moistureScaler = 40;
+			waterLevel = height/4;
 			break;
 		default:
 				System.err.println("Not a worldType");
@@ -69,4 +89,17 @@ public class WorldType {
 	public static String getRandomInterference(){
 		return interference.get(rng.nextInt(interference.size()));
 	}
+	public static int getHeight(){
+		return height;
+	}
+	public static double getElevationScaler() {
+		return elevationScaler;
+	}
+	public static int getWaterLevel() {
+		return waterLevel;
+	}
+	public static int getMoistureScaler() {
+		return moistureScaler;
+	}
+
 }

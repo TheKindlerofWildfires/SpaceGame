@@ -33,9 +33,9 @@ public class EntityManager {
 		Chunk.initShader();
 		// shaderManager = new ShaderManager();
 		// ShaderManager.loadAll();
-
-		map = new Map();
 		world = new WorldType();
+		map = new Map();
+		
 		// player = new Player(map, "Neo");
 		// monster = new MonsterV1(map);
 		// player.position.y = -0.01f;

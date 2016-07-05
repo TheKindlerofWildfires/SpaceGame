@@ -10,10 +10,10 @@ import java.util.Random;
 import maths.Utilities;
 
 public class WorldGenerator {
-	public static final double HEIGHT = Chunk.CHUNKHEIGHT / 2;
-	private static final double ELEVATIONSCALER = 50;
-	public static final int WATERLEVEL = Chunk.CHUNKHEIGHT / 5;
-	private static final int MOISTURESCALER = 20;
+	public static final double HEIGHT = WorldType.getHeight();
+	private static final double ELEVATIONSCALER =  WorldType.getElevationScaler();
+	public static final int WATERLEVEL = WorldType.getWaterLevel();
+	private static final int MOISTURESCALER = WorldType.getMoistureScaler();
 	public static String mapType;
 	public static String worldType;
 	public static int seedCount;
@@ -25,7 +25,7 @@ public class WorldGenerator {
 	Random rng = Map.rng;
 
 	public WorldGenerator() {
-		new WorldType();
+
 		Map.noise.setFrequency(1);
 		Map.noise.setLacunarity(2);
 		Map.noise.setOctaveCount(30);
@@ -46,19 +46,6 @@ public class WorldGenerator {
 		return data;
 	}
 
-	/*
-	 * public void generateFoliage() { for (int i = 0; i < HEXESACROSS; i++) {
-	 * for (int j = 0; j < HEXESDOWN; j++) { if (Block.destinationTraversable(i,
-	 * j)) { switch (worldType) { case "telilic": if (rng.nextDouble() > 0.99) {
-	 * elevation[i][j] += 30; land[i][j] = Block.JG_TREE; } else if
-	 * (rng.nextDouble() > 0.98) { land[i][j] = Block.FRUIT_BUSH; } break; case
-	 * "sapric": if (rng.nextDouble() > 0.99) { elevation[i][j] += 30;
-	 * land[i][j] = Block.ASH_TREE; } else if (rng.nextDouble() > 0.98) {
-	 * land[i][j] = Block.THORN_BUSH; } break; case "worlic": if
-	 * (rng.nextDouble() > 0.99) { elevation[i][j] += 30; land[i][j] =
-	 * Block.PALM_TREE; } else if (rng.nextDouble() > 0.98) { land[i][j] =
-	 * Block.REEDS; } break; } // System.out.println(land[i][j]); } } }
-	 */
 	private void foliate(int x, int y) {
 		if (data[x][y][eTracker[x][y]] == 100 && eTracker[x][y] > WATERLEVEL) {
 			if (rng.nextDouble() > 0.99) {
@@ -112,18 +99,24 @@ public class WorldGenerator {
 
 	private void fill(int x, int y) {
 		data[x][y][eTracker[x][y]] = 100;
+		
 		for (int z = 0; z < Map.WORLDHEIGHT; z++) {
+			
 			if (data[x][y][z] == 0 && z <= (eTracker[x][y])) {
 				data[x][y][z] = 100;
 			}
 			if (data[x][y][z] == 100 && z <= (eTracker[x][y] - 4)) {
 				data[x][y][z] = 8;
 			}
-			if (eTracker[x][y] <= WATERLEVEL) {
-				if (data[x][y][z] == 0 && z <= WATERLEVEL) {
+			if (eTracker[x][y] < WATERLEVEL) {
+				if (data[x][y][z] == 0 && z < WATERLEVEL) {
 					data[x][y][z] = Block.WATER;
 				}
 			}
+			
+		}
+		if(eTracker[x][y]<=WATERLEVEL){
+			data[x][y][WATERLEVEL] = Block.WATER;
 		}
 
 	}
@@ -176,6 +169,14 @@ public class WorldGenerator {
 			}
 		}
 		return data;
+	}
+
+	public static boolean inBounds(int q, int w, int e) {
+		if(q>0 && q<Map.HEXESACROSS && w>0 && w<Map.HEXESDOWN && e>0 && e<Chunk.CHUNKHEIGHT){
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 }

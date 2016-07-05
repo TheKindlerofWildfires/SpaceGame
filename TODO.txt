@@ -11,5 +11,6 @@ Fix how structures dont actually gen floors & gen underground
 Caves--???
 Fix lag -- Rendering 
 Make ends of world meet --Rendering
-
+STRUCTURE dont fill right - fix foliage clash
+face culling pls
 

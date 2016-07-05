@@ -60,8 +60,9 @@ public class Map {
 	float[] data = new float[Chunk.CHUNKSIZE * Chunk.CHUNKSIZE * WORLDHEIGHT];
 
 	public Map() {
-		//worldType = worldTypes[rng.nextInt(worldTypes.length)];
-		worldType = "worlic";
+		
+		worldType = WorldType.worldType; 
+		
 		distance = new Distance();
 		long seed = rng.nextLong();
 		rng.setSeed(seed);
@@ -70,25 +71,7 @@ public class Map {
 		System.out.println("Random Seed is " + seed);
 
 		land = new WorldGenerator().generate();
-		// initializeMap();
-		// generateFoliage();
-		// data = Utilities.flatten(land);
-		/*
-		 * for (int chunkX = 0; chunkX < chunks.length; chunkX++) { for (int
-		 * chunkY = 0; chunkY < chunks[0].length; chunkY++) { for (int i = 0; i
-		 * < Chunk.CHUNKSIZE * Chunk.CHUNKSIZE WORLDHEIGHT; i++) { int x = (i /
-		 * Chunk.CHUNKSIZE) % Chunk.CHUNKSIZE + chunkX; int z = i /
-		 * (Chunk.CHUNKSIZE * Chunk.CHUNKSIZE); int y = i % Chunk.CHUNKSIZE +
-		 * chunkY; data[i] = land[x][y][z]; } chunks[chunkX][chunkY] = new
-		 * Chunk(land, chunkX, chunkY); // } // chunks[x][y] = new Chunk(data,
-		 * x, y); } }
-		 */
 
-		/*
-		 * for (int x = 0; x < dat.length; x++) { for (int y = 0; y <
-		 * dat[0].length; y++) { for (int z = 0; z < dat[0][0].length; z++) { if
-		 * (z < 3) { dat[x][y][z] = 1; } else { dat[x][y][z] = 0; } } } }
-		 */
 
 		for (int i = 0; i < CHUNKSACROSS; i++) {
 			for (int j = 0; j < CHUNKSDOWN; j++) {
@@ -111,55 +94,9 @@ public class Map {
 		return output;
 	}
 
-	// @Deprecated
-	// private void initShader() {
-	// ShaderManager.landShader.start();
-	// ShaderManager.landShader.setUniform1f("side", EntityManager.side);
-	// ShaderManager.landShader.setUniform1i("hexesAcross", HEXESACROSS);
-	// ShaderManager.landShader.setUniform1f("apothem", EntityManager.APOTHEM);
-	// ShaderManager.landShader.setUniform1f("aspect",
-	// EntityManager.aspectScaler);
-	// ShaderManager.landShader.setUniform3f("pos", new Vector3f(-1f, 1f, 0));
-	//
-	// int[] land = new int[HEXESACROSS * HEXESDOWN];
-	// int counter = 0;
-	// for (int x = 0; x < HEXESDOWN; x++) {
-	// for (int y = 0; y < HEXESACROSS; y++) {
-	// land[counter] = Map.land[y][x];
-	// counter++;
-	// }
-	// }
-	// int bufferID = glGenBuffers();
-	//
-	// glBindBuffer(GL_ARRAY_BUFFER, bufferID);
-	// glBindBuffer(GL_TEXTURE_BUFFER, bufferID);
-	// IntBuffer data = Utilities.createIntBuffer(land);
-	// glBufferData(GL_ARRAY_BUFFER, data, GL_STATIC_DRAW);
-	//
-	// int textureID = glGenTextures();
-	// glBindTexture(GL_TEXTURE_BUFFER, textureID);
-	// glTexBuffer(GL_TEXTURE_BUFFER, GL_R32UI, bufferID);
-	// glBindBuffer(GL_ARRAY_BUFFER, 0);
-	//
-	// glActiveTexture(GL_TEXTURE5);
-	// glBindTexture(GL_TEXTURE_BUFFER, textureID);
-	//
-	// }
 
-	/*
-	 * @Deprecated private Hexagon[] getAllNeighbors(Hexagon hex) { if
-	 * (hex.xIndex > 0 && hex.yIndex > 0 && hex.xIndex < HEXESACROSS - 1 &&
-	 * hex.yIndex < HEXESDOWN - 1) { Hexagon[] neighbors = new Hexagon[6];
-	 * neighbors[0] = hexes.get(hex.yIndex + 1).get(hex.xIndex); neighbors[1] =
-	 * hexes.get(hex.yIndex - 1).get(hex.xIndex); neighbors[2] =
-	 * hexes.get(hex.yIndex).get(hex.xIndex + 1); neighbors[3] =
-	 * hexes.get(hex.yIndex).get(hex.xIndex - 1); if (hex.xIndex % 2 == 0) {
-	 * neighbors[4] = hexes.get(hex.yIndex - 1).get(hex.xIndex + 1);
-	 * neighbors[5] = hexes.get(hex.yIndex - 1).get(hex.xIndex - 1); } else {
-	 * neighbors[4] = hexes.get(hex.yIndex + 1).get(hex.xIndex + 1);
-	 * neighbors[5] = hexes.get(hex.yIndex + 1).get(hex.xIndex - 1); } return
-	 * neighbors; } else { return new Hexagon[0]; } }
-	 */
+
+
 
 	@Deprecated
 	public void zoom(float zoomFactor) {
@@ -194,51 +131,6 @@ public class Map {
 	}
 
 	public void render() {
-		// ShaderManager.landShader.start();
-		// glBindVertexArray(vaoID);
-		// glEnableVertexAttribArray(0);
-		// glDrawArraysInstanced(GL_TRIANGLE_FAN, 0, 6, HEXESACROSS *
-		// HEXESDOWN);
-		// glDisableVertexAttribArray(0);
-		// glBindVertexArray(0);
-		// ShaderManager.landShader.stop();
-
-		// for (int x = 0; x < chunks.length; x++) {
-		// for (Chunk chunk : chunks[x]) {
-		// chunk.setShaderUniforms();
-		// chunk.render();
-		// }
-		// }
-
-		/*
-		 * int x = (int) (EntityManager.cameraPos.x / 32); int y = (int)
-		 * (EntityManager.cameraPos.y / 32); chunks[x][y].render(); if (x > 0 &&
-		 * y > 0) { chunks[x - 1][y].render(); chunks[x + 1][y].render();
-		 * chunks[x][y - 1].render(); chunks[x - 1][y - 1].render(); chunks[x +
-		 * 1][y - 1].render(); chunks[x][y + 1].render(); chunks[x - 1][y +
-		 * 1].render(); chunks[x + 1][y + 1].render(); }
-		 */
-
-		// chunks[4][3].render();
-		// chunks[5][3].render();
-		// chunks[3][4].render();
-		// chunks[4][4].render();
-		// chunks[5][4].render();
-		// chunks[3][5].render();
-		// chunks[4][5].render();
-		// chunks[5][5].render();
-		//
-
-		// int x = (int)(EntityManager.cameraPos.x/32/1.2);
-		// int y = (int)(EntityManager.cameraPos.y/32/1.2);
-		// System.out.println(x);
-		// chunks[x][y].render();
-
-		// for (int x = 0; x < HEXESACROSS / Chunk.CHUNKSIZE; x++) {
-		// for (int y = 0; y < HEXESDOWN / Chunk.CHUNKSIZE; y++) {
-		// chunks[x][y].render();
-		// }
-		// }
 		int counter = 0;
 		for (int i = 0; i < numberOfChunks; i++) {
 			if (EntityManager.camera.getFrustum().boxIsInside(
@@ -247,7 +139,6 @@ public class Map {
 				counter++;
 			}
 		}
-		//System.out.println(counter);
 	}
 
 	public void update() {
@@ -359,10 +250,6 @@ public class Map {
 							&& land[neighbors[j][0]][neighbors[j][1]][0] != Block.SEED) {
 						if (rng.nextDouble() <= p) {
 							land[neighbors[j][0]][neighbors[j][1]][0] = Block.LAND;
-							// moisture[neighbors[j][0]][neighbors[j][1]] =
-							// (int) (p*(20 + 5*rng.nextDouble()));
-							// elevation[neighbors[j][0]][neighbors[j][1]] =
-							// (int) (p*(20+ 5*rng.nextDouble()));
 							iter++;
 							newLand.add(neighbors[j]);
 						}
@@ -389,16 +276,12 @@ public class Map {
 		// INIT MAPTYPE ETC
 		// mapType = "e2";
 		mapType = maps[rng.nextInt(maps.length)];
-		// worldType = "sapric"; //"telilic", "sapric", "worlic"
-
 		seedCount = 1;
 		seeds = new int[seedCount][2];
-
 		// INIT SEEDS
 		System.out.println("Initiailzing Seeds");
 		seeds[0][0] = HEXESACROSS / 2;
 		seeds[0][1] = HEXESDOWN / 2;
-
 		// INIT LAND ARRAY
 		for (int x = 0; x < HEXESACROSS; x++) {
 			for (int y = 0; y < HEXESDOWN; y++) {

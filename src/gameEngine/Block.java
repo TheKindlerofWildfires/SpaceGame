@@ -1,4 +1,4 @@
-package gameEngine;
+ package gameEngine;
 
 import java.util.Random;
 
@@ -51,14 +51,12 @@ public class Block {
 	}
 	public static int setBlock(int elevation, int moisture){
 		int block = 100;
-		String worldType = Map.worldType;
+		String worldType = WorldType.worldType;
 		double eP = elevation/8.0;
 		double mP = moisture/4.0;
 		//System.out.println(mP);
 		double chance = Math.abs(rng.nextDouble());
-		while (chance >0.6 || chance <0.4){
-			chance = Math.abs(rng.nextDouble());
-		}
+		chance = 0.5;
 		//System.out.println(mP+ "," + eP);
 		switch(worldType){
 		case "telilic":

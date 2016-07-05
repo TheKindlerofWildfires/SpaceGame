@@ -1,5 +1,6 @@
 package gen;
 
+import classesSimonDoesntLike.Chunk;
 import gameEngine.Block;
 import gameEngine.Map;
 import gameEngine.WorldGenerator;
@@ -13,6 +14,7 @@ public class Structure {
 	public static int sizeZ = 0;
 
 	public static void gen(int x, int y, int z) {
+		//this code is bad i think, should be single type per use
 		for (int i = 0; i < WorldType.interference.size(); i++) {
 			ruins[i] = WorldType.interference.get(i);
 			switch (ruins[i]) {
@@ -29,13 +31,34 @@ public class Structure {
 				jeneunRuinsLeast(x, y, z);
 				break;
 			}
+			
 		}
 	}
-
+	private static void clear(int cx, int cy, int cz){
+		for(int q = cx; q<cx+sizeX; q++){
+			for(int w = cy; w<cy+sizeY; w++){
+				for(int e = cz; e<Map.WORLDHEIGHT; e++){
+					if(WorldGenerator.inBounds(q,w,e)){
+					WorldGenerator.data[q][w][e] = Block.AIR;
+					}
+				}
+			}
+		}
+		for (int q = cx; q < cx + sizeX; q++) {
+			for (int w = cy; w < cy + sizeY; w++) {
+				for (int e = 0; e < cz; e++) {
+					if(WorldGenerator.inBounds(q,w,e)){
+						WorldGenerator.data[q][w][e] = 100;
+					}
+				}
+			}
+		}
+	}
 	private static void kinikariRuinsLeast(int cx, int cy, int cz) {
 		sizeX = 11;
 		sizeY = 6;
 		sizeZ = 10;
+		clear(cx, cy, cz);
 		if (cx + sizeX < Map.HEXESACROSS && cy + sizeY < Map.HEXESDOWN
 				&& cz + sizeZ < Map.WORLDHEIGHT && cx % 2 == 0) {
 			for (int z = cz; z < cz + 5; z++) {
@@ -142,13 +165,7 @@ public class Structure {
 			WorldGenerator.data[cx + 1][cy+2][cz+6] = Block.KINIKARI_ROOF;
 			WorldGenerator.data[cx + 9][cy+2][cz+6] = Block.KINIKARI_ROOF;
 			
-			for (int q = cx; q < cx + Structure.sizeX; q++) {
-				for (int w = cy; w < cy + Structure.sizeY; w++) {
-					for (int e = 0; e < cz; e++) {
-						WorldGenerator.data[q][w][e] = 100;
-					}
-				}
-			}
+			
 		}
 
 	}
@@ -162,6 +179,7 @@ public class Structure {
 		sizeX = 10;
 		sizeY = 10;
 		sizeZ = 10;
+		clear(cx, cy, cz);
 		if (cx + sizeX < Map.HEXESACROSS && cy + sizeY < Map.HEXESDOWN
 				&& cz + sizeZ < Map.WORLDHEIGHT && cx % 2 == 0) {
 			for (int x = cx; x < cx + 11; x++) {
@@ -205,13 +223,7 @@ public class Structure {
 					WorldGenerator.data[x + 2][y + 2][cz + 10] = Block.JENEUN_ROOF;
 				}
 			}
-			for (int q = cx; q < cx + Structure.sizeX; q++) {
-				for (int w = cy; w < cy + Structure.sizeY; w++) {
-					for (int e = 0; e < cz; e++) {
-						WorldGenerator.data[q][w][e] = 100;
-					}
-				}
-			}
+			
 
 		}
 
@@ -223,6 +235,7 @@ public class Structure {
 		sizeX = 9;
 		sizeY = 7;
 		sizeZ = 7;
+		clear(cx, cy, cz);
 		if (cx + sizeX < Map.HEXESACROSS && cy + sizeY < Map.HEXESDOWN
 				&& cz + sizeZ < Map.WORLDHEIGHT && cx % 2 == 0) {
 			for (int z = cz; z < cz + 5; z++) {
@@ -279,13 +292,7 @@ public class Structure {
 
 			WorldGenerator.data[cx + 5][cy + 4][cz + 7] = Block.OCTO_ROOF;
 
-			for (int q = cx; q < cx + Structure.sizeX; q++) {
-				for (int w = cy; w < cy + Structure.sizeY; w++) {
-					for (int e = 0; e < cz; e++) {
-						WorldGenerator.data[q][w][e] = 100;
-					}
-				}
-			}
+
 		}
 	}
 }
