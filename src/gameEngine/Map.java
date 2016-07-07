@@ -1,5 +1,7 @@
 package gameEngine;
 
+import gen.WorldGenerator;
+import gen.WorldType;
 import graphicEngine.Chunk;
 import graphicEngine.ShaderManager;
 

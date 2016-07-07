@@ -1,5 +1,6 @@
-package gameEngine;
+package gen;
 
+import gameEngine.Map;
 import graphicEngine.Chunk;
 
 import java.util.ArrayList;

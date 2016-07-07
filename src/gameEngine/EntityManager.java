@@ -1,6 +1,7 @@
 package gameEngine;
 
 import static org.lwjgl.glfw.GLFW.*;
+import gen.WorldType;
 import graphicEngine.Camera;
 import graphicEngine.Chunk;
 import graphicEngine.ShaderManager;

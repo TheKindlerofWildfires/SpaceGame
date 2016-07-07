@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import maths.Utilities;
 import gameEngine.Block;
 import gameEngine.Map;
-import gameEngine.WorldGenerator;
 import graphicEngine.Chunk;
 
 public class Plant {

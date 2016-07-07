@@ -1,7 +1,7 @@
-package gameEngine;
+package gen;
 
-import gen.Plant;
-import gen.Structure;
+import gameEngine.Block;
+import gameEngine.Map;
 import graphicEngine.Chunk;
 
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.Random;
 import maths.Utilities;
 
 public class WorldGenerator {
-	public static final double HEIGHT = WorldType.getHeight();
+	public static final int HEIGHT = WorldType.getHeight();
 	private static final double ELEVATIONSCALER =  WorldType.getElevationScaler();
 	public static final int WATERLEVEL = WorldType.getWaterLevel();
 	private static final int MOISTURESCALER = WorldType.getMoistureScaler();
@@ -19,7 +19,7 @@ public class WorldGenerator {
 	public static int seedCount;
 	int[][] seeds;
 	int[] seed = new int[3];
-	int[][] eTracker = new int[Map.HEXESACROSS][Map.HEXESDOWN];
+	public static int[][] eTracker = new int[Map.HEXESACROSS][Map.HEXESDOWN];
 	int[][] mTracker = new int[Map.HEXESACROSS][Map.HEXESDOWN];
 	public static int[][][] data = new int[Map.HEXESACROSS][Map.HEXESDOWN][Map.WORLDHEIGHT];
 	Random rng = Map.rng;

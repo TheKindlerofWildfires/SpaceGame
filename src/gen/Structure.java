@@ -3,8 +3,6 @@ package gen;
 import classesSimonDoesntLike.Chunk;
 import gameEngine.Block;
 import gameEngine.Map;
-import gameEngine.WorldGenerator;
-import gameEngine.WorldType;
 
 public class Structure {
 	static String[] ruins = new String[WorldType.interference.size()];
@@ -17,6 +15,7 @@ public class Structure {
 		//this code is bad i think, should be single type per use
 		for (int i = 0; i < WorldType.interference.size(); i++) {
 			ruins[i] = WorldType.interference.get(i);
+			z = getTall(x,y,z);
 			switch (ruins[i]) {
 			case "octividRuinsLeast":
 				octividRuinsLeast(x, y, z);
@@ -33,6 +32,17 @@ public class Structure {
 			}
 			
 		}
+	}
+	private static int getTall(int x, int y, int z) {
+		int tall = z;
+		for(int q = x; q<x+sizeX; q++){
+			for(int w = y; w<y+sizeY; w++){
+				if(WorldGenerator.eTracker[x][y]>tall){
+					tall = WorldGenerator.eTracker[x][y];
+				}
+			}
+			}
+		return tall;
 	}
 	private static void clear(int cx, int cy, int cz){
 		//these "functions" may do literally jack shit
@@ -59,9 +69,10 @@ public class Structure {
 		sizeX = 11;
 		sizeY = 6;
 		sizeZ = 10;
-		clear(cx, cy, cz);
+		
 		if (cx + sizeX < Map.HEXESACROSS && cy + sizeY < Map.HEXESDOWN
 				&& cz + sizeZ < Map.WORLDHEIGHT && cx % 2 == 0) {
+			clear(cx, cy, cz);
 			for (int z = cz; z < cz + 5; z++) {
 				WorldGenerator.data[cx + 5][cy][z] = Block.KINIKARI_WALL;
 				WorldGenerator.data[cx + 4][cy][z] = Block.KINIKARI_WALL;
@@ -180,9 +191,9 @@ public class Structure {
 		sizeX = 10;
 		sizeY = 10;
 		sizeZ = 10;
-		clear(cx, cy, cz);
 		if (cx + sizeX < Map.HEXESACROSS && cy + sizeY < Map.HEXESDOWN
 				&& cz + sizeZ < Map.WORLDHEIGHT && cx % 2 == 0) {
+			clear(cx, cy, cz);
 			for (int x = cx; x < cx + 11; x++) {
 				for (int y = cy; y < cy + 10; y++) {
 					WorldGenerator.data[x][y][cz + 5] = Block.JENEUN_WALL;
@@ -236,9 +247,9 @@ public class Structure {
 		sizeX = 9;
 		sizeY = 7;
 		sizeZ = 7;
-		clear(cx, cy, cz);
 		if (cx + sizeX < Map.HEXESACROSS && cy + sizeY < Map.HEXESDOWN
 				&& cz + sizeZ < Map.WORLDHEIGHT && cx % 2 == 0) {
+			clear(cx, cy, cz);
 			for (int z = cz; z < cz + 5; z++) {
 				WorldGenerator.data[cx + 5][cy + 1][z] = Block.OCTO_WALL;
 				WorldGenerator.data[cx + 4][cy + 1][z] = Block.OCTO_WALL;

@@ -1,7 +1,7 @@
 package entity.monster;
 
 import entity.Entity;
-import gameEngine.WorldType;
+import gen.WorldType;
 
 
 public class Leader extends Entity{

@@ -4,6 +4,7 @@ import java.util.Random;
 
 import combat.BuffHandler;
 import entity.Entity;
+import gen.WorldType;
 
 public class Block {
 	public static final int AIR = 0;
