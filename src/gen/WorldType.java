@@ -41,7 +41,7 @@ public class WorldType {
 			elevationScaler = 70;
 			moistureScaler = 20;
 			waterLevel = height/5;
-			cloudCover = 0.4;
+			cloudCover = 0.997;
 			break;
 		case "worlic":
 			difficulty = 1;
@@ -58,7 +58,7 @@ public class WorldType {
 			elevationScaler = 200;
 			moistureScaler = 20;
 			waterLevel = height/6;
-			cloudCover = 0.99;
+			cloudCover = 0.999;
 			break;
 		case "sapric":
 			difficulty = 1;
@@ -75,7 +75,7 @@ public class WorldType {
 			elevationScaler = 50;
 			moistureScaler = 40;
 			waterLevel = height/4;
-			cloudCover = 0.8;
+			cloudCover = 0.998;
 			break;
 		default:
 				System.err.println("Not a worldType");
