@@ -182,7 +182,7 @@ public class Utilities {
 	public static int[][] getNeighborIndices3(int x, int y, int z) {
 		// System.out.println(x + "," + y);
 		if (x > 0 && y > 0 && x < Map.HEXESACROSS - 1 && y < Map.HEXESDOWN - 1
-				&& z > 0 && z > Map.WORLDHEIGHT) {
+				&& z > 0 && z < Map.WORLDHEIGHT-1) {
 			int[][] neighbors = new int[8][3];
 			neighbors[0][0] = x;
 			neighbors[0][1] = y + 1;

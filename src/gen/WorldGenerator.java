@@ -20,7 +20,7 @@ public class WorldGenerator {
 	int[][] seeds;
 	int[] seed = new int[3];
 	public static int[][] eTracker = new int[Map.HEXESACROSS][Map.HEXESDOWN];
-	int[][] mTracker = new int[Map.HEXESACROSS][Map.HEXESDOWN];
+	public static int[][] mTracker = new int[Map.HEXESACROSS][Map.HEXESDOWN];
 	public static int[][][] data = new int[Map.HEXESACROSS][Map.HEXESDOWN][Map.WORLDHEIGHT];
 	Random rng = Map.rng;
 
@@ -39,11 +39,19 @@ public class WorldGenerator {
 				moisturize(x, y);
 				foliate(x, y);
 				build(x, y);
+				cloud(x,y);
 				block(x, y);
 
 			}
 		}
 		return data;
+	}
+
+	private void cloud(int x, int y) {
+		if(rng.nextDouble()>WorldType.cloudCover){
+			Sky.cloud(x,y);
+		}
+		
 	}
 
 	private void foliate(int x, int y) {
@@ -65,6 +73,8 @@ public class WorldGenerator {
 
 			}
 		}
+		//what does this do?
+		/*
 		if (x + Structure.sizeX < Map.HEXESACROSS
 				&& y + Structure.sizeY < Map.HEXESDOWN
 				&& eTracker[x][y] + Structure.sizeZ < Map.WORLDHEIGHT) {
@@ -78,7 +88,7 @@ public class WorldGenerator {
 					}
 				}
 			}
-		}
+		}*/
 	}
 
 	private void block(int x, int y) {

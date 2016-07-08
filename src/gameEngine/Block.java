@@ -38,7 +38,7 @@ public class Block {
 	public static final int JENEUN_ROOF = 25;
 	public static final int KINIKARI_WALL = 26;
 	public static final int KINIKARI_ROOF = 27;
-	
+	public static final int CLOUD = 2;
 	static Random rng = Map.rng;
 	public static final int[] gen= {LAND, AIR,SEED};
 	public static final int[] natural = {WATER, UPPERFOREST, LOWERFOREST, 
@@ -48,6 +48,7 @@ public class Block {
 	public static final int[] octo = {OCTO_WALL, OCTO_ROOF};
 	public static final int[] jenuen = {JENEUN_WALL, JENEUN_ROOF};
 	public static final int[] kinikari = {KINIKARI_WALL, KINIKARI_ROOF};
+	
 	public Block(){
 	}
 	public static int setBlock(int elevation, int moisture){

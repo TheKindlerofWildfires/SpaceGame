@@ -20,6 +20,7 @@ public class WorldType {
 	public static int elevationScaler = 0;
 	public static int moistureScaler = 0;
 	public static int waterLevel;
+	public static double cloudCover = 1;
 	public WorldType(){
 		worldType = worldTypes[rng.nextInt(worldTypes.length)];
 		System.out.println(worldType);
@@ -40,6 +41,7 @@ public class WorldType {
 			elevationScaler = 70;
 			moistureScaler = 20;
 			waterLevel = height/5;
+			cloudCover = 0.4;
 			break;
 		case "worlic":
 			difficulty = 1;
@@ -56,6 +58,7 @@ public class WorldType {
 			elevationScaler = 200;
 			moistureScaler = 20;
 			waterLevel = height/6;
+			cloudCover = 0.99;
 			break;
 		case "sapric":
 			difficulty = 1;
@@ -72,6 +75,7 @@ public class WorldType {
 			elevationScaler = 50;
 			moistureScaler = 40;
 			waterLevel = height/4;
+			cloudCover = 0.8;
 			break;
 		default:
 				System.err.println("Not a worldType");

@@ -59,7 +59,7 @@ public class Structure {
 			for (int w = cy; w < cy + sizeY; w++) {
 				for (int e = 0; e < cz; e++) {
 					if(WorldGenerator.inBounds(q,w,e)){
-						WorldGenerator.data[q][w][e] = 100;
+						WorldGenerator.data[q][w][e] = Block.setBlock(e, WorldGenerator.mTracker[q][w]);
 					}
 				}
 			}
