@@ -8,8 +8,6 @@ import graphicEngine.ShaderManager;
 import maths.Vector3f;
 import GUI.KeyboardInput;
 import GUI.MouseInput;
-import GUI.Window;
-
 public class EntityManager {
 
 	// Player player;

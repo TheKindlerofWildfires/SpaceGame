@@ -1,12 +1,10 @@
 package gen;
 
-import classesSimonDoesntLike.Chunk;
 import gameEngine.Block;
 import gameEngine.Map;
 
 public class Structure {
 	static String[] ruins = new String[WorldType.interference.size()];
-	private String worldType = Map.worldType;
 	public static int sizeX = 0;
 	public static int sizeY = 0;
 	public static int sizeZ = 0;

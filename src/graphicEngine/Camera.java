@@ -1,6 +1,6 @@
 package graphicEngine;
 
-import GUI.MouseInput;
+
 import maths.Frustum;
 import maths.Matrix4f;
 import maths.Vector3f;

@@ -13,7 +13,6 @@ public class WorldGenerator {
 	public static final int HEIGHT = WorldType.getHeight();
 	private static final double ELEVATIONSCALER =  WorldType.getElevationScaler();
 	public static final int WATERLEVEL = WorldType.getWaterLevel();
-	private static final int MOISTURESCALER = WorldType.getMoistureScaler();
 	public static String mapType;
 	public static String worldType;
 	public static int seedCount;
