@@ -23,6 +23,7 @@ public class WorldType {
 	public static double cloudCover = 1;
 	public WorldType(){
 		worldType = worldTypes[rng.nextInt(worldTypes.length)];
+		worldType = "sapric";
 		System.out.println(worldType);
 	    //worldType = "sapric";
 		switch(worldType){

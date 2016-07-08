@@ -36,7 +36,6 @@ public class Sky {
 			newCloud.clear();
 			p=getP(iter, p);
 			iter++;
-			System.out.println(p);
 		}
 	}
 

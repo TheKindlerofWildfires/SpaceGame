@@ -56,13 +56,13 @@ if(prop==100){
 	}else if(prop == 4){
 		VColor = vec3(0.4,0.7,0.52);
 	}else if(prop == 5){
-		VColor = vec3(0.89,0.88,0.88);
+		VColor = vec3(0.89,0.89,0.89);
 	}else if(prop == 6){
-		VColor = vec3(0.88,0.85,0.85);
+		VColor = vec3(0.83,0.83,0.83);
 	}else if(prop == 7){
-		VColor = vec3(0.9,0.9,0.9);
+		VColor = vec3(0.93,0.93,0.93);
 	}else if(prop == 8){
-		VColor = vec3(0.6,0.6,0.6);
+		VColor = vec3(0.75,0.75,0.75);
 	}else if(prop == 9){
 		VColor = vec3(0.15,0.56,0.36);
 	}else if(prop == 10){

@@ -51,52 +51,52 @@ public class Block {
 	
 	public Block(){
 	}
-	public static int setBlock(int elevation, int moisture){
+	public static int setBlock(int moisture){
 		int block = 100;
 		String worldType = WorldType.worldType;
-		double eP = elevation/8.0;
-		double mP = moisture/4.0;
+		//System.out.println(moisture);
+		//double eP = elevation/8.0;
+		//double mP = moisture/4.0;
 		//System.out.println(mP);
-		double chance = Math.abs(rng.nextDouble());
-		chance = 0.5;
+		//double chance = Math.abs(rng.nextDouble());
+		//chance = 0.5;
 		//System.out.println(mP+ "," + eP);
 		switch(worldType){
 		case "telilic":
-			if (mP>= chance && eP>=chance){
-				
-				block = UPPERFOREST;
-			}else if (mP>= chance && eP<=chance){
+			if (moisture ==0){
 				block = LOWERFOREST;
-			}else if (mP<= chance && eP>=chance){
- 				block = MIDFOREST;
-			}else if (mP<= chance && eP<=chance){
+			}else if (moisture ==1){
 				block = MUD;
+			}else if (moisture ==2){
+ 				block = MIDFOREST;
+			}else if (moisture ==3){
+				block = UPPERFOREST;
 			}else{
 				block = 100;
 			}
 			break;
 		case "sapric":
-			if (mP>= chance && eP>=chance){
-				block = HIGHLAND;
-			}else if (mP>= chance && eP<=chance){
-				block = THORNS;
-			}else if (mP<= chance && eP>=chance){
- 				block = DEEPFOREST;
-			}else if (mP<= chance && eP<=chance){
+			if (moisture ==0){
+				block = DEEPFOREST;
+			}else if (moisture ==1){
 				block = UNDERBRUSH;
+			}else if (moisture ==2){
+ 				block = HIGHLAND;
+			}else if (moisture ==3){
+				block = THORNS;
 			}else{
 				block = 100;
 			}
 			break;
 		case "worlic":
-			if (mP>= chance && eP>=chance){
-				block = SANDSTONE;
-			}else if (mP>= chance && eP<=chance){
-				block = SAND;
-			}else if (mP<= chance && eP>=chance){
- 				block = ASH;
-			}else if (mP<= chance && eP<=chance){
+			if (moisture ==0){
 				block = ROCK;
+			}else if (moisture ==1){
+				block = SANDSTONE;
+			}else if (moisture ==2){
+ 				block = ASH;
+			}else if (moisture ==3){
+				block = SAND;
 			}else{
 				block = 100;
 			}

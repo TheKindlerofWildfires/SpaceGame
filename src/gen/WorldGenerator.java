@@ -19,6 +19,9 @@ public class WorldGenerator {
 	public static int seedCount;
 	int[][] seeds;
 	int[] seed = new int[3];
+	
+	double m = 0;
+	
 	public static int[][] eTracker = new int[Map.HEXESACROSS][Map.HEXESDOWN];
 	public static int[][] mTracker = new int[Map.HEXESACROSS][Map.HEXESDOWN];
 	public static int[][][] data = new int[Map.HEXESACROSS][Map.HEXESDOWN][Map.WORLDHEIGHT];
@@ -94,15 +97,29 @@ public class WorldGenerator {
 	private void block(int x, int y) {
 		for (int z = 0; z < Map.WORLDHEIGHT; z++) {
 			if (data[x][y][z] == 100) {
-				data[x][y][z] = Block.setBlock(z, mTracker[x][y]);
+				data[x][y][z] = Block.setBlock(mTracker[x][y]);
 			}
 		}
 
 	}
 
 	private void moisturize(int x, int y) {
-		int moist = (int) (Math.abs(Map.noise.getValue(x / MOISTURESCALER, y
-				/ MOISTURESCALER, 0.1)) * HEIGHT);
+		//int moist = (int) ((Math.abs(Map.noise.getValue(x / MOISTURESCALER, y/ MOISTURESCALER, 0.1))*6.5)-0.5+rng.nextDouble());
+		
+		int moist = rng.nextInt(11);
+		if(moist>9){
+			moist = 3;
+		}else if(moist>7){
+			moist =2;
+		}else if(moist >4){
+			moist = 1;
+		}else{
+			moist = 0;
+		}
+		//0-1.5
+		moist = (int)(eTracker[x][y]/(double)(HEIGHT/3));
+		System.out.println(moist);
+		//if(moist<0){moist = 0;} if(moist>3){moist = 3;}
 		mTracker[x][y] = moist;
 
 	}
