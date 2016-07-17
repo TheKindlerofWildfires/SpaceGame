@@ -100,9 +100,11 @@ public class Window implements Runnable {
 
 		glEnable(GL_DEPTH_TEST);
 		//new stuff
+		//in summery, this thing creates a new object model m, assigns its vertices, faces and normals,
+		//then tries to render it using lwjgl2, so change render method to lwjgl3 and we g
 		/*
-		int objectDisplayList = glGenLists(1);
-		glNewList(objectDisplayList, GL_COMPILE);
+		int objectDisplayList = glGenLists(1); //lwjgl2
+		glNewList(objectDisplayList, GL_COMPILE); //lwjgl2
 		{
 			
 			Model m = null;
@@ -129,9 +131,9 @@ public class Window implements Runnable {
                 Vector3f v3 = m.vertices.get((int) (face.vertex.z - 1));
                 glVertex3f(v3.x, v3.y, v3.z);
             }
-            glEnd();
+            glEnd();//lwjgl2
         }
-        glEndList();
+        glEndList(); //lwjgl2
         looks like the list function didnt work right
 		*/ 
 		
