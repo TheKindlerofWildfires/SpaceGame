@@ -23,9 +23,11 @@ import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
 import static org.lwjgl.opengl.GL11.GL_TRUE;
+import static org.lwjgl.opengl.GL11.GL_VERSION;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glGetString;
 import static org.lwjgl.system.MemoryUtil.NULL;
 import gameEngine.EntityManager;
 import gameEngine.Tick;
@@ -89,7 +91,7 @@ public class Window implements Runnable {
 				cursorCallback = (GLFWCursorPosCallback) new MouseInput());
 
 		// GLFWVidMode vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-		glfwSetWindowPos(window, 0, 20); 
+		glfwSetWindowPos(window, 0, 20);
 
 		glfwMakeContextCurrent(window);
 		glfwShowWindow(window);
@@ -99,50 +101,36 @@ public class Window implements Runnable {
 		glClearColor(0.2f, 0.258f, 0.425f, 1.0f);
 
 		glEnable(GL_DEPTH_TEST);
-		//new stuff
-		//in summery, this thing creates a new object model m, assigns its vertices, faces and normals,
-		//then tries to render it using lwjgl2, so change render method to lwjgl3 and we g
+		// new stuff
+		// in summery, this thing creates a new object model m, assigns its
+		// vertices, faces and normals,
+		// then tries to render it using lwjgl2, so change render method to
+		// lwjgl3 and we g
 		/*
-		int objectDisplayList = glGenLists(1); //lwjgl2
-		glNewList(objectDisplayList, GL_COMPILE); //lwjgl2
-		{
-			
-			Model m = null;
-			try{
-				m = OBJLoader.loadmodel(new File("resources/test.obj"));
-			}catch(FileNotFoundException e){
-				e.printStackTrace();
-				System.exit(1);
-			}catch(IOException e){
-				e.printStackTrace();
-				System.exit(1);
-			}
-			for (Face face : m.faces) {
-                Vector3f n1 = m.normals.get((int) face.normal.x - 1);
-                glNormal3f(n1.x, n1.y, n1.z);
-                Vector3f v1 = m.vertices.get((int) (face.vertex.x - 1));
-                glVertex3f(v1.x, v1.y, v1.z);
-                Vector3f n2 = m.normals.get((int) (face.normal.y - 1));
-                glNormal3f(n2.x, n2.y, n2.z);
-                Vector3f v2 = m.vertices.get((int) (face.vertex.y - 1));
-                glVertex3f(v2.x, v2.y, v2.z);
-                Vector3f n3 = m.normals.get((int) (face.normal.z - 1));
-                glNormal3f(n3.x, n3.y, n3.z);
-                Vector3f v3 = m.vertices.get((int) (face.vertex.z - 1));
-                glVertex3f(v3.x, v3.y, v3.z);
-            }
-            glEnd();//lwjgl2
-        }
-        glEndList(); //lwjgl2
-        looks like the list function didnt work right
-		*/ 
-		
-		
-		//end new stuff
+		 * int objectDisplayList = glGenLists(1); //lwjgl2
+		 * glNewList(objectDisplayList, GL_COMPILE); //lwjgl2 {
+		 * 
+		 * Model m = null; try{ m = OBJLoader.loadmodel(new
+		 * File("resources/test.obj")); }catch(FileNotFoundException e){
+		 * e.printStackTrace(); System.exit(1); }catch(IOException e){
+		 * e.printStackTrace(); System.exit(1); } for (Face face : m.faces) {
+		 * Vector3f n1 = m.normals.get((int) face.normal.x - 1);
+		 * glNormal3f(n1.x, n1.y, n1.z); Vector3f v1 = m.vertices.get((int)
+		 * (face.vertex.x - 1)); glVertex3f(v1.x, v1.y, v1.z); Vector3f n2 =
+		 * m.normals.get((int) (face.normal.y - 1)); glNormal3f(n2.x, n2.y,
+		 * n2.z); Vector3f v2 = m.vertices.get((int) (face.vertex.y - 1));
+		 * glVertex3f(v2.x, v2.y, v2.z); Vector3f n3 = m.normals.get((int)
+		 * (face.normal.z - 1)); glNormal3f(n3.x, n3.y, n3.z); Vector3f v3 =
+		 * m.vertices.get((int) (face.vertex.z - 1)); glVertex3f(v3.x, v3.y,
+		 * v3.z); } glEnd();//lwjgl2 } glEndList(); //lwjgl2 looks like the list
+		 * function didnt work right
+		 */
+
+		// end new stuff
 		entityManager = new EntityManager();
 		tickManager = new TickManager();
 
-		// System.out.println(glGetString(GL_VERSION));
+		System.out.println(glGetString(GL_VERSION));
 	}
 
 	public void update() {
@@ -150,6 +138,7 @@ public class Window implements Runnable {
 		entityManager.update();
 		tickManager.update();
 	}
+
 	public void render() {
 		glfwSwapBuffers(window);
 
