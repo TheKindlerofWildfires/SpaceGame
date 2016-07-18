@@ -117,7 +117,7 @@ public class WorldGenerator {
 		}
 		//0-1.5
 		moist = (int)(eTracker[x][y]/(double)(HEIGHT/3));
-		System.out.println(moist);
+		//System.out.println(moist);
 		//if(moist<0){moist = 0;} if(moist>3){moist = 3;}
 		mTracker[x][y] = moist;
 

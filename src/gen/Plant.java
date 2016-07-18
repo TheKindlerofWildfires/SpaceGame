@@ -173,7 +173,7 @@ public class Plant {
 	private static void ashTree(int x, int y, int z) {
 		
 		treeHeight = Map.rng.nextInt(Chunk.CHUNKHEIGHT/3)+Chunk.CHUNKHEIGHT/3;
-		System.out.println(treeHeight);
+		//System.out.println(treeHeight);
 		// OPTIMIZE ME PLS
 		ArrayList<int[][]> leaves1 = new ArrayList<int[][]>();
 		ArrayList<int[][]> leaves2 = new ArrayList<int[][]>();
