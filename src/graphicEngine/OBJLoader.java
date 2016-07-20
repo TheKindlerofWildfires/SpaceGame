@@ -7,7 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import maths.Vector3f;
-
+//this class loads an obj into model format
 public class OBJLoader {
 	public static Model loadmodel(File f)throws FileNotFoundException, IOException{
 		BufferedReader reader = new BufferedReader(new FileReader(f));
@@ -42,3 +42,5 @@ public class OBJLoader {
 		return m;
 	}
 }
+//Syntax to call load a model probably looks like Model m = OBJLoader.loadModel(insertOBJfile here)
+//then we can call m.verticies, m.normals, m.faces as we render it

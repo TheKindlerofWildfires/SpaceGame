@@ -1,6 +1,6 @@
 TO DO:
 Textures --??? 
-Fix world size limits (its in the shader, why can't I change it?) -- SIMON HELP
+Fix world size limits (its in the shader, why can't I change it?) -- Buffer size issue
 Re-implement player- ???
 Merge and correct side culling -???
 Field lines of pretty --???
@@ -14,4 +14,5 @@ STRUCTURE dont fill right - fix foliage clash
 face culling pls
 Lock mouse cursor to center of screen 
 Learn to import blender objects? 
-Make key decisions about what is blender and what is pixel. 
+Decrease hex size proportional to objects
+lag
