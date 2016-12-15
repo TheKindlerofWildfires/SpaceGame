@@ -1,6 +1,6 @@
 package gameEngine;
-import combat.BuffHandler;
 
+import combat.BuffHandler;
 
 public class TickManager {
 	public BuffHandler buffHandler;

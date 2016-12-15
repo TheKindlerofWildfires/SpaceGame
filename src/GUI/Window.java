@@ -68,7 +68,7 @@ public class Window implements Runnable {
 	}
 
 	public void init() {
-		if (glfwInit() != GL_TRUE) {
+		if (!glfwInit()) {
 			System.err.println("GLFW init fail");
 		}
 		glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
@@ -148,11 +148,11 @@ public class Window implements Runnable {
 				updates = 0;
 			}
 
-			if (glfwWindowShouldClose(window) == GL_TRUE) {
+			if (glfwWindowShouldClose(window)) {
 				running = false;
 			}
 		}
-		keyCallback.release();
+		//keyCallback.release();
 		glfwDestroyWindow(window);
 	}
 }
